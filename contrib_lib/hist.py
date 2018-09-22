@@ -1,5 +1,5 @@
 from ifm import Enum
-from.hist_pandas import HistPd
+from .hist_pandas import HistPd
 
 
 class Hist:
