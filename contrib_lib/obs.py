@@ -1,5 +1,7 @@
 from ifm import Enum
 
+from .obs_geopandas import ObsGpd
+
 
 class Obs:
     """
@@ -11,5 +13,8 @@ class Obs:
 
     def __init__(self, doc):
         self.doc = doc
+
+        # add custom child-classes here
+        self.gdf = ObsGpd(doc)
 
     # add custom methods here
