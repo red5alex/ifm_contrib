@@ -1,5 +1,6 @@
 from ifm import Enum
 
+from .mesh_geopandas import MeshGpd
 
 class Mesh:
     """
@@ -9,6 +10,9 @@ class Mesh:
 
     def __init__(self, doc):
         self.doc = doc
+
+        # add custom child-classes here
+        self.gdf = MeshGpd(doc)
 
     # add custom methods here
 
