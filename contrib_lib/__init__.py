@@ -7,6 +7,7 @@ from .diag import Diag
 from .hist import Hist
 from .mesh import Mesh
 from .obs import Obs
+from .plot import Plot
 from .settings import  Settings
 from .ts import Ts
 
@@ -28,6 +29,7 @@ class IfmContrib:
         self.hist = Hist(doc)
         self.mesh = Mesh(doc)
         self.obs = Obs(doc)
+        self.plot = Plot(doc)
         self.settings = Settings(doc)
         self.ts = Ts(doc)
 

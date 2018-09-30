@@ -53,4 +53,4 @@ else:
 
             # import contributors library
             import contrib_lib
-            self.c = contrib_lib.IfmContrib(self.pdoc)
+            self.c = contrib_lib.IfmContrib(self)
