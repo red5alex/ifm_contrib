@@ -31,3 +31,19 @@ class Sel:
 
     def set(self, selname, seltype=None):
         return set(self.list(selname, seltype=seltype))
+
+    def getSelectionNames(self, seltype=None):
+        if seltype is None:
+            seltypes = [Enum.SEL_NODES,
+                        Enum.SEL_ELEMS,
+                        Enum.SEL_EDGES,
+                        Enum.SEL_FRACS]
+            selection_names = []
+            for seltype in seltypes:
+                nsel = self.doc.getNumberOfSelections(seltype)
+                selection_names += [self.doc.getSelectionName(seltype, selid) for selid in range(nsel)]
+            return selection_names
+
+        else:
+            nsel = self.doc.getNumberOfSelections(seltype)
+            return [self.doc.getSelectionName(seltype, selid) for selid in range(nsel)]
