@@ -95,7 +95,7 @@ class PlotGpd:
         fringes = ax.tricontour(femesh, values, cmap='rainbow')
         _ = ax.remove()
 
-        # create geodataframe from fringes
+        # create geodataframe from contours
         p = []
         for collection in fringes.collections:
             for path in collection.get_paths():
