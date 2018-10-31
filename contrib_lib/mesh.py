@@ -12,7 +12,7 @@ class Mesh:
         self.doc = doc
 
         # add custom child-classes here
-        self.gdf = MeshGpd(doc)
+        self.df = MeshGpd(doc)
 
     # add custom methods here
 
@@ -31,7 +31,6 @@ class Mesh:
         else:
             X0 = Y0 = 0
 
-
         if self.doc.getNumberOfDimensions() == 2:
             nn = self.doc.getNumberOfNodesPerSlice()
             ee = self.doc.getNumberOfElementsPerLayer()
@@ -45,8 +44,11 @@ class Mesh:
             ee = self.doc.getNumberOfElements()
             stop = 1
 
-        x = np.array([self.doc.getX(n) + X0 for n in range(nn)])
-        y = np.array([self.doc.getY(n) + Y0 for n in range(nn)])
+        x = self.doc.getParamValues(Enum.P_MSH_X)[:nn]
+        y = self.doc.getParamValues(Enum.P_MSH_Y)[:nn]
+
+        # x = np.array([self.doc.getX(n) + X0 for n in range(nn)])
+        # y = np.array([self.doc.getY(n) + Y0 for n in range(nn)])
 
         imat = []
 

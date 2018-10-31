@@ -15,6 +15,6 @@ class Obs:
         self.doc = doc
 
         # add custom child-classes here
-        self.gdf = ObsGpd(doc)
+        self.df = ObsGpd(doc)
 
     # add custom methods here
