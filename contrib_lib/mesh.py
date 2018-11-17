@@ -17,17 +17,39 @@ class Mesh:
     # add custom methods here
 
 
-    def get_imatrix(self, split_quads_to_triangles=False, ignore_inactive=False):
+    def get_imatrix(self, layer=None, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
+        """
+        return the incidence matrix as [[int]].
+        :param layer: specifies a layer number to return. If None (default), return all layers
+        :param split_quads_to_triangles: split 4/8-nodes elements into two 3/6-noded elements
+        :param ignore_inactive: do not include inactive elements
+        :return: list (len=n_elements) of lists of node numbers
+        """
+
+        if layer is not None and (layer > self.doc.getNumberOfLayers() or layer <= 0):
+                raise ValueError("layer number out of range.")
+
+        ee = self.doc.getNumberOfElementsPerLayer()
+        eee = self.doc.getNumberOfElements()
+
+        if layer is None:
+            element_range = range(self.doc.getNumberOfElements())
+        else:
+            if self.doc.getNumberOfDimensions() == 2:
+                element_range = range(eee)
+            elif self.doc.getNumberOfDimensions() == 3:
+                element_range = range((layer - 1) * ee, layer * ee)
+            else:
+                raise NotImplementedError(str(self.doc.getNumberOfDimensions()) + " dimensions not supported")
 
         imat = []
-        for e in range(self.doc.getNumberOfElements()):
-
+        inactive = set()
+        for e in element_range:
             if ignore_inactive and not self.doc.getMatElementActive(e):
+                inactive.add(e)
                 continue
-
             NN = self.doc.getNumberOfElementNodes(e)
             element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
-
             if split_quads_to_triangles:
                 if NN == 3 or NN == 6:
                     imat.append(element_nodes)
@@ -38,11 +60,68 @@ class Mesh:
                     imat.append(element_nodes[:3] + element_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
                     imat.append(element_nodes[1:4] + element_nodes[4:])
                 else:
-                    raise ValueError(str(NN) + "-noded element not supported")
+                    raise NotImplementedError(str(NN) + "-noded element not supported")
             else:
                 imat.append(element_nodes)
 
-        return imat
+        if return_elements:
+            return (imat, list(set(element_range)-inactive))
+        else:
+            return imat
+
+
+    def get_imatrix2d(self, slice=1, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
+        """
+        return the incidence matrix as [[int]] of a slice.
+        :param split_quads_to_triangles: split 4/8-nodes elements into two 3/6-noded elements
+        :param ignore_inactive: do not include inactive elements
+        :return: list (len=n_elements) of lists of node numbers
+        """
+        layer = slice
+        if slice == self.doc.getNumberOfSlices():
+            layer -= 1
+        if slice > self.doc.getNumberOfSlices() or slice <= 0:
+            raise ValueError("slice number out of range.")
+
+        ee = self.doc.getNumberOfElementsPerLayer()
+        eee = self.doc.getNumberOfElements()
+
+        if self.doc.getNumberOfDimensions() == 2:
+            element_range = range(eee)
+        elif self.doc.getNumberOfDimensions() == 3:
+            element_range = range((layer-1)*ee, layer*ee)
+        else:
+            raise NotImplementedError(str(self.doc.getNumberOfDimensions()) + " dimensions not supported")
+
+        imat = []
+        inactive = set()
+        for e in element_range:
+            if ignore_inactive and not self.doc.getMatElementActive(e):
+                inactive.add(e)
+                continue
+
+            NN = self.doc.getNumberOfElementNodes(e)
+            element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
+            if split_quads_to_triangles:
+                if NN == 3:
+                    imat.append(element_nodes)
+                elif NN == 6:
+                    imat.append(element_nodes[:3])  # top nodes only
+                elif NN == 4:
+                    imat.append(element_nodes[:3])  # split quadrangle in 2 triangles
+                    imat.append(element_nodes[1:])
+                elif NN == 8:
+                    imat.append(element_nodes[:3])  # split 8-noded prism into 2 6-noded prisms, top nodes only
+                    imat.append(element_nodes[1:4])
+                else:
+                    raise NotImplementedError(str(NN) + "-noded element not supported")
+            else:
+                imat.append(element_nodes)
+
+        if return_elements:
+            return (imat, list(set(element_range)-inactive))
+        else:
+            return imat
 
 
 
@@ -103,7 +182,7 @@ class Mesh:
             else:
                 imat.append(element_nodes)
 
-        return x, y, imat
+        return imat
 
     def getCentroid(self, item, localcos=False, itemtype=Enum.SEL_ELEMENTAL):
         """
