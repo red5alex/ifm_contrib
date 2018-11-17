@@ -16,7 +16,38 @@ class Mesh:
 
     # add custom methods here
 
-    def imatrix_as_array(self, global_cos=True, split_quads_to_triangles=False, layer=None, ignore_inactive=False):
+
+    def get_imatrix(self, split_quads_to_triangles=False, ignore_inactive=False):
+
+        imat = []
+        for e in range(self.doc.getNumberOfElements()):
+
+            if ignore_inactive and not self.doc.getMatElementActive(e):
+                continue
+
+            NN = self.doc.getNumberOfElementNodes(e)
+            element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
+
+            if split_quads_to_triangles:
+                if NN == 3 or NN == 6:
+                    imat.append(element_nodes)
+                elif NN == 4:
+                    imat.append(element_nodes[:3])  # split quadrangle in 2 triangles
+                    imat.append(element_nodes[1:])
+                elif NN == 8:
+                    imat.append(element_nodes[:3] + element_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
+                    imat.append(element_nodes[1:4] + element_nodes[4:])
+                else:
+                    raise ValueError(str(NN) + "-noded element not supported")
+            else:
+                imat.append(element_nodes)
+
+        return imat
+
+
+
+    def imatrix_as_array(self, global_cos=True, split_quads_to_triangles=False, layer=None, ignore_inactive=False,
+                         use_cache=True, as_2d=False):
         """
         load the nodes coordinates, the incidence matrix into a numpy matrix
         :param global_cos: If True, use global coordinate system (default: local)
@@ -35,7 +66,7 @@ class Mesh:
             nn = self.doc.getNumberOfNodesPerSlice()
             ee = self.doc.getNumberOfElementsPerLayer()
             stop = 1
-        elif layer is not None:
+        elif layer is not None or as_2d:
             nn = self.doc.getNumberOfNodesPerSlice()
             ee = self.doc.getNumberOfElementsPerLayer()
             stop = 2
@@ -44,8 +75,8 @@ class Mesh:
             ee = self.doc.getNumberOfElements()
             stop = 1
 
-        x = self.doc.getParamValues(Enum.P_MSH_X)[:nn]
-        y = self.doc.getParamValues(Enum.P_MSH_Y)[:nn]
+        x = np.array(self.doc.getParamValues(Enum.P_MSH_X)[:nn]) + X0
+        y = np.array(self.doc.getParamValues(Enum.P_MSH_Y)[:nn]) + Y0
 
         # x = np.array([self.doc.getX(n) + X0 for n in range(nn)])
         # y = np.array([self.doc.getY(n) + Y0 for n in range(nn)])
