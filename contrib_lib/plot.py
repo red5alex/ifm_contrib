@@ -118,28 +118,30 @@ class Plot:
         return self._contours(*args, style="edges", ignore_inactive=ignore_inactive,
                               color=color, alpha=alpha, lw=lw, **kwargs)
 
-    def continuous(self, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
+    def continuous(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plots the item (given as Parameter ID according to ifm.Enum) in a continuous style using matplotlib.
         :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :return:
         """
-        return self._contours(*args, style="continuous",
+        return self._contours(*args, style="continuous", slice=slice,
                               cmap=cmap, alpha=alpha, **kwargs)
 
-    def fringes(self, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
+    def fringes(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plot Fringes using matplotlib.
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
-        return self._contours(*args, style="fringes", cmap=cmap, alpha=alpha, **kwargs)
+        return self._contours(*args, style="fringes", slice=slice,
+                              cmap=cmap, alpha=alpha, **kwargs)
 
-    def isolines(self, alpha=1.0, *args, **kwargs):
+    def isolines(self, slice=1, alpha=1.0, *args, **kwargs):
         """
         Plots Isolines using matplotlib.
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
-        return self._contours(*args, style="isolines", alpha=alpha, **kwargs)
+        return self._contours(*args, style="isolines", slice=slice,
+                              alpha=alpha, **kwargs)
