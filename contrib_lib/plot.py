@@ -1,3 +1,4 @@
+import ifm_contrib as ifm
 from ifm import Enum
 
 from .plot_geopandas import PlotGpd
@@ -17,16 +18,14 @@ class Plot:
 
     # add custom methods here
 
-    def _contours(self, item=None, expr=None, distr=None, slice=1, global_cos=True, species=None,
-                  style='isolines', **kwargs):
+    def _contours(self, par=None, expr=None, distr=None, slice=1, global_cos=True, species=None,
+                  style='isolines', ignore_inactive=True, **kwargs):
         """
-               Get Fringes Polygons.
-               :param global_cos: If True, use global coordinate system (default: local)
-               :return: GeoDataFrame
-               """
+        Business functions for plotting library.
+        :param global_cos: If True, use global coordinate system (default: local)
+        :return: GeoDataFrame
+        """
 
-        import geopandas as gpd
-        from shapely.geometry import Polygon
         import numpy as np
         import matplotlib.pyplot as plt
         import matplotlib.tri as tri
@@ -42,7 +41,8 @@ class Plot:
             self.doc.setMultiSpeciesId(speciesID)
 
         # read incidence matrix and node coordinates
-        imat = self.doc.c.mesh.get_imatrix2d(slice=slice, ignore_inactive=True, split_quads_to_triangles=True)
+        imat = self.doc.c.mesh.get_imatrix2d(slice=slice, ignore_inactive=ignore_inactive,
+                                             split_quads_to_triangles=True)
         x, y = self.doc.getParamValues(Enum.P_MSH_X), self.doc.getParamValues(Enum.P_MSH_Y)
 
         if global_cos:
@@ -54,13 +54,19 @@ class Plot:
         # create Triangulation object
         femesh = tri.Triangulation(x, y, np.asarray(imat))
 
-        if style=="mesh":
-            return plt.triplot(femesh,  **kwargs)
+        if style == "edges":
+            return plt.triplot(femesh, **kwargs)
+        elif style == "faces":
+            from matplotlib.colors import LinearSegmentedColormap
+            allgrey_cm = LinearSegmentedColormap.from_list("all_grey",
+                                                           np.array([[0.5, 0.5, 0.5, 1.], [0.5, 0.5, 0.5, 1.]]))
+            return plt.tripcolor(femesh, np.zeros_like(range(self.doc.getNumberOfNodes())),
+                                 cmap=allgrey_cm, **kwargs)
 
         # get values, remove nan values (=inactive elements)
-        if item is not None:
-            self.doc.getParamSize(item)  # workaorund for a crashbug in FEFLOW
-            values = self.doc.getParamValues(item)
+        if par is not None:
+            self.doc.getParamSize(par)  # workaround for a crashbug in FEFLOW
+            values = self.doc.getParamValues(par)
         elif expr is not None:
             if type(expr) == str:
                 exprID = self.doc.getNodalExprDistrIdByName(expr)
@@ -78,55 +84,62 @@ class Plot:
                 raise ValueError("distr must be string (for name) or integer (for id)")
             values = [self.doc.getNodalRefDistrValue(distrID, n) for n in range(self.doc.getNumberOfNodes())]
         else:
-            raise ValueError("either of parameter item, expr or distr must be provided!")
+            raise ValueError("either of parameter param, expr or distr must be provided!")
 
         # set nan values to zero
         values = np.nan_to_num(np.asarray(values))
 
         # generate polygons from matplotlib (suppress output)
-        if style=="continuous":
-            return plt.tripcolor(femesh, values, **kwargs)
-        if style=="fringes":
+        if style == "continuous":
+            return plt.tripcolor(femesh, values,
+                                 shading='gouraud', **kwargs)
+        elif style == "fringes":
             contourset = plt.tricontourf(femesh, values, **kwargs)
             return contourset
-        elif style=="isolines":
+        elif style == "isolines":
             contourset = plt.tricontour(femesh, values, **kwargs)
             return contourset
         else:
-            raise ValueError ("unkonwn style "+str(style))
+            raise ValueError("unkonwn style " + str(style))
 
-    def mesh(self, color="black", alpha=0.5, lw=1, *args, **kwargs):
+    def faces(self, color="grey", alpha=1.0, ignore_inactive=False, *args, **kwargs):
         """
         Plot the mesh using matplotlib.tri.triplot.
-        For arguments see
-
+        For arguments see matplotlib.tri.tripcolor
         """
-        return self._contours(*args, style="mesh", color=color, alpha=alpha, lw=lw,**kwargs)
+        return self._contours(*args, style="faces", ignore_inactive=ignore_inactive,
+                              color=color, alpha=alpha, **kwargs)
 
+    def edges(self, color="black", alpha=0.5, lw=1, ignore_inactive=False, *args, **kwargs):
+        """
+        Plot the mesh using matplotlib.tri.triplot.
+        For arguments see matplotlib.tri.triplot
+        """
+        return self._contours(*args, style="edges", ignore_inactive=ignore_inactive,
+                              color=color, alpha=alpha, lw=lw, **kwargs)
 
-    def continuous(self, *args, **kwargs):
+    def continuous(self, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plots the item (given as Parameter ID according to ifm.Enum) in a continuous style using matplotlib.
         :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :return:
         """
-        return self._contours(*args, style="continuous", **kwargs)
+        return self._contours(*args, style="continuous",
+                              cmap=cmap, alpha=alpha, **kwargs)
 
-
-    def fringes(self, *args, **kwargs):
+    def fringes(self, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plot Fringes using matplotlib.
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
-        return self._contours(*args, style="fringes", **kwargs)
+        return self._contours(*args, style="fringes", cmap=cmap, alpha=alpha, **kwargs)
 
-
-    def isolines(self, *args, **kwargs):
+    def isolines(self, alpha=1.0, *args, **kwargs):
         """
         Plots Isolines using matplotlib.
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
-        return self._contours(*args, style="isolines", **kwargs)
+        return self._contours(*args, style="isolines", alpha=alpha, **kwargs)
