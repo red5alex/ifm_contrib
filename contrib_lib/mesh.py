@@ -49,20 +49,23 @@ class Mesh:
                 inactive.add(e)
                 continue
             NN = self.doc.getNumberOfElementNodes(e)
-            element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
+            el_nodes = [self.doc.getNode(e, N) for N in range(NN)]
             if split_quads_to_triangles:
                 if NN == 3 or NN == 6:
-                    imat.append(element_nodes)
+                    imat.append(el_nodes)
                 elif NN == 4:
-                    imat.append(element_nodes[:3])  # split quadrangle in 2 triangles
-                    imat.append(element_nodes[1:])
+                    imat.append([el_nodes[1], el_nodes[2], el_nodes[3]])  # split quadrangle in 2 triangles
+                    imat.append([el_nodes[3], el_nodes[0], el_nodes[1]])
                 elif NN == 8:
-                    imat.append(element_nodes[:3] + element_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
-                    imat.append(element_nodes[1:4] + element_nodes[4:])
+                    imat.append([el_nodes[1], el_nodes[2], el_nodes[3], el_nodes[5], el_nodes[6], el_nodes[7]])  # split quadrangle in 2 triangles
+                    imat.append([el_nodes[3], el_nodes[0], el_nodes[1], el_nodes[7], el_nodes[4], el_nodes[5]])
+
+                    #imat.append(el_nodes[:3] + el_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
+                    #imat.append(el_nodes[1:4] + el_nodes[4:])
                 else:
                     raise NotImplementedError(str(NN) + "-noded element not supported")
             else:
-                imat.append(element_nodes)
+                imat.append(el_nodes)
 
         if return_elements:
             return (imat, list(set(element_range)-inactive))
@@ -101,22 +104,19 @@ class Mesh:
                 continue
 
             NN = self.doc.getNumberOfElementNodes(e)
-            element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
+            el_nodes = [self.doc.getNode(e, N) for N in range(NN)]
             if split_quads_to_triangles:
                 if NN == 3:
-                    imat.append(element_nodes)
+                    imat.append(el_nodes)
                 elif NN == 6:
-                    imat.append(element_nodes[:3])  # top nodes only
-                elif NN == 4:
-                    imat.append(element_nodes[:3])  # split quadrangle in 2 triangles
-                    imat.append(element_nodes[1:])
-                elif NN == 8:
-                    imat.append(element_nodes[:3])  # split 8-noded prism into 2 6-noded prisms, top nodes only
-                    imat.append(element_nodes[1:4])
+                    imat.append(el_nodes[:3])  # top nodes only
+                elif NN == 4 or NN == 8:
+                    imat.append([el_nodes[1], el_nodes[2], el_nodes[3]])  # split quadrangle in 2 triangles
+                    imat.append([el_nodes[3], el_nodes[0], el_nodes[1]])
                 else:
                     raise NotImplementedError(str(NN) + "-noded element not supported")
             else:
-                imat.append(element_nodes)
+                imat.append(el_nodes)
 
         if return_elements:
             return (imat, list(set(element_range)-inactive))
