@@ -47,6 +47,7 @@ else:
     else:
         raise ImportError('This python version is not supported by FEFLOW!')
 
+    import colormaps
 
     def loadDocument(f):
         """
