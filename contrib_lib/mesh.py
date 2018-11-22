@@ -3,6 +3,7 @@ from ifm import Enum
 from .mesh_geopandas import MeshGpd
 from .mesh_pandas import MeshPd
 
+
 class Mesh:
     """
     Extension child-class for IFM contributor's Extensions.
@@ -18,7 +19,6 @@ class Mesh:
 
     # add custom methods here
 
-
     def get_imatrix(self, layer=None, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
         """
         return the incidence matrix as [[int]].
@@ -29,7 +29,7 @@ class Mesh:
         """
 
         if layer is not None and (layer > self.doc.getNumberOfLayers() or layer <= 0):
-                raise ValueError("layer number out of range.")
+            raise ValueError("layer number out of range.")
 
         ee = self.doc.getNumberOfElementsPerLayer()
         eee = self.doc.getNumberOfElements()
@@ -59,21 +59,21 @@ class Mesh:
                     imat.append([el_nodes[1], el_nodes[2], el_nodes[3]])  # split quadrangle in 2 triangles
                     imat.append([el_nodes[3], el_nodes[0], el_nodes[1]])
                 elif NN == 8:
-                    imat.append([el_nodes[1], el_nodes[2], el_nodes[3], el_nodes[5], el_nodes[6], el_nodes[7]])  # split quadrangle in 2 triangles
+                    imat.append([el_nodes[1], el_nodes[2], el_nodes[3], el_nodes[5], el_nodes[6],
+                                 el_nodes[7]])  # split quadrangle in 2 triangles
                     imat.append([el_nodes[3], el_nodes[0], el_nodes[1], el_nodes[7], el_nodes[4], el_nodes[5]])
 
-                    #imat.append(el_nodes[:3] + el_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
-                    #imat.append(el_nodes[1:4] + el_nodes[4:])
+                    # imat.append(el_nodes[:3] + el_nodes[4:7])  # split 8-noded prism into 2 6-noded prisms
+                    # imat.append(el_nodes[1:4] + el_nodes[4:])
                 else:
                     raise NotImplementedError(str(NN) + "-noded element not supported")
             else:
                 imat.append(el_nodes)
 
         if return_elements:
-            return (imat, list(set(element_range)-inactive))
+            return imat, list(set(element_range) - inactive)
         else:
             return imat
-
 
     def get_imatrix2d(self, slice=1, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
         """
@@ -94,7 +94,7 @@ class Mesh:
         if self.doc.getNumberOfDimensions() == 2:
             element_range = range(eee)
         elif self.doc.getNumberOfDimensions() == 3:
-            element_range = range((layer-1)*ee, layer*ee)
+            element_range = range((layer - 1) * ee, layer * ee)
         else:
             raise NotImplementedError(str(self.doc.getNumberOfDimensions()) + " dimensions not supported")
 
@@ -121,11 +121,9 @@ class Mesh:
                 imat.append(el_nodes)
 
         if return_elements:
-            return (imat, list(set(element_range)-inactive))
+            return (imat, list(set(element_range) - inactive))
         else:
             return imat
-
-
 
     def imatrix_as_array(self, global_cos=True, split_quads_to_triangles=False, layer=None, ignore_inactive=False,
                          use_cache=True, as_2d=False):
@@ -171,7 +169,6 @@ class Mesh:
 
             NN = self.doc.getNumberOfElementNodes(e) / stop
             element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
-
 
             if split_quads_to_triangles:
                 if NN == 3:
