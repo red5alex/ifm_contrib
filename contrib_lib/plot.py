@@ -14,7 +14,7 @@ class Plot:
         self.doc = doc
 
         # add custom child-classes here
-        self.df = PlotGpd(doc)
+        self.gdf = PlotGpd(doc)
 
     # add custom methods here
 

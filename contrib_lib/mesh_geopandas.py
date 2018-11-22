@@ -42,10 +42,12 @@ class MeshGpd:
         # export parameters if provided
         if type(parameters) == list:
             for parameter_id in parameters:
+                self.doc.getParamSize(parameter_id)
                 gdf_elements[parameter_id] = self.doc.getParamValues(parameter_id)
 
         if type(parameters) == dict:
             for key in parameters:
+                self.doc.getParamSize(parameter_id)
                 gdf_elements[key] = self.doc.getParamValues(parameters[key])
 
         # filter by given selection
