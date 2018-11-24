@@ -6,11 +6,13 @@ from ifm import Enum
 class TestMeshGpd(unittest.TestCase):
 
     def test_elements(self):
+        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         df = doc.c.mesh.df.elements([Enum.P_TRANS])
         self.assertAlmostEqual(df[Enum.P_TRANS].sum(), 741.2000004276633)
 
     def test_nodes(self):
+        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.mesh.df.nodes(par=Enum.P_HEAD)   # 0
         doc.c.mesh.df.nodes(par=[Enum.P_HEAD])  # 0
