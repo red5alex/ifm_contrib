@@ -101,6 +101,13 @@ class MeshPd:
         df_nodes["SLICE"] = df_nodes.index.values / self.doc.getNumberOfNodesPerSlice() + 1
         df_nodes["TOP_NODE"] = df_nodes.index.values % self.doc.getNumberOfNodesPerSlice()
 
+        if global_cos:
+            X0, Y0 = self.doc.getOriginX(), self.doc.getOriginY()
+        else:
+            X0, Y0 = 0, 0
+        df_nodes["X"] = np.array(self.doc.getParamValues(Enum.P_MSH_X)) + X0
+        df_nodes["Y"] = np.array(self.doc.getParamValues(Enum.P_MSH_Y)) + Y0
+
         if par is not None:
             # single items become lists
             if type(par) == int:

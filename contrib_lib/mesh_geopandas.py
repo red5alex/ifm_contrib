@@ -98,8 +98,20 @@ class MeshGpd:
             # filter by layer list
             gdf_elements = gdf_elements.loc[gdf_elements.LAYER.isin(layer)]
 
-
         return gdf_elements
+
+
+    def nodes(self, *args, **kwargs):
+        """
+        Create a geopandas.GeoDataFrame of the nodes.
+        Can use all parameters of doc.c.mesh.df.nodes().
+        :return: geopandas.GeoDataFrame
+        """
+        from shapely.geometry import Point
+        df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
+        df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
+        return df_nodes.set_geometry("element_shape")
+
 
     def model_area(self):
         df = self.doc.c.mesh.df.elements(layer=1, as_2d=True)
