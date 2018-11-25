@@ -129,6 +129,9 @@ class MeshPd:
                     exprID = x
                 else:
                     raise ValueError("expr must be string (for name) or integer (for id)")
+                if exprID == -1:
+                    raise ValueError("Expression "+str(x)+" not found!")
+
                 df_nodes[x] = [self.doc.getNodalExprDistrValue(exprID, n) for n in range(self.doc.getNumberOfNodes())]
 
         if distr is not None:
