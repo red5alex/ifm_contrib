@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<colorSequence version="7200" piecewiseConstant="false">
+    <colorItems>
+        <colorItem fraction="0" R="1" G="1" B="1" A="1" />
+        <colorItem fraction="1" R="1" G="0" B="0" A="1" />
+    </colorItems>
+</colorSequence>

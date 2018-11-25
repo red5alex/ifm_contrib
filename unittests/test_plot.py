@@ -25,7 +25,7 @@ class TestPlot(unittest.TestCase):
     def test_fringes(self):
         ifm.forceLicense("Viewer")
         self.doc = ifm.loadDocument(r".\models\example_2D.dac")
-        self.doc.c.plot.fringes(par=Enum.P_HEAD, alpha=1)
+        self.doc.c.plot.fringes(par=Enum.P_HEAD, alpha=1, cmap=ifm.colormaps.feflow_rainbow)
 
     def test_isolines(self):
         ifm.forceLicense("Viewer")
