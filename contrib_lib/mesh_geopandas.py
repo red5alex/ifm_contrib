@@ -6,10 +6,10 @@ class MeshGpd:
         self.doc = doc
 
 
-    def elements(self, parameters=None, global_cos=True, layer=None, selection=None, as_2d=False):
+    def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False):
         """
         Get the mesh as a GeoPandas GeoDataFrame.
-        :param parameters: Dict {colname : parid} or List [parid]. Adds values of given parameters as columns.
+        :param par: Dict {colname : parid} or List [parid]. Adds values of given parameters as columns.
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
@@ -39,16 +39,50 @@ class MeshGpd:
         gdf_elements["TOP_ELEMENT"] = gdf_elements.index.values % self.doc.getNumberOfElementsPerLayer()
         gdf_elements["AREA"] = gdf_elements.geometry.area
 
-        # export parameters if provided
-        if type(parameters) == list:
-            for parameter_id in parameters:
-                self.doc.getParamSize(parameter_id)
-                gdf_elements[parameter_id] = self.doc.getParamValues(parameter_id)
+        if par is not None:
+            # single items become lists
+            if type(par) == int:
+                par = [par]
 
-        if type(parameters) == dict:
-            for key in parameters:
-                self.doc.getParamSize(parameter_id)
-                gdf_elements[key] = self.doc.getParamValues(parameters[key])
+            # export parameters if provided
+            if type(par) == list:
+                for parameter_id in par:
+                    self.doc.getParamSize(parameter_id)
+                    gdf_elements[parameter_id] = self.doc.getParamValues(parameter_id)
+
+            if type(par) == dict:
+                for key in par:
+                    self.doc.getParamSize(par[key])
+                    gdf_elements[key] = self.doc.getParamValues(par[key])
+
+        if expr is not None:
+            # single items become lists
+            if type(expr) == str:
+                expr = [expr]
+
+            for x in expr:
+                if type(x) == str:
+                    exprID = self.doc.getElementalExprDistrIdByName(x)
+                elif type(x) == int:
+                    exprID = x
+                else:
+                    raise ValueError("expr must be string (for name) or integer (for id)")
+                gdf_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in
+                                  range(self.doc.getNumberOfElements())]
+
+        if distr is not None:
+            # single items become lists
+            if type(distr) == str:
+                distr = [distr]
+
+            for d in distr:
+                if type(d) == str:
+                    distrID = self.doc.getElementalRefDistrIdByName(d)
+                elif type(d) == int:
+                    distrID = d
+                else:
+                    raise ValueError("expr distr be string (for name) or integer (for id)")
+                gdf_elements[d] = self.doc.getElementalRefDistrValues(distrID)
 
         # filter by given selection
         if selection is not None:
