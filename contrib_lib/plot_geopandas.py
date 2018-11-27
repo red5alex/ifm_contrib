@@ -68,7 +68,7 @@ class PlotGpd:
 
         return gdf
 
-    def fringes(self, item=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
+    def fringes(self, par=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
         """
         Get Fringes Polygons.
         :param global_cos: If True, use global coordinate system (default: local)
@@ -105,8 +105,8 @@ class PlotGpd:
         femesh = tri.Triangulation(x, y, np.asarray(imat))
 
         # get values, remove nan values (=inactive elements)
-        if item is not None:
-            values = self.doc.getParamValues(item)
+        if par is not None:
+            values = self.doc.getParamValues(par)
         elif expr is not None:
             if type(expr) == str:
                 exprID = self.doc.getNodalExprDistrIdByName(expr)
@@ -136,13 +136,13 @@ class PlotGpd:
         else:
             fringes = ax.tricontourf(femesh, values, levels)
         _ = ax.remove()
+        plt.close()  # this is important to prevent a memory leak!
+
+        return self._tricontourset_to_gdf(fringes, itemname=par)
 
 
-        return self._tricontourset_to_gdf(fringes, itemname=item)
 
-
-
-    def isolines(self, item, subitem=0, global_cos=True):
+    def isolines(self, par, subitem=0, global_cos=True):
         """
         Get isocontour lines.
         :param global_cos: If True, use global coordinate system (default: local)
@@ -160,10 +160,11 @@ class PlotGpd:
         femesh = tri.Triangulation(x, y, np.asarray(imat))
 
         # get values and generate polygons from matplotlib (suppress output)
-        values = self._get_nodal_values(item)
+        values = self.doc.getParamValues(par)
         fig, ax = plt.subplots(1, 1)
         fringes = ax.tricontour(femesh, values, cmap='rainbow')
         _ = ax.remove()
+        plt.close()  # this is important to prevent a memory leak!
 
         # create geodataframe from contours
         p = []
@@ -174,6 +175,6 @@ class PlotGpd:
         gdf = gpd.GeoDataFrame(p)
         gdf.columns = ["geometry"]
         gdf.set_geometry("geometry", inplace=True)
-        gdf[str(item)] = fringes.levels
+        gdf[str(par)] = fringes.levels
 
         return gdf
