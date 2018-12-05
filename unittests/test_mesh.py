@@ -69,5 +69,10 @@ class TestMesh(unittest.TestCase):
         with self.assertRaises(ValueError):
             doc.c.mesh.get_imatrix2d(slice=4)
 
+    def test_getCentroid(self):
+        ifm.forceLicense("Viewer")
+        doc = ifm.loadDocument("./models/example_2D.fem")
+        doc.c.mesh.getCentroid(0)
+
 if __name__ == '__main__':
     unittest.main()

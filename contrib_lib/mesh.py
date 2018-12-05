@@ -191,11 +191,11 @@ class Mesh:
         :param itemtype: {ifm.Enum.SEL_*} default ifm.Enum.SEL_ELEMENTAL
         :return:
         """
-        if itemtype != ifm.Enum.SEL_ELEMENTAL:
-            raise NotImplementedError("function not implemented for itemtype " + str(ifm.Enum.SEL_ELEMENTAL))
+        if itemtype != Enum.SEL_ELEMENTAL:
+            raise NotImplementedError("function not implemented for itemtype " + str(Enum.SEL_ELEMENTAL))
 
-        dim = self.getNumberOfDimensions()
-        NN = self.doc.getNumberOfNodesPerElement()
+        dim = self.doc.getNumberOfDimensions()
+        NN = self.doc.getNumberOfElementNodes(item)
 
         x, y, z = (0., 0., 0.)
         for N in range(NN):
