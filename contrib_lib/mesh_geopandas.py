@@ -1,6 +1,9 @@
 from ifm import Enum
 
 class MeshGpd:
+    """
+    Functions for exporting nodal and elemental properties to GeoDataFrames.
+    """
 
     def __init__(self, doc):
         self.doc = doc
@@ -8,10 +11,25 @@ class MeshGpd:
 
     def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False):
         """
-        Get the mesh as a GeoPandas GeoDataFrame.
-        :param par: Dict {colname : parid} or List [parid]. Adds values of given parameters as columns.
-        :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        Create a GeoPandas GeoDataframe with information on the model elements.
+
+        :param par:        Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+                           columns are created if a list is provided.  Columns can be givens custom names if a dict
+                           {column name : parid} is provided.
+        :type par:         dict, list or ifm.Enum
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type distr:       str or list
+        :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type expr:        str or list
+        :param global_cos: If True (default), use global instead of local coordinate system.
+        :type global_cos:  bool
+        :param layer:      if provided in a 3D model, return only elements of this layer
+        :type layer:       int
+        :param selection:  if provided in a 3D model, return only elements of this selection
+        :type selection:   str
+        :return:           geopandas.GeoDataFrame
         """
 
         import geopandas as gpd
@@ -103,10 +121,27 @@ class MeshGpd:
 
     def nodes(self, *args, **kwargs):
         """
-        Create a geopandas.GeoDataFrame of the nodes.
-        Can use all parameters of doc.c.mesh.df.nodes().
-        :return: geopandas.GeoDataFrame
+        Create a Pandas Dataframe with information on the model nodes.
+
+        :param par:        Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+                           columns are created if a list is provided.  Columns can be givens custom names if a dict
+                           {column name : parid} is provided.
+        :type par:         dict, list or ifm.Enum
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type distr:       str or list
+        :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type expr:        str or list
+        :param global_cos: if True (default), use global instead of local coordinate system
+        :type global_cos:  bool
+        :param slice:      if provided in a 3D model, return only nodes of this slice
+        :type slice:       int
+        :param selection:  if provided, return only nodes of this selection
+        :type selection:   str
+        :return:           geopandas.GeoDataFrame
         """
+
         from shapely.geometry import Point
         df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
@@ -114,11 +149,16 @@ class MeshGpd:
 
 
     def model_area(self):
-        df = self.doc.c.mesh.df.elements(layer=1, as_2d=True)
-        df = df.dissolve(by="LAYER")
-        df.reset_index(inplace=True)
-        del (df["ELEMENT"])
-        del (df["LAYER"])
-        del (df["TOP_ELEMENT"])
-        df["AREA"] = df.geometry.area
-        return df
+        """
+        Get the model area as a single 2D polygon.
+
+        :return: geopandas.GeoDataFrame.
+        """
+        gdf = self.doc.c.mesh.df.elements(layer=1, as_2d=True)
+        gdf = gdf.dissolve(by="LAYER")
+        gdf.reset_index(inplace=True)
+        del (gdf["ELEMENT"])
+        del (gdf["LAYER"])
+        del (gdf["TOP_ELEMENT"])
+        gdf["AREA"] = gdf.geometry.area
+        return gdf

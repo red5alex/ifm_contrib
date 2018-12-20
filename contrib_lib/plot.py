@@ -22,6 +22,7 @@ class Plot:
                   style='isolines', ignore_inactive=True, **kwargs):
         """
         Business functions for plotting library.
+
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
@@ -121,6 +122,7 @@ class Plot:
     def continuous(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plots the item (given as Parameter ID according to ifm.Enum) in a continuous style using matplotlib.
+
         :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :return:
@@ -131,6 +133,7 @@ class Plot:
     def fringes(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
         Plot Fringes using matplotlib.
+
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """
@@ -140,6 +143,7 @@ class Plot:
     def isolines(self, slice=1, alpha=1.0, *args, **kwargs):
         """
         Plots Isolines using matplotlib.
+
         :param global_cos: If True, use global coordinate system (default: local)
         :return: GeoDataFrame
         """

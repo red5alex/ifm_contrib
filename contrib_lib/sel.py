@@ -3,8 +3,7 @@ from ifm import Enum
 
 class Sel:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to the PROBLEM SETTINGS of a FEFLOW model.
+    Functions for working with selections.
     """
 
     def __init__(self, doc):
@@ -15,9 +14,12 @@ class Sel:
     def list(self, selname, seltype=None):
         """
         Return the item indices of the given selection as a list.
+
         :param selname: name of the selection
+        :type selname:  str
         :param seltype: type of the selection (optional)
-        :return:
+        :type seltype:  ifm.Enum or None
+        :return:        list of item indices
         """
 
         # try all supported types
@@ -40,13 +42,23 @@ class Sel:
     def set(self, selname, seltype=None):
         """
         Return the item indices of the given selection as a set.
+
         :param selname: name of the selection
-        :param seltype: type of the selection (optional)
-        :return:
+        :type selname:  str
+        :param seltype: type of the selection
+        :type seltype:  ifm.Enum or None
+        :return:        set of item indices
         """
         return set(self.list(selname, seltype=seltype))
 
     def getSelectionNames(self, seltype=None):
+        """
+        Return a list of names of selections in the model
+
+        :param seltype: Selection type (return all if None).
+        :type seltype:  ifm.Enum or None.
+        :return:
+        """
         if seltype is None:
             seltypes = [Enum.SEL_NODES,
                         Enum.SEL_ELEMS,
@@ -64,9 +76,12 @@ class Sel:
 
     def getSelectionType(self, selection):
         """
-        Returns the type of the selection. Returns -1 (Enum.SEL_INVALID) if selection does not exist.
-        :param selection: name of the selection to be tested
+        Returns the type of a given selection. Returns -1 (=Enum.SEL_INVALID) if selection does not exist.
+
+        :param selection: name of the selection
+        :type selection: str
         :return: type of selection
+        :rtype: ifm.Enum
         """
         for seltype in [Enum.SEL_NODAL,
                         Enum.SEL_ELEMENTAL,
@@ -81,11 +96,15 @@ class Sel:
 
     def create(self, seltype, selname, itemlist=None):
         """
-        create a new selection of given type and name. Populate the selection if itemlist is provided.
-        :param seltype: Type of selection type (see ifm.Enum.SEL_<>)
-        :param selname: Name of selection
+        create a new selection of given type and name. Populate the selection if itemlist if provided.
+
+        :param seltype:  Type of selection type
+        :type seltype:   ifm.Enum
+        :param selname:  Name of selection
+        :type selname:   str
         :param itemlist: list of item indices (optional)
-        :return: the id of the selection
+        :type itemlist:  [int]
+        :return:         the id of the selection
         """
 
         # raise error if selection already exists
@@ -103,10 +122,14 @@ class Sel:
 
     def convert(self, selection, to_type):
         """
-        Converts a selection to a selection of the given type
-        :param selection:
-        :param to_type:
-        :return:
+        Converts a selection to a selection of the given type.
+        Currently only support elemental to nodal.
+
+        :param selection: Name of the selection to be converted
+        :type selection:  str
+        :param to_type:   type of the selection to return
+        :type to_type:    ifm.Enum
+        :return:          list of converted items
         """
         from_type = self.doc.c.sel.getSelectionType(selection)
 

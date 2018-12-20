@@ -3,16 +3,32 @@ import numpy as np
 
 
 class MeshPd:
+    """
+    Functions for exporting nodal and elemental properties to DataFrames.
+    """
 
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False):
+    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, as_2d=False):
         """
-        Get the mesh as a GeoPandas GeoDataFrame.
-        :param par: Dict {colname : parid} or List [parid]. Adds values of given parameters as columns.
-        :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        Create a Pandas Dataframe with information on the model elements.
+
+        :param par:        Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+                           columns are created if a list is provided.  Columns can be givens custom names if a dict
+                           {column name : parid} is provided.
+        :type par:         dict, list or ifm.Enum
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type distr:       str or list
+        :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type expr:        str or list
+        :param layer:      if provided in a 3D model, return only elements of this layer
+        :type layer:       int
+        :param selection:  if provided in a 3D model, return only elements of this selection
+        :type selection:   str
+        :return:           pandas.DataFrame
         """
 
         import pandas as pd
@@ -86,10 +102,25 @@ class MeshPd:
 
     def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None):
         """
-        Get the mesh as a GeoPandas GeoDataFrame.
-        :param par: Dict {colname : parid} or List [parid]. Adds values of given parameters as columns.
-        :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        Create a Pandas Dataframe with information on the model nodes.
+
+        :param par:        Create additional columns with parameter values. Parameter are provided as ifm.Enum. Multiple
+                           columns are created if a list is provided.  Columns can be givens custom names if a dict
+                           {column name : parid} is provided.
+        :type par:         dict, list or ifm.Enum
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type distr:       str or list
+        :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type expr:        str or list
+        :param global_cos: if True (default), use global instead of local coordinate system
+        :type global_cos:  bool
+        :param slice:      if provided in a 3D model, return only nodes of this slice
+        :type slice:       int
+        :param selection:  if provided, return only nodes of this selection
+        :type selection:   str
+        :return:           pandas.DataFrame
         """
 
         import pandas as pd

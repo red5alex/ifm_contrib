@@ -6,8 +6,7 @@ from .mesh_pandas import MeshPd
 
 class Mesh:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to MESH (Nodes, Elements).
+    Provides functions for working with mesh properties.
     """
 
     def __init__(self, doc):
@@ -22,6 +21,7 @@ class Mesh:
     def get_imatrix(self, layer=None, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
         """
         return the incidence matrix as [[int]].
+
         :param layer: specifies a layer number to return. If None (default), return all layers
         :param split_quads_to_triangles: split 4/8-nodes elements into two 3/6-noded elements
         :param ignore_inactive: do not include inactive elements
@@ -78,6 +78,7 @@ class Mesh:
     def get_imatrix2d(self, slice=1, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
         """
         return the incidence matrix as [[int]] of a slice.
+
         :param split_quads_to_triangles: split 4/8-nodes elements into two 3/6-noded elements
         :param ignore_inactive: do not include inactive elements
         :return: list (len=n_elements) of lists of node numbers
@@ -129,6 +130,7 @@ class Mesh:
                          use_cache=True, as_2d=False):
         """
         load the nodes coordinates, the incidence matrix into a numpy matrix
+
         :param global_cos: If True, use global coordinate system (default: local)
         :return: tuple(numpy.Array) (x, y, imat)
         """
@@ -186,10 +188,15 @@ class Mesh:
     def getCentroid(self, item, localcos=False, itemtype=Enum.SEL_ELEMENTAL):
         """
         Return the centroid of an element as (X, Y, Z) coordinate Tuple
-        :param item: element number
-        :param localcos: if True, Return local coordinate system (default: global)
-        :param itemtype: {ifm.Enum.SEL_*} default ifm.Enum.SEL_ELEMENTAL
-        :return:
+
+        :param item: item number (e.g. element number)
+        :type item: int
+        :param localcos: Return local coordinate system if true, global otherwise (default).
+        :type localcos: bool
+        :param itemtype: item type (E
+        :type itemtype: int (ifm.Enum.SEL_*)
+        :return: coordinate (x,y,z) of the centroid
+        :rtype: tuple
         """
         if itemtype != Enum.SEL_ELEMENTAL:
             raise NotImplementedError("function not implemented for itemtype " + str(Enum.SEL_ELEMENTAL))

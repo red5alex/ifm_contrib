@@ -15,12 +15,20 @@ class HistPd:
 
     def getDataframe(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None):
         """
-        returns the chosen history id as a DataFrame. Calling the function without arguments returns a dictionary of
-        all available histories
-        hist_type:    History Type (str, int, ifm.Enum.HIST_* constant or None.
-        hist_subtype: History Sub-Type (int)
-        force_time_axis: index uses FEFLOW time in days
-        reference_time: specify reference_time (default: as set in FEFLOW)
+        Returns the values of any history charting window as a dataframe. Calling the function without arguments
+        returns a dictionary of all available histories
+
+        :param hist_type:        History Type.
+        :type hist_type:         str, int, ifm.Enum or None.
+        :param hist_subtype:     History Sub-Type (int)
+        :type hist_subtype:      int
+        :param force_time_axis:  If True, the index of the dataframe will be the simulation time in days.
+                                 If False (default), the index type will be of type datetime if a reference time is set
+                                 in the model, and simulation time in days otherwise.
+        :type force_time_axis:   bool
+        :param reference_time:   Specify (or override) a reference time. Note that this only accounts for this export and
+                                 is not a permanent change of the model settings.
+        :type reference_time:    datetime.datetime
         """
 
         hist_str = None
@@ -80,4 +88,5 @@ class HistPd:
 
         if hist_str is not None:
             setattr(self, hist_str, df) # add the df permanently to class instance
+            #TODO: does not update after re-run!
         return df

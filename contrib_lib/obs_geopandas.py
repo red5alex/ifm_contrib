@@ -2,6 +2,9 @@ from ifm import Enum
 
 
 class ObsGpd:
+    """
+    Functions for exporting observation point properties to GeoDataFrames.
+    """
 
     def __init__(self, doc):
         self.doc = doc
@@ -9,6 +12,7 @@ class ObsGpd:
     def getGeoDataframe(self, global_cos=True):
         """
         Get the observation points as a GeoPandas GeoDataFrame.
+
         :param global_cos: If True, use global coordinate system (default)
         :return: GeoDataFrame
         """

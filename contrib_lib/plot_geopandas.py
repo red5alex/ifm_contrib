@@ -2,6 +2,10 @@ from ifm import Enum
 
 
 class PlotGpd:
+    """
+    Functions for exporting plotted data like isocontours as GeoDataFrame. Results are similar to the
+    output of the View Components Panel of the FEFLOW GUI.
+    """
 
     def __init__(self, doc):
         self.doc = doc
@@ -38,6 +42,7 @@ class PlotGpd:
     def _tricontourset_to_gdf(self, tricontourset, itemname):
         """
         Create a GeoPandas.GeoDataFrame from a TriContourSet object
+
         :return: geodataframe
         """
 
@@ -70,9 +75,20 @@ class PlotGpd:
 
     def fringes(self, par=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
         """
-        Get Fringes Polygons.
+        Create fringes polygons of a given parameter, expression or distribution. Return the plot as a polygonal
+        GeoDataFrame.
+
+        :param par:        Type of parameter to evaluate. Parameter are provided as ifm.Enum.
+        :type par:         ifm.Enum
+        :param distr:      Name of user distribution to evaluate.
+        :type distr:       str
+        :param expr:       Name of user expression to evaluate.
+        :type expr:        str
+        :param slice:      if provided in a 3D model, create fringe polygons on this slice.
+        :type layer:       int
         :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        :type global_cos:  bool
+        :return:           geopandas.GeoDataFrame
         """
 
         import geopandas as gpd
@@ -142,12 +158,25 @@ class PlotGpd:
 
 
 
-    def isolines(self, par, subitem=0, global_cos=True):
+    def isolines(self, par, global_cos=True):
         """
-        Get isocontour lines.
+        Create Isoline plot of a parameter, expression or distribution. Return the plot as a line-type
+        GeoDataFrame.
+
+        :param par:        Type of parameter to evaluate. Parameter are provided as ifm.Enum.
+        :type par:         ifm.Enum
+        :param distr:      Name of user distribution to evaluate.
+        :type distr:       str
+        :param expr:       Name of user expression to evaluate.
+        :type expr:        str
+        :param slice:      if provided in a 3D model, create isolines on this slice.
+        :type layer:       int
         :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        :type global_cos:  bool
+        :return:           geopandas.GeoDataFrame
         """
+
+        #TODO: implement expressions, distribtions
 
         import geopandas as gpd
         from shapely.geometry import LineString
