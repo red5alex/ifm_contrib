@@ -6,8 +6,10 @@ from .plot_geopandas import PlotGpd
 
 class Plot:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to VISUALISATION routine of a FEFLOW model.
+    Functions for creating visual plots using the matplotlib.  The function resemble the functionality of the
+    View Components panel; The default plot styles are chosen to  minmic output from FEFLOW's user interface.
+    Useful for visualization of the model in an interactive environments like Jupyter, or for batch processing
+    of images. See examples for further info.
     """
 
     def __init__(self, doc):
@@ -105,47 +107,54 @@ class Plot:
 
     def faces(self, color="grey", alpha=1.0, ignore_inactive=False, *args, **kwargs):
         """
-        Plot the mesh using matplotlib.tri.triplot.
-        For arguments see matplotlib.tri.tripcolor
+        Add the faces of the model to the plot.
+        Corresponds to the geometrie : faces style in FEFLOW.
         """
         return self._contours(*args, style="faces", ignore_inactive=ignore_inactive,
                               color=color, alpha=alpha, **kwargs)
 
     def edges(self, color="black", alpha=0.5, lw=1, ignore_inactive=False, *args, **kwargs):
         """
-        Plot the mesh using matplotlib.tri.triplot.
-        For arguments see matplotlib.tri.triplot
+        Add the edges of the mesh to the plot.
+        Corresponds to the geometrie > edges style in FEFLOW.
         """
         return self._contours(*args, style="edges", ignore_inactive=ignore_inactive,
                               color=color, alpha=alpha, lw=lw, **kwargs)
 
     def continuous(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
-        Plots the item (given as Parameter ID according to ifm.Enum) in a continuous style using matplotlib.
+        Add an interpolated color plot of the given nodal model property to the plot.
+        Corresponds to the continuous style in FEFLOW.
+        Note: Avoid usage when creating vector graphics (svg).
 
+        :param slice: specified the slice to be plotted in a 3D model.
+        :type slice: int
         :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
-        :return:
         """
         return self._contours(*args, style="continuous", slice=slice,
                               cmap=cmap, alpha=alpha, **kwargs)
 
     def fringes(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
         """
-        Plot Fringes using matplotlib.
+        Add fringe polygons of the given nodal model property to the plot.
+        Corresponds to the fringes style in FEFLOW.
 
-        :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        :param slice: specified the slice to be plotted in a 3D model.
+        :type slice: int
+        :return: matplotlib.contour.ContourSet
         """
         return self._contours(*args, style="fringes", slice=slice,
                               cmap=cmap, alpha=alpha, **kwargs)
 
     def isolines(self, slice=1, alpha=1.0, *args, **kwargs):
         """
-        Plots Isolines using matplotlib.
+        Add isolines of the given nodal model property to the plot.
+        Corresponds to the Isolines style in FEFLOW.
 
-        :param global_cos: If True, use global coordinate system (default: local)
-        :return: GeoDataFrame
+        :param slice: specified the slice to be plotted in a 3D model.
+        :type slice: int
+        :return: matplotlib.contour.ContourSet
         """
         return self._contours(*args, style="isolines", slice=slice,
                               alpha=alpha, **kwargs)
