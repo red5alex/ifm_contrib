@@ -75,7 +75,7 @@ class PlotGpd:
 
     def fringes(self, par=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
         """
-        Create fringes polygons of a given parameter, expression or distribution. Return the plot as a polygonal
+        Create fringes polygons of a given nodal parameter, expression or distribution. Return the plot as a polygonal
         GeoDataFrame.
 
         :param par:        Type of parameter to evaluate. Parameter are provided as ifm.Enum.
@@ -157,10 +157,9 @@ class PlotGpd:
         return self._tricontourset_to_gdf(fringes, itemname=par)
 
 
-
-    def isolines(self, par, global_cos=True):
+    def isolines(self, par=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
         """
-        Create Isoline plot of a parameter, expression or distribution. Return the plot as a line-type
+        Create isolines of a given nodal parameter, expression or distribution. Return the plot as a LineString geometry-type
         GeoDataFrame.
 
         :param par:        Type of parameter to evaluate. Parameter are provided as ifm.Enum.
@@ -176,34 +175,85 @@ class PlotGpd:
         :return:           geopandas.GeoDataFrame
         """
 
-        #TODO: implement expressions, distribtions
-
         import geopandas as gpd
         from shapely.geometry import LineString
         import numpy as np
         import matplotlib.pyplot as plt
         import matplotlib.tri as tri
 
-        # read incidence matrix and node values
-        x, y, imat = self.doc.c.mesh.gdf.imatrix_as_array(global_cos=global_cos)
+        # set current species
+        if species is not None:
+            if type(species) == str:
+                speciesID = self.doc.findSpecies(species)
+            elif type(species) == int:
+                speciesID = species
+            else:
+                raise ValueError("species must be string (for name) or integer (for id)")
+            self.doc.setMultiSpeciesId(speciesID)
+
+        # read incidence matrix and node coordinates
+        imat = self.doc.c.mesh.get_imatrix2d(slice=slice, ignore_inactive=True, split_quads_to_triangles=True)
+        x, y = self.doc.getParamValues(Enum.P_MSH_X), self.doc.getParamValues(Enum.P_MSH_Y)
+
+        if global_cos:
+            X0 = self.doc.getOriginX()
+            Y0 = self.doc.getOriginY()
+            x = [X + X0 for X in x]
+            y = [Y + Y0 for Y in y]
+
+        # create Triangulation object
         femesh = tri.Triangulation(x, y, np.asarray(imat))
 
-        # get values and generate polygons from matplotlib (suppress output)
-        values = self.doc.getParamValues(par)
-        fig, ax = plt.subplots(1, 1)
-        fringes = ax.tricontour(femesh, values, cmap='rainbow')
+        # get values, remove nan values (=inactive elements)
+        if par is not None:
+            values = self.doc.getParamValues(par)
+        elif expr is not None:
+            if type(expr) == str:
+                exprID = self.doc.getNodalExprDistrIdByName(expr)
+            elif type(expr) == int:
+                exprID = expr
+            else:
+                raise ValueError("expr must be string (for name) or integer (for id)")
+            values = [self.doc.getNodalExprDistrValue(exprID, n) for n in range(self.doc.getNumberOfNodes())]
+        elif distr is not None:
+            if type(distr) == str:
+                distrID = self.doc.getNodalRefDistrIdByName(distr)
+            elif type(distr) == int:
+                distrID = distr
+            else:
+                raise ValueError("distr must be string (for name) or integer (for id)")
+            values = [self.doc.getNodalRefDistrValue(distrID, n) for n in range(self.doc.getNumberOfNodes())]
+        else:
+            raise ValueError("either of parameter item, expr or distr must be provided!")
+
+        # set nan values to zero
+        values = np.nan_to_num(np.asarray(values))
+
+        # generate polygons from matplotlib (suppress output)
+        fig, ax = plt.subplots(1, 1, figsize=(0,0))
+        if levels is None:
+            isolines = ax.tricontour(femesh, values,)
+        else:
+            isolines = ax.tricontour(femesh, values, levels)
         _ = ax.remove()
         plt.close()  # this is important to prevent a memory leak!
 
         # create geodataframe from contours
         p = []
-        for collection in fringes.collections:
+        levels = []
+        for level, collection in zip(isolines.levels, isolines.collections):
             for path in collection.get_paths():
                 for polygon in path.to_polygons(closed_only=False):
                     p.append(LineString(polygon))
+                    levels.append(level)
         gdf = gpd.GeoDataFrame(p)
-        gdf.columns = ["geometry"]
+
+        if len(gdf) > 0:
+            gdf.columns = ["geometry"]
+        else:
+            gdf["geometry"] = []
+
         gdf.set_geometry("geometry", inplace=True)
-        gdf[str(par)] = fringes.levels
+        gdf[str(par)] = levels
 
         return gdf
