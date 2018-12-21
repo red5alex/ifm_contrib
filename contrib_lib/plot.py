@@ -158,3 +158,38 @@ class Plot:
         """
         return self._contours(*args, style="isolines", slice=slice,
                               alpha=alpha, **kwargs)
+
+    def obs_markers(self, color="lightgreen", *args,  **kwargs):
+        """
+        Add observation point markers to the plot.
+        Corresponds to Obs. Markers in FEFLOW.
+
+        :param args:   arguments for plt.scatter
+        :param kwargs: arguments for plt.scatter
+        :return:
+        """
+
+        import matplotlib.pyplot as plt
+
+        self.doc.c.obs.gdf.getGeoDataframe().plot(ax=plt.gca(), color=color)
+
+    def obs_labels(self, attribute='label', horizontalalignment='center', *args, **kwargs):
+        """
+        Add observation point labels to the plot.
+        Corresponds to Obs. Labels in FEFLOW.
+
+        :param attribute: "label", "x", "y", "node" or "h" (modelled head)
+        :type attribute:  str
+        :param args:      arguments for plt.annotate
+        :param kwargs:    arguments for plt.annotate
+        :return:
+        """
+
+        import matplotlib.pyplot as plt
+
+        for i, row in self.doc.c.obs.gdf.getGeoDataframe().iterrows():
+            plt.annotate(*args, s=row[attribute],
+                         xy=(row.x, row.y),
+                         horizontalalignment=horizontalalignment,
+                         **kwargs)
+
