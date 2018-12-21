@@ -1,0 +1,7 @@
+ifm_contrib
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   ifm_contrib
