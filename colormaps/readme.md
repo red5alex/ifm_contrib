@@ -1,0 +1,1 @@
+Export colormaps from FEFLOW to here to make them available in ifm_contrib.
