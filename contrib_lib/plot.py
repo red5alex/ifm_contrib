@@ -20,7 +20,7 @@ class Plot:
 
     # add custom methods here
 
-    def _contours(self, par=None, expr=None, distr=None, slice=1, global_cos=True, species=None,
+    def _contours(self, par=None, expr=None, distr=None, values=None, slice=1, global_cos=True, species=None,
                   style='isolines', ignore_inactive=True, **kwargs):
         """
         Business functions for plotting library.
@@ -86,6 +86,8 @@ class Plot:
             else:
                 raise ValueError("distr must be string (for name) or integer (for id)")
             values = [self.doc.getNodalRefDistrValue(distrID, n) for n in range(self.doc.getNumberOfNodes())]
+        elif values is not None:
+            values = values  # OK, so this is just to make clear that we are using the values directly!
         else:
             raise ValueError("either of parameter param, expr or distr must be provided!")
 
@@ -121,7 +123,7 @@ class Plot:
         return self._contours(*args, style="edges", ignore_inactive=ignore_inactive,
                               color=color, alpha=alpha, lw=lw, **kwargs)
 
-    def continuous(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
+    def continuous(self, slice=1, alpha=0.5, cmap="feflow_rainbow", *args, **kwargs):
         """
         Add an interpolated color plot of the given nodal model property to the plot.
         Corresponds to the continuous style in FEFLOW.
@@ -135,7 +137,7 @@ class Plot:
         return self._contours(*args, style="continuous", slice=slice,
                               cmap=cmap, alpha=alpha, **kwargs)
 
-    def fringes(self, slice=1, alpha=0.5, cmap=ifm.colormaps.feflow_rainbow, *args, **kwargs):
+    def fringes(self, slice=1, alpha=0.5, cmap="feflow_rainbow", *args, **kwargs):
         """
         Add fringe polygons of the given nodal model property to the plot.
         Corresponds to the fringes style in FEFLOW.
