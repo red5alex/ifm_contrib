@@ -9,8 +9,10 @@ If anybody has some time, feel free to get going.
 import glob, os
 import xml.etree.ElementTree as ET
 
-from matplotlib.colors import LinearSegmentedColormap
-import numpy as np
+try:
+    from matplotlib.colors import LinearSegmentedColormap
+except Exception:
+    raise ImportError("No module named matplotlib.colors")
 
 def create_colormap_from_xml(name, xmlfile, register_cmap=True):
     """
