@@ -173,7 +173,7 @@ class Plot:
 
         import matplotlib.pyplot as plt
 
-        self.doc.c.obs.gdf.getGeoDataframe().plot(ax=plt.gca(), color=color)
+        self.doc.c.obs.gdf.obspoints().plot(ax=plt.gca(), color=color)
 
     def obs_labels(self, attribute='label', horizontalalignment='center', *args, **kwargs):
         """
@@ -189,7 +189,7 @@ class Plot:
 
         import matplotlib.pyplot as plt
 
-        for i, row in self.doc.c.obs.gdf.getGeoDataframe().iterrows():
+        for i, row in self.doc.c.obs.gdf.obspoints().iterrows():
             plt.annotate(*args, s=row[attribute],
                          xy=(row.x, row.y),
                          horizontalalignment=horizontalalignment,
