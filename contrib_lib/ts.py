@@ -29,9 +29,9 @@ class Ts:
                 break
             info.append((tsid,
                          self.doc.powerGetComment(tsid),
-                         self.doc.powerGetNumberOfPoints(1),
-                         self.doc.powerIsCyclic(1),
-                         self.doc.powerGetInterpolationKind(1)))
+                         self.doc.powerGetNumberOfPoints(tsid),
+                         self.doc.powerIsCyclic(tsid),
+                         self.doc.powerGetInterpolationKind(tsid)))
         return info
 
     def points(self, tsid):
