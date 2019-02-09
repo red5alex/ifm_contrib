@@ -9,7 +9,7 @@ class ObsGpd:
     def __init__(self, doc):
         self.doc = doc
 
-    def getGeoDataframe(self, global_cos=True):
+    def obspoints(self, global_cos=True):
         """
         Get the observation points as a GeoPandas GeoDataFrame.
 
