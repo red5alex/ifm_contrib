@@ -9,7 +9,7 @@ class ObsGpd:
     def __init__(self, doc):
         self.doc = doc
 
-    def obspoints(self, global_cos=True):
+    def obspoints(self, global_cos=True, filter_by=None):
         """
         Get the observation points as a GeoPandas GeoDataFrame.
 
@@ -49,7 +49,22 @@ class ObsGpd:
 
         # create and return dataframe
         gdf_obs = gpd.GeoDataFrame(obs, columns=["id", "label", "x", "y", "z", "node", "h", "shape"])
+
+        # filter the dataframe by attributes
+        if filter_by is not None:
+            # check if filter attribute is a dictionary
+            if type(filter_by) != dict:
+                raise ValueError("filter must be of type dict!")
+            for key in filter_by.keys():
+                # check if attribute exists
+                if key not in gdf_obs.columns:
+                    raise ValueError("unknown attribute {}".format(key))
+                if type(filter_by[key]) == list:
+                    gdf_obs = gdf_obs.loc[gdf_obs[key].isin(filter_by[key])]
+                else:
+                    raise ValueError("type {} not supported as dict value! (provide a list)".format(type(filter_by[key])))
+
+        # finalize and return
         gdf_obs.set_index("id", inplace=True)
         gdf_obs.set_geometry("shape", inplace=True)
-
         return gdf_obs

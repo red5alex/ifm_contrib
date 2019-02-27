@@ -8,5 +8,9 @@ class TestObsGpd(unittest.TestCase):
     def test_obspoints(self):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
-        gdf = doc.c.obs.gdf.obspoints()
-        self.assertEqual(3, len(gdf))  # should return three observation points
+
+        # should return three observation points
+        self.assertEqual(3, len(doc.c.obs.gdf.obspoints()))
+
+        # should return two observation points
+        self.assertEqual(2, len(doc.c.obs.gdf.obspoints(filter_by={"label": ["myObsPoint1", "myObsPoint2"]})))
