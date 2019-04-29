@@ -90,3 +90,6 @@ class HistPd:
             setattr(self, hist_str, df) # add the df permanently to class instance
             #TODO: does not update after re-run!
         return df
+
+    def all_hist_items(self):
+        return [e for e in dir(Enum) if "HIST_" in e]
