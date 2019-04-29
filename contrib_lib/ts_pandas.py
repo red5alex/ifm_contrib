@@ -46,6 +46,12 @@ class TsPd:
         if not self.doc.c.ts.exists(tsid):
             raise ValueError("Time Series {} does not exist.".format(tsid))
 
+        # test if time series is empty, return empty dataframe if so
+        if self.doc.powerGetNumberOfPoints(tsid) == 0:
+            df = pd.DataFrame(columns=["Simulation Time", "Values"])
+            df.set_index("Simulation Time", inplace=True)
+            return df
+
         # get list of points and convert to DataFrame
         df = pd.DataFrame(self.doc.c.ts.points(tsid), columns=["Simulation Time", "Values"])
         df.set_index("Simulation Time", inplace=True)
