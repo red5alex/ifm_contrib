@@ -169,7 +169,7 @@ class Mesh:
             if ignore_inactive and not self.doc.getMatElementActive(e):
                 continue
 
-            NN = self.doc.getNumberOfElementNodes(e) / stop
+            NN = int(self.doc.getNumberOfElementNodes(e) / stop)
             element_nodes = [self.doc.getNode(e, N) for N in range(NN)]
 
             if split_quads_to_triangles:

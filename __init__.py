@@ -47,7 +47,7 @@ else:
     else:
         raise ImportError('This python version is not supported by FEFLOW!')
 
-    import colormaps
+    from . import colormaps
 
     def loadDocument(f):
         """
@@ -72,5 +72,5 @@ else:
                 self.__dict__[item] = self.pdoc.__getattribute__(item)
 
             # import contributors library
-            import contrib_lib
+            from . import contrib_lib
             self.c = contrib_lib.IfmContrib(self)
