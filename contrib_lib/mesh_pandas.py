@@ -221,7 +221,7 @@ class MeshPd:
                 else:
                     itemtype = 'unknowm'
                 available_items.append((e, e_num, itemtype))
-            except StandardError:
+            except Exception:
                 pass
 
         df_items = pd.DataFrame(available_items, columns=["Name", "Enum_Constant", "Type"])
