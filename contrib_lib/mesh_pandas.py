@@ -201,3 +201,35 @@ class MeshPd:
             df_nodes = df_nodes.loc[df_nodes.SLICE.isin(slice)]
 
         return df_nodes.replace(-99999.0, np.nan)
+
+    def get_available_items(self, Type=None):
+        #TODO: Generalize and move to Enum!
+
+        import pandas as pd
+
+        available_items = []
+        for e in [e for e in dir(Enum) if "P_" in e]:
+            e_num = eval("Enum." + e)
+            try:
+                ii = self.doc.getParamSize(e_num)
+                if ii == self.doc.getNumberOfNodes()  and ii == self.doc.getNumberOfElements():
+                    itemtype = 'ambiguous'  # n_nodes = n_elements, can't determine type
+                elif ii == self.doc.getNumberOfNodes():
+                    itemtype = 'nodal'
+                elif ii == self.doc.getNumberOfElements():
+                    itemtype = 'elemental'
+                else:
+                    itemtype = 'unknowm'
+                available_items.append((e, e_num, itemtype))
+            except StandardError:
+                pass
+
+        df_items = pd.DataFrame(available_items, columns=["Name", "Enum_Constant", "Type"])
+
+        # filter by type
+        if Type is not None:
+            df_items = df_items[df_items.Type == Type]
+
+        df_items.set_index("Enum_Constant", inplace=True)
+
+        return df_items
