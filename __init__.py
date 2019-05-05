@@ -47,7 +47,15 @@ else:
     else:
         raise ImportError('This python version is not supported by FEFLOW!')
 
+    # check for incompatible versions
+    if getKernelVersion() == 7201 or getKernelVersion() == 7202:
+        warning_message = """You are using FEFLOW Version {}, which is known to cause frequent python kernel crashes.
+        Please downgrade to last knwon stable version (FEFLOW 7.2 patch 0) or upgrade to latest version.
+        """.format(getKernelVersion())
+        warnings.warn(warning_message, UserWarning)
+
     from . import colormaps
+
 
     def loadDocument(f):
         """
@@ -56,6 +64,7 @@ else:
         :param f: filename of fem or dac
         :return: doctype including ifm_contrib extension
         """
+
         return doc_contrib(f)
 
 
