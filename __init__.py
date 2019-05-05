@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+
 # ONLY EDIT THIS FILE IF YOU KNOW WHAT YOU DO!
 
 def _():
@@ -46,13 +47,6 @@ else:
         from ifm27 import loadDocument as _loadDocument
     else:
         raise ImportError('This python version is not supported by FEFLOW!')
-
-    # check for incompatible versions
-    if getKernelVersion() == 7201 or getKernelVersion() == 7202:
-        warning_message = """You are using FEFLOW Version {}, which is known to cause frequent python kernel crashes.
-        Please downgrade to last knwon stable version (FEFLOW 7.2 patch 0) or upgrade to latest version.
-        """.format(getKernelVersion())
-        warnings.warn(warning_message, UserWarning)
 
     from . import colormaps
 
