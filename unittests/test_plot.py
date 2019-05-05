@@ -22,6 +22,12 @@ class TestPlot(unittest.TestCase):
         self.doc = ifm.loadDocument(r".\models\example_2D.dac")
         self.doc.c.plot.continuous(par=Enum.P_HEAD)
 
+    def test_patches(self):
+        ifm.forceLicense("Viewer")
+        self.doc = ifm.loadDocument(r".\models\example_2D_unconf.fem")  # pure triangle mesh
+        self.doc.c.plot._contours(par=Enum.P_COND, style="patches")
+        self.doc.c.plot.patches(par=Enum.P_COND)
+
     def test_fringes(self):
         ifm.forceLicense("Viewer")
         self.doc = ifm.loadDocument(r".\models\example_2D.dac")

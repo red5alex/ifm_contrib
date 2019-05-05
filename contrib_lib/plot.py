@@ -98,6 +98,18 @@ class Plot:
         if style == "continuous":
             return plt.tripcolor(femesh, values,
                                  shading='gouraud', **kwargs)
+        elif style == "patches":
+            try:
+                return plt.tripcolor(femesh, facecolors=values.flatten(),
+                                 **kwargs)
+            except ValueError as e:
+                # problems with quad elements --> need to have values for split elements, was
+                # not a poblem for nodal values...
+                if "Length of color" in str(e):
+                    raise NotImplementedError("does not support quad elements yet")
+                else:
+                    raise e
+
         elif style == "fringes":
             contourset = plt.tricontourf(femesh, values, **kwargs)
             return contourset
@@ -195,3 +207,16 @@ class Plot:
                          horizontalalignment=horizontalalignment,
                          **kwargs)
 
+    def patches(self, layer=1, alpha=0.5, cmap="feflow_rainbow", *args, **kwargs):
+        """
+        Add plot of the given elemental model property to the plot.
+        Corresponds to the patches style in FEFLOW (for elemental property).
+        Note: Avoid usage when creating vector graphics (svg).
+
+        :param slice: specified the slice to be plotted in a 3D model.
+        :type slice: int
+        :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
+        :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
+        """
+        return self._contours(*args, style="patches", slice=layer,
+                              cmap=cmap, alpha=alpha, **kwargs)
