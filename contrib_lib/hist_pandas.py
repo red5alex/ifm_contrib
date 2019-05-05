@@ -9,11 +9,21 @@ class HistPd:
     def __getattr__(self, item):
         # TODO: create dataframe as attribute, or raise Attribute Error
         if item in [i.replace("HIST_","") for i in dir(Enum) if "HIST" in i]:
-            return self.getDataframe(item)
+            return self.history(item)
         else:
             raise AttributeError()
 
     def getDataframe(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None):
+        """"
+        Depreciated: use doc.c.hist.history()
+        """
+        import warnings
+        warnings.warn("This function is depreciated. Use ", DeprecationWarning)
+        self.doc.c.hist.df.history(hist_type=hist_type, hist_subtype=hist_subtype,
+                     force_time_axis=force_time_axis, reference_time=reference_time)
+
+
+    def history(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None):
         """
         Returns the values of any history charting window as a dataframe. Calling the function without arguments
         returns a dictionary of all available histories
