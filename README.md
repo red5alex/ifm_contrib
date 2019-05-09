@@ -2,7 +2,7 @@
 
 An Open Source Extension Project for the FEFLOW Programming API.
 
-ifm_contrib requires FEFLOW version 7.2 (release planned late 2018). 
+ifm_contrib requires FEFLOW version 7.2. 
 It is code-compatible with the standard IFM coming with the FEFLOW installation.
 
 The code is free to use, share and modify. 
