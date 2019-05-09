@@ -224,3 +224,30 @@ class Mesh:
             y += self.doc.getOriginY()
 
         return x, y, z
+
+    def mlw(self):
+        """
+        Return a dictionary with information on all Multi-Layer wells in the model.
+        :return:
+        """
+        l_mlw = range(self.doc.getNumberOfMultiLayerWells())
+        data = {
+            "name": [self.doc.queryMultiLayerWellInfo(self.doc.getMultiLayerWellBottomNode(mlw)).getName() for mlw in l_mlw],
+            "radius": [self.doc.queryMultiLayerWellInfo(self.doc.getMultiLayerWellBottomNode(mlw)).getRadius() for mlw in l_mlw],
+            "mlw_id": [self.doc.queryMultiLayerWellInfo(self.doc.getMultiLayerWellBottomNode(mlw)).getId() for mlw in l_mlw],
+            "rate_tsid": [self.doc.getMultiLayerWellAttrTSID(mlw, Enum.MLW_RATE) for mlw in l_mlw],
+            "rate_value": [self.doc.getMultiLayerWellAttrValue(mlw, Enum.MLW_RATE) for mlw in l_mlw],
+            "bcc_hmin_tsid": [self.doc.getMultiLayerWellAttrTSID(mlw, Enum.MLW_BCC_HMIN) for mlw in l_mlw],
+            "bcc_hmin_value": [self.doc.getMultiLayerWellAttrValue(mlw, Enum.MLW_BCC_HMIN) for mlw in l_mlw],
+            "bcc_hmax_tsid": [self.doc.getMultiLayerWellAttrTSID(mlw, Enum.MLW_BCC_HMAX) for mlw in l_mlw],
+            "bcc_hmax_value": [self.doc.getMultiLayerWellAttrValue(mlw, Enum.MLW_BCC_HMAX) for mlw in l_mlw],
+            "bottom_node": [self.doc.getMultiLayerWellBottomNode(mlw) for mlw in l_mlw],
+            "top_node": [self.doc.getMultiLayerWellTopNode(mlw) for mlw in l_mlw],
+            "top_x": [self.doc.getX(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
+            "top_y": [self.doc.getY(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
+            "top_z": [self.doc.getZ(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
+            "bottom_x": [self.doc.getX(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
+            "bottom_y": [self.doc.getY(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
+            "bottom_z": [self.doc.getZ(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
+        }
+        return data

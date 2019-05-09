@@ -233,3 +233,14 @@ class MeshPd:
         df_items.set_index("Enum_Constant", inplace=True)
 
         return df_items
+
+    def mlw(self):
+        """
+        Return a pandas.DataFrame with information on all Multi-Layer wells in the model.
+        :return:
+        """
+        import pandas as pd
+        data = self.doc.c.mesh.mlw()
+        df = pd.DataFrame(data)
+        df.set_index("mlw_id", inplace=True)
+        return df

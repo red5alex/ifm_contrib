@@ -30,3 +30,8 @@ class TestMeshGpd(unittest.TestCase):
         doc.c.mesh.gdf.nodes(par=[Enum.P_HEAD], expr=["nodal_expr_test"], distr=["nodal_test"])
         doc.c.mesh.gdf.nodes(par=[Enum.P_HEAD], slice=1)  # 0
         # self.assertAlmostEqual(df[Enum.P_TRANS].sum(), 741.2000004276633)
+
+    def test_mlw(self):
+        ifm.forceLicense("Viewer")
+        doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
+        doc.c.mesh.gdf.mlw()

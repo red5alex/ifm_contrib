@@ -36,3 +36,11 @@ class TestMeshPd(unittest.TestCase):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.mesh.df.get_available_items()
+
+    def test_mlw(self):
+        ifm.forceLicense("Viewer")
+        doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
+        doc.c.mesh.df.mlw()
+
+if __name__ == '__main__':
+    unittest.main()

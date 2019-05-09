@@ -147,7 +147,6 @@ class MeshGpd:
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
         return df_nodes.set_geometry("element_shape")
 
-
     def model_area(self):
         """
         Get the model area as a single 2D polygon.
@@ -162,3 +161,19 @@ class MeshGpd:
         del (gdf["TOP_ELEMENT"])
         gdf["AREA"] = gdf.geometry.area
         return gdf
+
+    def mlw(self):
+        """
+        Return a geoPandas.GeoDataFrame with information on all Multi-Layer wells in the model.
+        :return:
+        """
+        from shapely.geometry import Point
+        import geopandas as gpd
+        gdf = gpd.GeoDataFrame(self.doc.c.mesh.df.mlw())
+
+        gdf["element_shape"] = [Point(row.bottom_x, row.bottom_y) for (i, row) in gdf.iterrows()]
+        return gdf.set_geometry("element_shape")
+
+
+
+
