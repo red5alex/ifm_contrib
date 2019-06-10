@@ -36,9 +36,13 @@ class MeshPd:
         # create a GeoDataFrame from the mesh
         df_elements = pd.DataFrame(index=range(self.doc.getNumberOfElements()))
         df_elements.index.name = "ELEMENT"
-        # df_elements["ELEMENT"] = df_elements.index.values
-        df_elements["LAYER"] = df_elements.index.values / self.doc.getNumberOfElementsPerLayer() + 1
-        df_elements["TOP_ELEMENT"] = df_elements.index.values % self.doc.getNumberOfElementsPerLayer()
+
+        if self.doc.getNumberOfNodesPerElement() == 0:  # unstructured mesh
+            df_elements["LAYER"] = None
+            df_elements["TOP_ELEMENT"] = None
+        else:  # assume layered mesh
+            df_elements["LAYER"] = df_elements.index.values / self.doc.getNumberOfElementsPerLayer() + 1
+            df_elements["TOP_ELEMENT"] = df_elements.index.values % self.doc.getNumberOfElementsPerLayer()
 
         if par is not None:
             # single items become lists
@@ -68,7 +72,8 @@ class MeshPd:
                     exprID = x
                 else:
                     raise ValueError("expr must be string (for name) or integer (for id)")
-                df_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in range(self.doc.getNumberOfElements())]
+                df_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in
+                                  range(self.doc.getNumberOfElements())]
 
         if distr is not None:
             # single items become lists
@@ -108,7 +113,7 @@ class MeshPd:
                            columns are created if a list is provided.  Columns can be givens custom names if a dict
                            {column name : parid} is provided.
         :type par:         dict, list or ifm.Enum
-        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column
                            with distribution values will be added to the DataFrame.
         :type distr:       str or list
         :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
@@ -128,9 +133,13 @@ class MeshPd:
         # create a GeoDataFrame from the mesh
         df_nodes = pd.DataFrame(index=range(self.doc.getNumberOfNodes()))
         df_nodes.index.name = "NODE"
-        # df_elements["ELEMENT"] = df_elements.index.values
-        df_nodes["SLICE"] = df_nodes.index.values / self.doc.getNumberOfNodesPerSlice() + 1
-        df_nodes["TOP_NODE"] = df_nodes.index.values % self.doc.getNumberOfNodesPerSlice()
+
+        if self.doc.getNumberOfNodesPerElement() == 0:  # unstructured mesh
+            df_nodes["SLICE"] = None
+            df_nodes["TOP_NODE"] = None
+        else:  # assume layered mesh
+            df_nodes["SLICE"] = df_nodes.index.values / self.doc.getNumberOfNodesPerSlice() + 1
+            df_nodes["TOP_NODE"] = df_nodes.index.values % self.doc.getNumberOfNodesPerSlice()
 
         if global_cos:
             X0, Y0 = self.doc.getOriginX(), self.doc.getOriginY()
@@ -168,7 +177,7 @@ class MeshPd:
                 else:
                     raise ValueError("expr must be string (for name) or integer (for id)")
                 if exprID == -1:
-                    raise ValueError("Expression "+str(x)+" not found!")
+                    raise ValueError("Expression " + str(x) + " not found!")
 
                 df_nodes[x] = [self.doc.getNodalExprDistrValue(exprID, n) for n in range(self.doc.getNumberOfNodes())]
 
@@ -203,7 +212,7 @@ class MeshPd:
         return df_nodes.replace(-99999.0, np.nan)
 
     def get_available_items(self, Type=None):
-        #TODO: Generalize and move to Enum!
+        # TODO: Generalize and move to Enum!
 
         import pandas as pd
 
@@ -212,7 +221,7 @@ class MeshPd:
             e_num = eval("Enum." + e)
             try:
                 ii = self.doc.getParamSize(e_num)
-                if ii == self.doc.getNumberOfNodes()  and ii == self.doc.getNumberOfElements():
+                if ii == self.doc.getNumberOfNodes() and ii == self.doc.getNumberOfElements():
                     itemtype = 'ambiguous'  # n_nodes = n_elements, can't determine type
                 elif ii == self.doc.getNumberOfNodes():
                     itemtype = 'nodal'
