@@ -152,5 +152,15 @@ class Sel:
 
             return sorted(list(to_sel))
 
+        # nodal to elemental
+        if from_type == Enum.SEL_NODAL and to_type == Enum.SEL_ELEMENTAL:
+
+            to_sel = set()
+            for n in self.doc.c.sel.list(selection):
+                for E in range(self.doc.getNumberOfNodeElements(n)):
+                    to_sel.add(self.doc.getElement(n, E))
+
+            return sorted(list(to_sel))
+
         # all other cases not implemented
         raise NotImplementedError()
