@@ -1,5 +1,6 @@
 from ifm import Enum
 
+
 class MeshGpd:
     """
     Functions for exporting nodal and elemental properties to GeoDataFrames.
@@ -7,7 +8,6 @@ class MeshGpd:
 
     def __init__(self, doc):
         self.doc = doc
-
 
     def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False):
         """
@@ -17,7 +17,7 @@ class MeshGpd:
                            columns are created if a list is provided.  Columns can be givens custom names if a dict
                            {column name : parid} is provided.
         :type par:         dict, list or ifm.Enum
-        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column
                            with distribution values will be added to the DataFrame.
         :type distr:       str or list
         :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
@@ -86,7 +86,7 @@ class MeshGpd:
                 else:
                     raise ValueError("expr must be string (for name) or integer (for id)")
                 gdf_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in
-                                  range(self.doc.getNumberOfElements())]
+                                   range(self.doc.getNumberOfElements())]
 
         if distr is not None:
             # single items become lists
@@ -118,7 +118,6 @@ class MeshGpd:
 
         return gdf_elements
 
-
     def nodes(self, *args, **kwargs):
         """
         Create a Pandas Dataframe with information on the model nodes.
@@ -127,7 +126,7 @@ class MeshGpd:
                            columns are created if a list is provided.  Columns can be givens custom names if a dict
                            {column name : parid} is provided.
         :type par:         dict, list or ifm.Enum
-        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column
                            with distribution values will be added to the DataFrame.
         :type distr:       str or list
         :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
@@ -174,6 +173,32 @@ class MeshGpd:
         gdf["element_shape"] = [Point(row.bottom_x, row.bottom_y) for (i, row) in gdf.iterrows()]
         return gdf.set_geometry("element_shape")
 
+    def dfe(self):
+        """
+        Return a geoPandas.GeoDataFrame with information on all DFE in the model.
+        :return:
+        """
+        if self.doc.getNumberOfDimensions() != 3:
+            raise NotImplementedError("this function is currently only available for 3D problems")
 
+        from shapely.geometry import LineString
+        import geopandas as gpd
+        import numpy as np
 
+        gdf = gpd.GeoDataFrame(self.doc.c.mesh.df.dfe())
 
+        # get coordinates of nodes
+        df_nodes = self.doc.c.mesh.df.nodes(par={"Z": Enum.P_ELEV})
+        gdf["x1"] = np.array(df_nodes.loc[gdf.node_1].X)
+        gdf["x2"] = np.array(df_nodes.loc[gdf.node_2].X)
+        gdf["y1"] = np.array(df_nodes.loc[gdf.node_1].Y)
+        gdf["y2"] = np.array(df_nodes.loc[gdf.node_2].Y)
+        gdf["z1"] = np.array(df_nodes.loc[gdf.node_1].Z)
+        gdf["z2"] = np.array(df_nodes.loc[gdf.node_2].Z)
+
+        gdf["element_shape"] = [LineString([(row.x1, row.y1, row.z1),
+                                            (row.x2, row.y2, row.z2)]) for (i, row) in gdf.iterrows()]
+
+        gdf.drop(columns=["x1", "x2", "y1", "y2", "z1", "z2"], inplace=True)
+
+        return gdf.set_geometry("element_shape")

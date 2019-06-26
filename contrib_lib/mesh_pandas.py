@@ -10,7 +10,7 @@ class MeshPd:
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, as_2d=False):
+    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False):
         """
         Create a Pandas Dataframe with information on the model elements.
 
@@ -102,6 +102,9 @@ class MeshPd:
                 layer = [layer]
             # filter by layer list
             df_elements = df_elements.loc[df_elements.LAYER.isin(layer)]
+
+        if centroids == True:
+            df_elements["centroid"] = [self.doc.c.mesh.getCentroid(e) for e in df_elements.index]
 
         return df_elements.replace(-99999.0, np.nan)
 
@@ -253,3 +256,37 @@ class MeshPd:
         df = pd.DataFrame(data)
         df.set_index("mlw_id", inplace=True)
         return df
+
+    def dfe(self):
+        if self.doc.getNumberOfDimensions() != 3:
+            raise NotImplementedError("this function is currently only available for 3D problems")
+
+        import pandas as pd
+
+        df_dfe = pd.DataFrame(
+            [self.doc.getNodalArrayOfFractureElement(f) for f in range(self.doc.getNumberOfTotalFractureElements())],
+            columns=["node_1", "node_2"])
+        df_dfe.index.name = "dfe"
+
+        df_dfe["law"] = [
+            self.doc.getFracLaw(f, Enum.FRAC_1D, Enum.ALL_FRAC_MODES) for f in
+            range(self.doc.getNumberOfTotalFractureElements())]
+
+        df_dfe["area"] = [
+            self.doc.getFracArea(f, Enum.FRAC_1D, Enum.ALL_FRAC_MODES, Enum.ALL_FRAC_LAWS) for f in
+            range(self.doc.getNumberOfTotalFractureElements())]
+
+        df_dfe["diameter"] = [
+            self.doc.getFracElementDiameter(f) for f in
+            range(self.doc.getNumberOfTotalFractureElements())]
+
+        df_dfe["conductivity"] = [
+            self.doc.getFracFlowConductivity(f, Enum.ALL_FRAC_TYPES, Enum.ALL_FRAC_MODES, Enum.ALL_FRAC_LAWS) for f in
+            range(self.doc.getNumberOfTotalFractureElements())]
+
+        df_dfe["storativity"] = [
+            self.doc.getFracFlowStorativity(f, Enum.ALL_FRAC_TYPES, Enum.ALL_FRAC_MODES, Enum.ALL_FRAC_LAWS) for f in
+            range(self.doc.getNumberOfTotalFractureElements())]
+
+        # finalize
+        return df_dfe
