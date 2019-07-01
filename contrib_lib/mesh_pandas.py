@@ -68,6 +68,8 @@ class MeshPd:
             for x in expr:
                 if type(x) == str:
                     exprID = self.doc.getElementalExprDistrIdByName(x)
+                    if exprID==-1:
+                        raise ValueError("expression {} does not exist!".format(str(d)))
                 elif type(x) == int:
                     exprID = x
                 else:
@@ -83,6 +85,8 @@ class MeshPd:
             for d in distr:
                 if type(d) == str:
                     distrID = self.doc.getElementalRefDistrIdByName(d)
+                    if distrID==-1:
+                        raise ValueError("reference distribution {} does not exist!".format(str(d)))
                 elif type(d) == int:
                     distrID = d
                 else:
