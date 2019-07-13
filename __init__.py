@@ -51,29 +51,38 @@ else:
     from . import colormaps
 
 
-    def loadDocument(f):
+    def loadDocument(f, ifm_classic=True):
         """
         This replaces the original ifm.loadDocument function.
         it returns a copy of an IFM Document including the ifm_contrib extension.
         :param f: filename of fem or dac
+        :param ifm_classic: If False, do not import classic ifm calls. Use this function to prevent Kernel crashes.
         :return: doctype including ifm_contrib extension
         """
 
-        return doc_contrib(f)
+        return doc_contrib(f, ifm_classic=ifm_classic)
 
 
-    class doc_contrib():
+    class doc_contrib:
         """
         Contributors IfmDocument class.
         This class loads the original IfmDocument class and adds the contributors methods.
         """
 
-        def __init__(self, filename):
-            # load document as standard IFM object and transfer all attributes to contributors IFM object
+        def __init__(self, filename, ifm_classic=True):
+            # load document as standard IFM object
             self.pdoc = _loadDocument(filename)
-            for item in dir(self.pdoc):
-                self.__dict__[item] = self.pdoc.__getattribute__(item)
+
+            if ifm_classic:
+                # transfer all attributes to contributors IFM object
+                for item in dir(self.pdoc):
+                    self.__dict__[item] = self.pdoc.__getattribute__(item)
 
             # import contributors library
             from . import contrib_lib
             self.c = contrib_lib.IfmContrib(self)
+
+        def __getattr__(self, item):
+            # if an unknown attribute called, check if doc.pdoc has the atrribute and use it if so.
+            # required for code compatibility with classic IFM if ifm_classic parameter is set to False.
+            return self.pdoc.__getattribute__(item)
