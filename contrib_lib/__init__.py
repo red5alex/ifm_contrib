@@ -2,6 +2,7 @@ import os
 
 from ifm import Enum
 
+from .content import Content
 from .dfe import Dfe
 from .diag import Diag
 from .hist import Hist
@@ -11,6 +12,7 @@ from .plot import Plot
 from .sel import Sel
 from .settings import  Settings
 from .ts import Ts
+#from .simulator import Simulator
 
 class IfmContrib:
     """"
@@ -25,6 +27,7 @@ class IfmContrib:
         # import child-classes
         # If adding additional childs and planning to contribute to the project,
         # please consult the maintainer of the repository about extending name space convention.
+        self.content = Content(doc)
         self.dfe = Dfe(doc)
         self.diag = Diag(doc)
         self.hist = Hist(doc)
@@ -34,6 +37,8 @@ class IfmContrib:
         self.sel = Sel(doc)
         self.settings = Settings(doc)
         self.ts = Ts(doc)
+        #self.sim = Simulator(doc)
+
 
     def show_credits(self):
         for line in open(os.path.dirname(__file__)+"../../credits.md"):
