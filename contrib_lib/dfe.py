@@ -1,4 +1,5 @@
 from ifm import Enum
+from .dfe_pandas import DfePd
 
 
 class Dfe:
@@ -9,5 +10,9 @@ class Dfe:
 
     def __init__(self, doc):
         self.doc = doc
+
+        # add custom child-classes here
+        self.df = DfePd(doc)
+
 
     # add custom methods here
