@@ -228,7 +228,9 @@ class Mesh:
     def mlw(self):
         """
         Return a dictionary with information on all Multi-Layer wells in the model.
-        :return:
+
+        :return: dictionary
+        :rtype: dict
         """
         l_mlw = range(self.doc.getNumberOfMultiLayerWells())
         data = {

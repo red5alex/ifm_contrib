@@ -1,7 +1,5 @@
-Plain Python
-=================================
-
-These objects provide functionality that can be used without non-standard packages.
+Accessing Nodal and Elemental Model Data
+========================================
 
 doc.c.mesh - Model Properties
 -------------------------------------
@@ -9,8 +7,20 @@ doc.c.mesh - Model Properties
 .. automodule:: ifm_contrib.contrib_lib.mesh
     :members:
     :undoc-members:
-    :show-inheritance:
+	
+doc.c.mesh.df - Model Properties (Pandas)
+-----------------------------------------
 
+.. automodule:: ifm_contrib.contrib_lib.mesh_pandas
+    :members:
+    :undoc-members:
+	
+doc.c.mesh.gdf - Model Properties (Geopandas)
+-----------------------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.mesh_geopandas
+    :members:
+    :undoc-members:
 	
 doc.c.sel - Selections
 ------------------------------------
@@ -18,69 +28,70 @@ doc.c.sel - Selections
 .. automodule:: ifm_contrib.contrib_lib.sel
     :members:
     :undoc-members:
-    :show-inheritance:
+
+doc.c.content.df - Content (Pandas)
+------------------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.content_pandas
+    :members:
+    :undoc-members:		
 	
 Plotting and Visualization
-=================================	
+==========================	
 	
 These objects provide functionality to create plots of the model.
 These are mostly used in interactive scripting environments like Jupyter or Spyder.	
 
 doc.c.plot - Matplotlib
--------------------------------------
+-----------------------
 
 .. automodule:: ifm_contrib.contrib_lib.plot
     :members:
     :undoc-members:
-    :show-inheritance:
-
 	
-Interfacing with Pandas & Geopandas
-=================================
-
-These objects provide an interface to the pandas and geopandas packages.
-Pandas is a powerful library to process tabulated data, including time series.
-Geopandas is an extension of pandas that can handle spatial data, incl. shape-files.
-
-doc.c.plot.hist - History Charts
-------------------------------------------------
-
-.. automodule:: ifm_contrib.contrib_lib.hist_pandas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-doc.c.mesh.df - Model Properties
----------------------------------------------
-
-.. automodule:: ifm_contrib.contrib_lib.mesh_pandas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-doc.c.mesh.gdf - Model Properties
-------------------------------------------------
-
-.. automodule:: ifm_contrib.contrib_lib.mesh_geopandas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-	
-
-doc.c.obs.gdf - Observations
------------------------------------------------
-
-.. automodule:: ifm_contrib.contrib_lib.obs_geopandas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 doc.c.plot.gdf - Plot Output
-------------------------------------------------
+----------------------------
 
 .. automodule:: ifm_contrib.contrib_lib.plot_geopandas
     :members:
     :undoc-members:
-    :show-inheritance:
+	
+History Charts and Time Series
+==============================
+
+
+doc.c.plot.hist - History Charts
+--------------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.hist_pandas
+    :members:
+    :undoc-members:
+	
+doc.c.plot.ts - Time Series
+---------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.ts
+    :members:
+    :undoc-members:
+	
+doc.c.plot.ts - Time Series (Pandas)
+------------------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.ts_pandas
+    :members:
+    :undoc-members:
+
+
+Observation Points
+==================
+
+doc.c.obs.gdf - Observations (Geopandas)
+----------------------------------------
+
+.. automodule:: ifm_contrib.contrib_lib.obs_geopandas
+    :members:
+    :undoc-members:
+
+
 	
 	

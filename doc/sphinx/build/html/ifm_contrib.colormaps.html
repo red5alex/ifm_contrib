@@ -9,11 +9,10 @@
     <title>ifm_contrib.colormaps package &#8212; ifm_contrib 0.1 beta documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -39,6 +38,29 @@ This is unfinished work, with only the standard raibow color map implemented by 
 This file is meant to import the colormaps directly from the XML files in the same folder, which have
 been exported from the FEFLOW GUI.
 If anybody has some time, feel free to get going.</p>
+<dl class="function">
+<dt id="ifm_contrib.colormaps.create_colormap_from_xml">
+<code class="descclassname">ifm_contrib.colormaps.</code><code class="descname">create_colormap_from_xml</code><span class="sig-paren">(</span><em>name</em>, <em>xmlfile</em>, <em>register_cmap=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.colormaps.create_colormap_from_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Matplotlib Colormap from a FEFLOW colormap file (XML).
+The XML file can be created from the FEFLOW GUI (export colormap).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – name of the colormap</li>
+<li><strong>xmlfile</strong> (<em>str</em>) – path to the xml file.</li>
+<li><strong>register_cmap</strong> (<em>bool</em>) – If True (default), colormap is registered for use in matplotlib.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -48,13 +70,17 @@ If anybody has some time, feel free to get going.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">ifm_contrib.colormaps package</a><ul>
-<li><a class="reference internal" href="#module-ifm_contrib.colormaps">Module contents</a></li>
-</ul>
-</li>
-</ul>
+<h1 class="logo"><a href="index.html">ifm_contrib</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -62,13 +88,6 @@ If anybody has some time, feel free to get going.</p>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/ifm_contrib.colormaps.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -89,7 +108,7 @@ If anybody has some time, feel free to get going.</p>
       &copy;2018, Alexander Renz.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

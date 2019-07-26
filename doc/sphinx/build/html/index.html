@@ -9,11 +9,10 @@
     <title>FEFLOW ifm_contrib &#8212; ifm_contrib 0.1 beta documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -32,132 +31,43 @@
             
   <div class="section" id="feflow-ifm-contrib">
 <h1>FEFLOW ifm_contrib<a class="headerlink" href="#feflow-ifm-contrib" title="Permalink to this headline">¶</a></h1>
-<p>An Open-Source Extension to FEFLOW’s programming API.</p>
+<p>An Open-Source Extension to FEFLOW’s Python programming API.</p>
+<div class="section" id="code-compatibility-with-classic-ifm">
+<h2>Code-Compatibility with Classic IFM<a class="headerlink" href="#code-compatibility-with-classic-ifm" title="Permalink to this headline">¶</a></h2>
+<p>ifm_contrib inherits all commands of the classic IFM API, thus that it is code-compatible with
+code written for the classic IFM:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ifm_contrib</span> <span class="pre">as</span> <span class="pre">ifm</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">doc</span> <span class="pre">=</span> <span class="pre">ifm.loadDocument(&quot;myfeflowmodel.fem&quot;)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">doc.getNumberOfElements()</span></code></p>
+</div></blockquote>
+</div>
+<div class="section" id="additional-features">
+<h2>Additional Features<a class="headerlink" href="#additional-features" title="Permalink to this headline">¶</a></h2>
+<p>It adds however additional API features, such as creating plots similar to those of the FEFLOW Slice View using matplotlib, or exporting model data to Pandas (Geo-)DataFrames.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">doc.c.plot.edges()</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">doc.c.hist.df.HEAD</span></code></p>
+</div></blockquote>
+<p>The main components are</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.plot</span></code> : <strong>plot maps</strong> using matplotlib, similar to FEFLOWs slice view.</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.hist</span></code> : get <strong>history chart</strong> data</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.mesh</span></code> : get <strong>model data</strong> (nodal, elemental, dfe, multi-layer wells, etc.)</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.ts</span></code> : get <strong>time series</strong> data</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.obs</span></code> : get <strong>observation points</strong> data</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.sel</span></code> : get <strong>selection</strong> data</li>
+<li><code class="docutils literal notranslate"><span class="pre">doc.c.content</span></code> : get <strong>elemental content</strong> data</li>
+</ul>
+<p>Most of these modules feature Pandas and/or GeoPandas submodules for exporting the requested data directly into DataFrames and GeoDataFrames, respectively:</p>
+<blockquote>
+<div><code class="docutils literal notranslate"><span class="pre">doc.c.mesh.df.nodes(par={&quot;HEAD&quot;</span> <span class="pre">:</span> <span class="pre">Enum.P_HEAD})</span></code>
+<code class="docutils literal notranslate"><span class="pre">doc.c.mesh.gdf.elements(par={&quot;CONDX&quot;</span> <span class="pre">:</span> <span class="pre">Enum.P_CONDX})</span></code></div></blockquote>
+<p>For detailed information, see <a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a>.</p>
+<p>:ref:’contrib_list’</p>
 <div class="toctree-wrapper compound">
 </div>
-<span class="target" id="module-ifm_contrib.contrib_lib.hist"></span><span class="target" id="module-ifm_contrib.contrib_lib.plot"></span><dl class="class">
-<dt id="ifm_contrib.contrib_lib.plot.Plot">
-<em class="property">class </em><code class="descclassname">ifm_contrib.contrib_lib.plot.</code><code class="descname">Plot</code><span class="sig-paren">(</span><em>doc</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functions for creating visual plots using the matplotlib.  The function resemble the functionality of the
-View Components panel; The default plot styles are chosen to  minmic output from FEFLOW’s user interface.
-Useful for visualization of the model in an interactive environments like Jupyter, or for batch processing
-of images. See examples for further info.</p>
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.continuous">
-<code class="descname">continuous</code><span class="sig-paren">(</span><em>slice=1</em>, <em>alpha=0.5</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.continuous" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an interpolated color plot of the given nodal model property to the plot.
-Corresponds to the continuous style in FEFLOW.
-Note: Avoid usage when creating vector graphics (svg).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>slice</strong> (<em>int</em>) – specified the slice to be plotted in a 3D model.</li>
-<li><strong>args</strong> – see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html</li>
-<li><strong>kwargs</strong> – matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.edges">
-<code class="descname">edges</code><span class="sig-paren">(</span><em>color='black'</em>, <em>alpha=0.5</em>, <em>lw=1</em>, <em>ignore_inactive=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the edges of the mesh to the plot.
-Corresponds to the geometrie &gt; edges style in FEFLOW.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.faces">
-<code class="descname">faces</code><span class="sig-paren">(</span><em>color='grey'</em>, <em>alpha=1.0</em>, <em>ignore_inactive=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.faces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the faces of the model to the plot.
-Corresponds to the geometrie : faces style in FEFLOW.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.fringes">
-<code class="descname">fringes</code><span class="sig-paren">(</span><em>slice=1</em>, <em>alpha=0.5</em>, <em>cmap=&lt;matplotlib.colors.LinearSegmentedColormap object&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.fringes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add fringe polygons of the given nodal model property to the plot.
-Corresponds to the fringes style in FEFLOW.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slice</strong> (<em>int</em>) – specified the slice to be plotted in a 3D model.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">matplotlib.contour.ContourSet</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.isolines">
-<code class="descname">isolines</code><span class="sig-paren">(</span><em>slice=1</em>, <em>alpha=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.isolines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add isolines of the given nodal model property to the plot.
-Corresponds to the Isolines style in FEFLOW.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>slice</strong> (<em>int</em>) – specified the slice to be plotted in a 3D model.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">matplotlib.contour.ContourSet</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.obs_labels">
-<code class="descname">obs_labels</code><span class="sig-paren">(</span><em>attribute='label'</em>, <em>horizontalalignment='center'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.obs_labels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add observation point labels to the plot.
-Corresponds to Obs. Labels in FEFLOW.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>attribute</strong> (<em>str</em>) – “label”, “x”, “y”, “node” or “h” (modelled head)</li>
-<li><strong>args</strong> – arguments for plt.annotate</li>
-<li><strong>kwargs</strong> – arguments for plt.annotate</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="ifm_contrib.contrib_lib.plot.Plot.obs_markers">
-<code class="descname">obs_markers</code><span class="sig-paren">(</span><em>color='lightgreen'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.plot.Plot.obs_markers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add observation point markers to the plot.
-Corresponds to Obs. Markers in FEFLOW.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>args</strong> – arguments for plt.scatter</li>
-<li><strong>kwargs</strong> – arguments for plt.scatter</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+</div>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
@@ -174,11 +84,17 @@ Corresponds to Obs. Markers in FEFLOW.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">FEFLOW ifm_contrib</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
+<h1 class="logo"><a href="#">ifm_contrib</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -186,13 +102,6 @@ Corresponds to Obs. Markers in FEFLOW.</p>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -213,7 +122,7 @@ Corresponds to Obs. Markers in FEFLOW.</p>
       &copy;2018, Alexander Renz.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
