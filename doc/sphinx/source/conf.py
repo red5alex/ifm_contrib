@@ -24,9 +24,9 @@ copyright = u'2018, Alexander Renz'
 author = u'Alexander Renz'
 
 # The short X.Y version
-version = u'0.1'
+version = u'0.2'
 # The full version, including alpha/beta/rc tags
-release = u'0.1 beta'
+release = u'0.2 beta'
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.githubpages',
+	'sphinx.ext.autosectionlabel'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

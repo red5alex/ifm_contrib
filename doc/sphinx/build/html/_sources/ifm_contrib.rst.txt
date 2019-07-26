@@ -1,5 +1,6 @@
 ifm\_contrib package contents
-====================
+=============================
+
 
 .. toctree::
 

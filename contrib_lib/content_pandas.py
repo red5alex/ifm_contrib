@@ -9,6 +9,12 @@ class ContentPd:
         self.doc = doc
 
     def info(self):
+        """
+        Return infomation on available content items.
+
+        :return:  information on content items
+        :rtype:   pandas.DataFrame
+        """
         import pandas as pd
         features = [[Enum.TOTAL_VOLUME, 'TOTAL_VOLUME', 'Total volume', u"m3"],
                      [Enum.VOID_VOLUME, 'VOID_VOLUME', 'Void volume', u"m3"],
@@ -24,6 +30,12 @@ class ContentPd:
         return df_info.set_index("id")
 
     def content(self):
+        """
+        Get the model domains content (all content items).
+
+        :return: DataFrame with all contents
+        :rtype: pandas.DataFrame
+        """
         import numpy as np
 
         df_content = self.doc.c.content.df.info()

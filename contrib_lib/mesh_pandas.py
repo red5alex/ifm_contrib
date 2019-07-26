@@ -28,7 +28,8 @@ class MeshPd:
         :type layer:       int
         :param selection:  if provided in a 3D model, return only elements of this selection
         :type selection:   str
-        :return:           pandas.DataFrame
+        :return:           DataFrame, index of element index, all requested information as columns.
+        :rtype:            pandas.DataFrame
         """
 
         import pandas as pd
@@ -132,7 +133,8 @@ class MeshPd:
         :type slice:       int
         :param selection:  if provided, return only nodes of this selection
         :type selection:   str
-        :return:           pandas.DataFrame
+        :return:           DataFrame, index of element nodes, all requested information as columns.
+        :rtype:            pandas.DataFrame
         """
 
         import pandas as pd
@@ -219,6 +221,16 @@ class MeshPd:
         return df_nodes.replace(-99999.0, np.nan)
 
     def get_available_items(self, Type=None):
+        """
+        Return a list of available Parameters that can be obtained by calling doc.c.mesh.df.nodes or
+        doc.c.mesh.df.elements, respectively.
+
+        :param Type: Filter by Type ("elemental" or "nodal")
+        :type Type: str
+
+        :return: DataFrame with available items
+        :rtype: pandas.DataFrame
+        """
         # TODO: Generalize and move to Enum!
 
         import pandas as pd
@@ -253,7 +265,9 @@ class MeshPd:
     def mlw(self):
         """
         Return a pandas.DataFrame with information on all Multi-Layer wells in the model.
-        :return:
+
+        :return: Dataframe with information on Mullti-Layer-wells
+        :rtype: pandas.DataFrame
         """
         import pandas as pd
         data = self.doc.c.mesh.mlw()
@@ -262,6 +276,12 @@ class MeshPd:
         return df
 
     def dfe(self):
+        """
+        Reutrn a DataFrame with information on Discrete Feature Elements in the model.
+
+        :return: DataFrame with information on DFE
+        :rtype: pandas.DataFrame
+        """
         if self.doc.getNumberOfDimensions() != 3:
             raise NotImplementedError("this function is currently only available for 3D problems")
 
