@@ -50,8 +50,7 @@ else:
 
     from . import colormaps
 
-
-    def loadDocument(f, ifm_classic=True):
+    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None):
         """
         This replaces the original ifm.loadDocument function.
         it returns a copy of an IFM Document including the ifm_contrib extension.
@@ -60,7 +59,12 @@ else:
         :return: doctype including ifm_contrib extension
         """
 
-        return doc_contrib(f, ifm_classic=ifm_classic)
+        if ifm_classic is not None:
+            import warnings
+            warnings.warn(DeprecationWarning("ifm_classic is depreciated, use import_ifm_attribs!"))
+            import_ifm_attribs=ifm_classic
+
+        return doc_contrib(f, import_ifm_attribs=import_ifm_attribs)
 
 
     class doc_contrib:
@@ -69,11 +73,11 @@ else:
         This class loads the original IfmDocument class and adds the contributors methods.
         """
 
-        def __init__(self, filename, ifm_classic=True):
+        def __init__(self, filename, import_ifm_attribs=True):
             # load document as standard IFM object
             self.pdoc = _loadDocument(filename)
 
-            if ifm_classic:
+            if import_ifm_attribs:
                 # transfer all attributes to contributors IFM object
                 for item in dir(self.pdoc):
                     self.__dict__[item] = self.pdoc.__getattribute__(item)
