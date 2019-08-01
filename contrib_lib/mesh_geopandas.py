@@ -152,7 +152,7 @@ class MeshGpd:
 
         :return: geopandas.GeoDataFrame.
         """
-        gdf = self.doc.c.mesh.df.elements(layer=1, as_2d=True)
+        gdf = self.doc.c.mesh.gdf.elements(layer=1, as_2d=True)
         gdf = gdf.dissolve(by="LAYER")
         gdf.reset_index(inplace=True)
         del (gdf["ELEMENT"])
