@@ -14,6 +14,10 @@ class ObsGpd:
         Get the observation points as a GeoPandas GeoDataFrame.
 
         :param global_cos: If True, use global coordinate system (default)
+        :param filter_by: dictionary {str : list} defining a filter. Return only observation points whose attributes
+        defined by the key of the dictionary is member of a list provided as the value.
+        :type global_cos: Bool
+        :type filter_by: dict {str : list}
         :return: GeoDataFrame
         """
 
@@ -45,10 +49,15 @@ class ObsGpd:
             # get modelled values
             h = self.doc.getFlowValueOfObsIdAtCurrentTime(obsid)
 
-            obs.append([obsid, label, x, y, z, node, h, shape])
+            if self.doc.getProblemClass() in [Enum.PCLS_MASS_TRANSPORT, Enum.PCLS_THERMOHALINE]:
+                CONC = self.doc.getMassValueOfObsIdAtCurrentTime(obsid)
+            else:
+                CONC = np.nan
+
+            obs.append([obsid, label, x, y, z, node, h, CONC, shape])
 
         # create and return dataframe
-        gdf_obs = gpd.GeoDataFrame(obs, columns=["id", "label", "x", "y", "z", "node", "h", "shape"])
+        gdf_obs = gpd.GeoDataFrame(obs, columns=["id", "label", "x", "y", "z", "node", "h", "conc", "shape"])
 
         # filter the dataframe by attributes
         if filter_by is not None:
