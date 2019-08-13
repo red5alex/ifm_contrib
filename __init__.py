@@ -50,12 +50,14 @@ else:
 
     from . import colormaps
 
-    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None):
+    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None, crs=None):
         """
         This replaces the original ifm.loadDocument function.
         it returns a copy of an IFM Document including the ifm_contrib extension.
         :param f: filename of fem or dac
-        :param ifm_classic: If False, do not import classic ifm calls. Use this function to prevent Kernel crashes.
+        :param import_ifm_attribs: If False (default), do not import classic ifm calls.
+        Use this function to prevent Kernel crashes.
+        :param crs: set the models coordinate system (Proj4 string)
         :return: doctype including ifm_contrib extension
         """
 
@@ -64,7 +66,7 @@ else:
             warnings.warn(DeprecationWarning("ifm_classic is depreciated, use import_ifm_attribs!"))
             import_ifm_attribs=ifm_classic
 
-        return doc_contrib(f, import_ifm_attribs=import_ifm_attribs)
+        return doc_contrib(f, import_ifm_attribs=import_ifm_attribs, crs=crs)
 
 
     class doc_contrib:
@@ -73,7 +75,7 @@ else:
         This class loads the original IfmDocument class and adds the contributors methods.
         """
 
-        def __init__(self, filename, import_ifm_attribs=True):
+        def __init__(self, filename, import_ifm_attribs=True, crs=None):
             # load document as standard IFM object
             self.pdoc = _loadDocument(filename)
 
@@ -85,6 +87,10 @@ else:
             # import contributors library
             from . import contrib_lib
             self.c = contrib_lib.IfmContrib(self)
+
+            if crs is not None:
+                self.c.crs = crs
+
 
         def __getattr__(self, item):
             # if an unknown attribute called, check if doc.pdoc has the atrribute and use it if so.
