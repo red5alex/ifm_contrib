@@ -146,18 +146,27 @@ class MeshGpd:
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
         return df_nodes.set_geometry("element_shape")
 
-    def model_area(self):
+    def model_area(self, selection=None):
         """
         Get the model area as a single 2D polygon.
 
+        :param selection:  if provided, return model area related to this elemental selection.
+        :type selection: str
+
         :return: geopandas.GeoDataFrame.
         """
-        gdf = self.doc.c.mesh.gdf.elements(layer=1, as_2d=True)
-        gdf = gdf.dissolve(by="LAYER")
+
+        if selection is not None and self.doc.pdoc.findSelection(Enum.SEL_ELEMENTAL, selection) == -1:
+            raise ValueError("Elemental Selection {} does not exist".format(selection))
+
+        gdf = self.doc.c.mesh.gdf.elements(layer=1, as_2d=True, selection=selection)
+        gdf["dummy"] = 0
+        gdf = gdf.dissolve(by="dummy")
         gdf.reset_index(inplace=True)
         del (gdf["ELEMENT"])
         del (gdf["LAYER"])
         del (gdf["TOP_ELEMENT"])
+        del (gdf["dummy"])
         gdf["AREA"] = gdf.geometry.area
         return gdf
 
