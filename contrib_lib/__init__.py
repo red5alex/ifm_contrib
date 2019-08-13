@@ -39,6 +39,8 @@ class IfmContrib:
         self.ts = Ts(doc)
         #self.sim = Simulator(doc)
 
+    # set coordinate system to None
+    crs=None
 
     def show_credits(self):
         for line in open(os.path.dirname(__file__)+"../../credits.md"):

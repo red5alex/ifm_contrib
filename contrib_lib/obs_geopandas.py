@@ -59,6 +59,9 @@ class ObsGpd:
         # create and return dataframe
         gdf_obs = gpd.GeoDataFrame(obs, columns=["id", "label", "x", "y", "z", "node", "h", "conc", "shape"])
 
+        if self.doc.c.crs is not None:
+            gdf_obs.crs = self.doc.c.crs
+
         # filter the dataframe by attributes
         if filter_by is not None:
             # check if filter attribute is a dictionary
