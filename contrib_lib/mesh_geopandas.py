@@ -116,6 +116,10 @@ class MeshGpd:
             # filter by layer list
             gdf_elements = gdf_elements.loc[gdf_elements.LAYER.isin(layer)]
 
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf_elements.crs = self.doc.c.crs
+
         return gdf_elements
 
     def nodes(self, *args, **kwargs):
@@ -144,7 +148,14 @@ class MeshGpd:
         from shapely.geometry import Point
         df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
-        return df_nodes.set_geometry("element_shape")
+
+        gdf_nodes = df_nodes.set_geometry("element_shape")
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf_nodes.crs = self.doc.c.crs
+
+        return gdf_nodes
 
     def model_area(self, selection=None):
         """
@@ -168,6 +179,11 @@ class MeshGpd:
         del (gdf["TOP_ELEMENT"])
         del (gdf["dummy"])
         gdf["AREA"] = gdf.geometry.area
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf.crs = self.doc.c.crs
+
         return gdf
 
     def mlw(self):
@@ -178,6 +194,10 @@ class MeshGpd:
         from shapely.geometry import Point
         import geopandas as gpd
         gdf = gpd.GeoDataFrame(self.doc.c.mesh.df.mlw())
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf.crs = self.doc.c.crs
 
         gdf["element_shape"] = [Point(row.bottom_x, row.bottom_y) for (i, row) in gdf.iterrows()]
         return gdf.set_geometry("element_shape")
@@ -209,5 +229,9 @@ class MeshGpd:
                                             (row.x2, row.y2, row.z2)]) for (i, row) in gdf.iterrows()]
 
         gdf.drop(columns=["x1", "x2", "y1", "y2", "z1", "z2"], inplace=True)
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf.crs = self.doc.c.crs
 
         return gdf.set_geometry("element_shape")

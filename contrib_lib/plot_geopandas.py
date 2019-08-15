@@ -71,6 +71,10 @@ class PlotGpd:
         gdf[str(itemname) + "_min"] = tricontourset.levels[:-1]
         gdf[str(itemname) + "_max"] = tricontourset.levels[1:]
 
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf.crs = self.doc.c.crs
+
         return gdf
 
     def fringes(self, par=None, expr=None, distr=None, slice=1, global_cos=True, levels=None, species=None):
@@ -255,5 +259,9 @@ class PlotGpd:
 
         gdf.set_geometry("geometry", inplace=True)
         gdf[str(par)] = levels
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf.crs = self.doc.c.crs
 
         return gdf

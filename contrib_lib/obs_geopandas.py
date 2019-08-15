@@ -59,6 +59,7 @@ class ObsGpd:
         # create and return dataframe
         gdf_obs = gpd.GeoDataFrame(obs, columns=["id", "label", "x", "y", "z", "node", "h", "conc", "shape"])
 
+        # set a coordinate system if defined for the model
         if self.doc.c.crs is not None:
             gdf_obs.crs = self.doc.c.crs
 
