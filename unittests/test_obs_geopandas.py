@@ -14,3 +14,7 @@ class TestObsGpd(unittest.TestCase):
 
         # should return two observation points
         self.assertEqual(2, len(doc.c.obs.gdf.obspoints(filter_by={"label": ["myObsPoint1", "myObsPoint2"]})))
+
+
+if __name__ == '__main__':
+    unittest.main()

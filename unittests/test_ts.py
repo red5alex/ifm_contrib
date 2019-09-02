@@ -23,3 +23,7 @@ class TestTs(unittest.TestCase):
         self.assertEqual(False, doc.c.ts.exists(0))
         self.assertEqual(False, doc.c.ts.exists(-1))
         self.assertEqual(False, doc.c.ts.exists(1111))
+
+
+if __name__ == '__main__':
+    unittest.main()

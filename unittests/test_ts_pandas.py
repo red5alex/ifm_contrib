@@ -13,3 +13,7 @@ class TestTs(unittest.TestCase):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.ts.df.points(10)
+
+
+if __name__ == '__main__':
+    unittest.main()

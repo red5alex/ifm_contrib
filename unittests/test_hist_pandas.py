@@ -21,3 +21,7 @@ class TestObsGpd(unittest.TestCase):
 
         # should return a certain number of entries
         self.assertEqual(46, len(doc.c.hist.df.HEAD))
+
+
+if __name__ == '__main__':
+    unittest.main()

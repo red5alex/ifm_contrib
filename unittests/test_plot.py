@@ -49,3 +49,7 @@ class TestPlot(unittest.TestCase):
         self.doc = ifm.loadDocument(r".\models\example_2D.dac")
         self.doc.c.plot.obs_labels()
         self.doc.c.plot.obs_labels(filter_by={"label": ["myObsPoint1", "myObsPoint2"]})
+
+
+if __name__ == '__main__':
+    unittest.main()

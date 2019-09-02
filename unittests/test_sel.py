@@ -68,3 +68,7 @@ class TestSel(unittest.TestCase):
             self.doc.c.sel.convert("conversiontest_el", Enum.SEL_EDGES)
 
         self.doc.closeDocument()
+
+
+if __name__ == '__main__':
+    unittest.main()

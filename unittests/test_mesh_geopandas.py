@@ -35,3 +35,7 @@ class TestMeshGpd(unittest.TestCase):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
         doc.c.mesh.gdf.mlw()
+
+
+if __name__ == '__main__':
+    unittest.main()
