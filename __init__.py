@@ -50,7 +50,9 @@ else:
 
     from . import colormaps
 
-    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None, crs=None):
+    import c
+
+    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None, crs=None, close_others=False):
         """
         This replaces the original ifm.loadDocument function.
         it returns a copy of an IFM Document including the ifm_contrib extension.
@@ -60,6 +62,9 @@ else:
         :param crs: set the models coordinate system (Proj4 string)
         :return: doctype including ifm_contrib extension
         """
+
+        if close_others:
+            c.closeAllDocuments()
 
         if ifm_classic is not None:
             import warnings
