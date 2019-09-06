@@ -19,6 +19,12 @@ class TestMeshPd(unittest.TestCase):
         doc.c.mesh.df.elements(par=[Enum.P_TRANS], expr=["elemental_expr_test"], distr=["elemental_test"])
         doc.c.mesh.df.elements(par=[Enum.P_TRANS], layer=1)  # 0
 
+        doc.c.mesh.df.elements(content=None)
+        doc.c.mesh.df.elements(content=False)
+        doc.c.mesh.df.elements(content=True)
+        doc.c.mesh.df.elements(content=Enum.TOTAL_VOLUME)
+        doc.c.mesh.df.elements(content=[Enum.TOTAL_VOLUME, Enum.VOID_VOLUME])
+
         doc = ifm.loadDocument("./models/example_partial_unstruct.fem")
         df = doc.c.mesh.df.elements()
 

@@ -10,7 +10,7 @@ class MeshPd:
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False):
+    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False, content=None):
         """
         Create a Pandas Dataframe with information on the model elements.
 
@@ -18,7 +18,7 @@ class MeshPd:
                            columns are created if a list is provided.  Columns can be givens custom names if a dict
                            {column name : parid} is provided.
         :type par:         dict, list or ifm.Enum
-        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column with
+        :param distr:      Name or list of names of user distributions. For each uer distribution provided, a column
                            with distribution values will be added to the DataFrame.
         :type distr:       str or list
         :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
@@ -28,6 +28,9 @@ class MeshPd:
         :type layer:       int
         :param selection:  if provided in a 3D model, return only elements of this selection
         :type selection:   str
+        :param content:    Add elemental content to datafrane. see doc.c.conent.df.info for available items.
+                           If True, all content items are returned. if int or list(int), specific items are returned.
+        :type content:     None, bool, int, list[int]
         :return:           DataFrame, index of element index, all requested information as columns.
         :rtype:            pandas.DataFrame
         """
@@ -69,7 +72,7 @@ class MeshPd:
             for x in expr:
                 if type(x) == str:
                     exprID = self.doc.getElementalExprDistrIdByName(x)
-                    if exprID==-1:
+                    if exprID == -1:
                         raise ValueError("expression {} does not exist!".format(str(d)))
                 elif type(x) == int:
                     exprID = x
@@ -86,7 +89,7 @@ class MeshPd:
             for d in distr:
                 if type(d) == str:
                     distrID = self.doc.getElementalRefDistrIdByName(d)
-                    if distrID==-1:
+                    if distrID == -1:
                         raise ValueError("reference distribution {} does not exist!".format(str(d)))
                 elif type(d) == int:
                     distrID = d
@@ -108,8 +111,25 @@ class MeshPd:
             # filter by layer list
             df_elements = df_elements.loc[df_elements.LAYER.isin(layer)]
 
-        if centroids == True:
+        # add centroid values
+        if centroids is True:
             df_elements["centroid"] = [self.doc.c.mesh.getCentroid(e) for e in df_elements.index]
+
+        # add elemental content
+        if content is not None and content is not False:
+            if type(content) == list:
+                items = content
+            elif type(content) == bool and content == True:
+                items = [int(i) for i in self.doc.c.content.df.info().index]
+            else:
+                raise ValueError("content must be None, False, True, int or list[int]")
+
+            for i, row in self.doc.c.content.df.info().loc[items].iterrows():
+                name = row["ifm.Enum"]
+                try:
+                    df_elements[name] = [self.doc.getElementalContent(i, e) for e in df_elements.index]
+                except StandardError:
+                    df_elements[name] = np.nan
 
         return df_elements.replace(-99999.0, np.nan)
 
