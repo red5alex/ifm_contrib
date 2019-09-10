@@ -50,7 +50,7 @@ else:
 
     from . import colormaps
 
-    import c
+    from . import c
 
     def loadDocument(f, import_ifm_attribs=False, ifm_classic=None, crs=None, close_others=False):
         """
