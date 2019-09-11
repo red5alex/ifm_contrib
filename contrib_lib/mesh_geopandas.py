@@ -9,7 +9,8 @@ class MeshGpd:
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False):
+    def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False,
+                 content=None):
         """
         Create a GeoPandas GeoDataframe with information on the model elements.
 
@@ -34,6 +35,7 @@ class MeshGpd:
 
         import geopandas as gpd
         from shapely.geometry import Polygon
+        import numpy as np
 
         imat = self.doc.c.mesh.imatrix_as_array(global_cos=global_cos,
                                                 split_quads_to_triangles=False,
@@ -119,6 +121,25 @@ class MeshGpd:
         # set a coordinate system if defined for the model
         if self.doc.c.crs is not None:
             gdf_elements.crs = self.doc.c.crs
+
+        # add elemental content
+        if content is not None and content is not False:
+            if type(content) == list:
+                items = content
+            elif type(content) == bool and content is True:
+                items = [int(i) for i in self.doc.c.content.df.info().index]
+            elif type(content) == int:
+                items = [content]
+            else:
+                raise ValueError("content must be None, False, True, int or list[int]")
+
+            for i, row in self.doc.c.content.df.info().loc[items].iterrows():
+                name = row["ifm.Enum"]
+                try:
+                    gdf_elements[name] = [self.doc.getElementalContent(i, e) for e in df_elements.index]
+                except StandardError:
+                    gdf_elements[name] = np.nan
+
 
         return gdf_elements
 
