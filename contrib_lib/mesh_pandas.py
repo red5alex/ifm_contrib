@@ -28,6 +28,8 @@ class MeshPd:
         :type layer:       int
         :param selection:  if provided in a 3D model, return only elements of this selection
         :type selection:   str
+        :param centroids:  if True, add coordinates of centroids to DataFrame.
+        :type centroids:   bool
         :param content:    Add elemental content to datafrane. see doc.c.conent.df.info for available items.
                            If True, all content items are returned. if int or list(int), specific items are returned.
         :type content:     None, bool, int, list[int]
@@ -119,8 +121,10 @@ class MeshPd:
         if content is not None and content is not False:
             if type(content) == list:
                 items = content
-            elif type(content) == bool and content == True:
+            elif type(content) == bool and content is True:
                 items = [int(i) for i in self.doc.c.content.df.info().index]
+            elif type(content) == int:
+                items = [content]
             else:
                 raise ValueError("content must be None, False, True, int or list[int]")
 
@@ -133,7 +137,7 @@ class MeshPd:
 
         return df_elements.replace(-99999.0, np.nan)
 
-    def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None):
+    def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None, budget=None):
         """
         Create a Pandas Dataframe with information on the model nodes.
 
@@ -153,6 +157,10 @@ class MeshPd:
         :type slice:       int
         :param selection:  if provided, return only nodes of this selection
         :type selection:   str
+        :param budget:     add nodal budget values to dataframe. Can be "flow", "mass", "heat", or a list
+                           like ["flow", "mass]. If True, all available budgets will be created. If None, no budget is
+                           calculated (default).
+        :type budget       bool, str or [str], None.
         :return:           DataFrame, index of element nodes, all requested information as columns.
         :rtype:            pandas.DataFrame
         """
@@ -237,6 +245,55 @@ class MeshPd:
                 slice = [slice]
             # filter by layer list
             df_nodes = df_nodes.loc[df_nodes.SLICE.isin(slice)]
+
+        # create nodal budgets
+        if budget is not None:
+
+            # if a single budget type is provided as str, convert to single-member list first
+            if type(budget) == str:
+                budget = [budget]
+
+            # if budget is True, create all available budgets
+            if budget is True:
+                budget = ["flow"]
+                if self.doc.pdoc.getProblemClass() in [Enum.PCLS_MASS_TRANSPORT, Enum.PCLS_THERMOHALINE]:
+                    budget.append("mass")
+                if self.doc.pdoc.getProblemClass() in [Enum.PCLS_HEAT_TRANSPORT, Enum.PCLS_THERMOHALINE]:
+                    budget.append("heat")
+
+
+            # compute nodal values for the flow budget
+            if "flow" in budget:
+                bdgt = self.doc.budgetFlowCreate()
+                df_nodes["budget_flow_bc"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[1] for n in
+                                              map(int, df_nodes.index)]
+                df_nodes["budget_flow_area"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[2] for n in
+                                                map(int, df_nodes.index)]
+                df_nodes["budget_flow_storage"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[3] for n in
+                                                   map(int, df_nodes.index)]
+                self.doc.pdoc.budgetClose(bdgt)
+
+            # compute nodal values for the mass budget
+            if "mass" in budget:
+                bdgt = self.doc.budgetMassCreate()
+                df_nodes["budget_mass_bc"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[1] for n in
+                                              map(int, df_nodes.index)]
+                df_nodes["budget_mass_area"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[2] for n in
+                                                map(int, df_nodes.index)]
+                df_nodes["budget_mass_storage"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[3] for n in
+                                                   map(int, df_nodes.index)]
+                self.doc.pdoc.budgetClose(bdgt)
+
+            # compute nodal values for the heat heat budget
+            if "heat" in budget:
+                bdgt = self.doc.budgetHeatCreate()
+                df_nodes["budget_heat_bc"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[1] for n in
+                                              map(int, df_nodes.index)]
+                df_nodes["budget_heat_area"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[2] for n in
+                                                map(int, df_nodes.index)]
+                df_nodes["budget_heat_storage"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[3] for n in
+                                                   map(int, df_nodes.index)]
+                self.doc.pdoc.budgetClose(bdgt)
 
         return df_nodes.replace(-99999.0, np.nan)
 

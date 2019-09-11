@@ -51,6 +51,17 @@ class TestMeshPd(unittest.TestCase):
         doc = ifm.loadDocument("./models/example_fully_unstruct.fem")
         df = doc.c.mesh.df.nodes()
 
+        # test nodal budget option
+        doc = ifm.loadDocument("./models/example_2D.dac")
+        doc.pdoc.loadTimeStep(1)  # t=10.0 days
+        doc.c.mesh.df.nodes(budget="flow")
+        doc.c.mesh.df.nodes(budget=["flow"])
+        doc.c.mesh.df.nodes(budget=True)
+        df = doc.c.mesh.df.nodes(budget="flow")
+        self.assertAlmostEqual(df.budget_flow_bc.sum() , -5.2016302997540258)
+        self.assertAlmostEqual(df.budget_flow_area.sum(), 23.580393938311079)
+        self.assertAlmostEqual(df.budget_flow_storage.sum(), -18.378763638890959)
+
 
     def test_availableitems(self):
         ifm.forceLicense("Viewer")
