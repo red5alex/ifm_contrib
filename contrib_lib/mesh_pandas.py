@@ -261,7 +261,6 @@ class MeshPd:
                 if self.doc.pdoc.getProblemClass() in [Enum.PCLS_HEAT_TRANSPORT, Enum.PCLS_THERMOHALINE]:
                     budget.append("heat")
 
-
             # compute nodal values for the flow budget
             if "flow" in budget:
                 bdgt = self.doc.budgetFlowCreate()
@@ -296,6 +295,32 @@ class MeshPd:
                 self.doc.pdoc.budgetClose(bdgt)
 
         return df_nodes.replace(-99999.0, np.nan)
+
+    def faces(self, global_cos=True, selection=None):
+
+        import pandas as pd
+
+        # create a GeoDataFrame from the mesh
+        df_faces = pd.DataFrame(index=range(self.doc.getNumberOfNodes()))
+        df_faces.index.name = "FACE"
+
+        # seems that these are the only API functions for faces
+        #self.doc.queryFaceElements()
+        #self.doc.queryFaceNodes()
+
+
+    def edges(self, global_cos=True, selection=None):
+
+        import pandas as pd
+
+        # create a GeoDataFrame from the mesh
+        df_edges = pd.DataFrame(index=range(self.doc.getNumberOfNodes()))
+        df_edges.index.name = "EDGE"
+
+        # seems that these are the only API functions for faces
+        #self.doc.queryEdgeElements()
+        #self.doc.queryEdgeNodes()
+
 
     def get_available_items(self, Type=None):
         """
