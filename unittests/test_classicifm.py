@@ -3,7 +3,7 @@ import ifm_contrib as ifm
 from ifm import Enum
 
 
-class TestMesh(unittest.TestCase):
+class TestClassicIfmFunctions(unittest.TestCase):
 
     def test_createFracElement(self):
         ifm.forceLicense("Viewer")
