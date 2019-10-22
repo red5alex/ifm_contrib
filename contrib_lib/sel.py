@@ -164,3 +164,61 @@ class Sel:
 
         # all other cases not implemented
         raise NotImplementedError()
+
+    def clear(self, selname, seltype=None):
+        """
+        :param selname: name of the selection to be updates
+        :type selname: str
+        :param seltype: list of allowed types of the selections (optional, default None - type will be determined)
+        :type seltype: list
+        :return: bool
+        """
+        if seltype is None:
+            seltypes = [Enum.SEL_NODES,
+                        Enum.SEL_ELEMS,
+                        Enum.SEL_EDGES,
+                        Enum.SEL_FRACS]
+        else:
+            seltypes = [seltype]
+
+        for stype in seltypes:
+            selid = self.doc.findSelection(stype, selname)
+            if selid != -1:  # if selection is found
+                while self.doc.getSelectionItemCount(stype, selid) > 0:
+                    first_item = self.doc.pdoc.getSelectionItems(stype, selid)[0]
+                    self.doc.clearSelectionItem(stype, selid, first_item)
+                return True
+
+        # if getting here, selection was not found
+        raise StandardError("selection '{}' not found in model".format(selname))
+
+    def update(self, selname, itemlist, seltype=None):
+        """
+        Updates a selection to match the current item list
+        :param selname: name of the selection to be updates
+        :type selname: str
+        :param itemlist: list with item numbers
+        :type itemlist: list
+        :param seltype: list of allowed types of the selections (optional, default None - type will be determined)
+        :type seltype: list
+        :return: bool
+        """
+        # try all supported types
+        if seltype is None:
+            seltypes = [Enum.SEL_NODES,
+                        Enum.SEL_ELEMS,
+                        Enum.SEL_EDGES,
+                        Enum.SEL_FRACS]
+        else:
+            seltypes = [seltype]
+
+        for stype in seltypes:
+            selid = self.doc.findSelection(stype, selname)
+            if selid != -1:  # if selection is found
+                # clear and repopulate all items.
+                self.doc.c.sel.clear(selname)
+                [self.doc.setSelectionItem(stype, selid, i) for i in itemlist]
+                return True
+
+        # if getting here, selection was not found
+        raise StandardError("selection '{}' not found in model".format(selname))
