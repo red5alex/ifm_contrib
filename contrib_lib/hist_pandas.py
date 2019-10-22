@@ -40,9 +40,9 @@ class HistPd:
         :type reference_time:    datetime.datetime
         """
 
-        hist_str = None
-
         import pandas as pd
+
+        hist_str = None
         hist_defined = [c for c in dir(Enum) if c.startswith("HIST_")]
 
         if hist_type is None:
@@ -68,36 +68,30 @@ class HistPd:
 
             hist_type = Enum.__dict__[hist_type]
 
+        # get lists with history values, split and convert to dataframe
         chart = self.doc.getHistoryValues(hist_type, hist_subtype)
-
         times = chart[0]
         values = chart[1]
         itemnames = chart[2]
-
         df = pd.DataFrame(values, columns=times, index=itemnames, ).T
         df.index.name = "Simulation Time"
 
-        # no further processing of reference time is not set or not applicable, or
-        # force_time flag is set:
+        # no further processing of reference time is not set or not applicable:
         if hist_type in ['ANA', 'MULTW_FLUX', 'BHE', 'VARIO']:
             force_time_axis = True
+
+        # if no reference time is available (in model or by reference_time parameter), force time axis:
         if self.doc.getReferenceTime() is None and reference_time is None:
             force_time_axis = True
-        if force_time_axis:
-            self.__dict__[hist_type] = df
-            if hist_str is not None:  # add the df permanently to class instance
-                setattr(self, hist_str, df)
-            return df
 
-        # convert time axis to datetime
-        if reference_time is None:
-            reference_time = self.doc.getReferenceTime()
-        df["Time"] = pd.to_datetime(df.index, unit="D", origin=reference_time)
-        df.set_index("Time", inplace=True)
+        # convert to calendar time unless force_time_axis is True:
+        if not force_time_axis:
+            # if no reference time is given, get it from model.
+            if reference_time is None:
+                reference_time = self.doc.getReferenceTime()
+            df["Time"] = pd.to_datetime(df.index, unit="D", origin=reference_time)
+            df.set_index("Time", inplace=True)
 
-        if hist_str is not None:
-            setattr(self, hist_str, df) # add the df permanently to class instance
-            #TODO: does not update after re-run!
         return df
 
     def all_hist_items(self):

@@ -34,6 +34,7 @@ class TsPd:
         :type reference_time:    datetime.datetime
 
         :return:                 time series as a pandas.DataFrame
+        :rtype:                  pandas.DataFrame
         """
 
         # make sure tsid is a valid number
