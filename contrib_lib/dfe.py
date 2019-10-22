@@ -16,3 +16,23 @@ class Dfe:
 
 
     # add custom methods here
+
+    def setFracArea(self, fracid, value):
+        """
+        Set a new cross-section area for the given DFE
+        :param fracid: index of the DFE
+        :param value: new area value
+        :return: None
+        """
+        self.doc.setFracArea(fracid, value,
+                             Enum.ALL_FRAC_TYPES, Enum.ALL_FRAC_MODES, Enum.ALL_FRAC_LAWS)
+
+    def setFracFlowConductivity(self, fracid, value):
+        """
+        Set a new hydraulic conductivity for the given DFE
+        :param fracid: index of the DFE
+        :param value: new area value
+        :return: None
+        """
+        self.doc.setFracFlowConductivity(fracid, value,
+                             Enum.ALL_FRAC_TYPES, Enum.ALL_FRAC_MODES, Enum.ALL_FRAC_LAWS)
