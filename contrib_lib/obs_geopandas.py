@@ -21,6 +21,7 @@ class ObsGpd:
         :return: GeoDataFrame
         """
 
+        import pandas as pd
         import geopandas as gpd
         from shapely.geometry import Point, Polygon
         import numpy as np
@@ -76,6 +77,18 @@ class ObsGpd:
                     gdf_obs = gdf_obs.loc[gdf_obs[key].isin(filter_by[key])]
                 else:
                     raise ValueError("type {} not supported as dict value! (provide a list)".format(type(filter_by[key])))
+
+        # add reference values for HEAD
+        if Enum.P_HEAD in self.doc.c.obs.reference_values.keys():
+
+            # convert dict to dataframe
+            df_refvalues = pd.DataFrame(self.doc.c.obs.reference_values[Enum.P_HEAD],
+                                        index=self.doc.c.obs.reference_values.keys()).T
+            df_refvalues.columns = ["h_obs"]
+            gdf_obs = gdf_obs.join(df_refvalues, on="label")
+
+            # calculate residual
+            gdf_obs["h_res"] = gdf_obs.h - gdf_obs.h_obs
 
         # finalize and return
         gdf_obs.set_index("id", inplace=True)
