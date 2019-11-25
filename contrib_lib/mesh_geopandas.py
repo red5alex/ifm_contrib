@@ -102,7 +102,12 @@ class MeshGpd:
                     distrID = d
                 else:
                     raise ValueError("expr distr be string (for name) or integer (for id)")
-                gdf_elements[d] = self.doc.getElementalRefDistrValues(distrID)
+                if layer is None:
+                    values = self.doc.getElementalRefDistrValues(distrID)
+                else:
+                    ee = self.doc.getNumberOfElementsPerLayer()
+                    values = self.doc.getElementalRefDistrValues(distrID)[ee*(layer-1):ee*layer]
+                gdf_elements[d] = values
 
         # filter by given selection
         if selection is not None:
@@ -167,6 +172,8 @@ class MeshGpd:
         """
 
         from shapely.geometry import Point
+        import geopandas
+
         df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
 
