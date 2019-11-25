@@ -296,7 +296,11 @@ class MeshPd:
 
         return df_nodes.replace(-99999.0, np.nan)
 
-    def faces(self, global_cos=True, selection=None):
+    def faces(self):
+        """
+        Return a DataFrame with Faces properties.
+        :return:
+        """
 
         import pandas as pd
 
@@ -305,22 +309,34 @@ class MeshPd:
         df_faces.index.name = "FACE"
 
         # seems that these are the only API functions for faces
-        #self.doc.queryFaceElements()
-        #self.doc.queryFaceNodes()
+        # self.doc.queryFaceElements()
+        # self.doc.queryFaceNodes()
 
-
-    def edges(self, global_cos=True, selection=None):
+    def edges(self):
+        """
+        Return a DataFrame with Edges and corresponding properties.
+        :return:
+        """
 
         import pandas as pd
 
         # create a GeoDataFrame from the mesh
-        df_edges = pd.DataFrame(index=range(self.doc.getNumberOfNodes()))
+        df_edges = pd.DataFrame(index=range(self.doc.getNumberOfEdges()))
         df_edges.index.name = "EDGE"
 
-        # seems that these are the only API functions for faces
-        #self.doc.queryEdgeElements()
-        #self.doc.queryEdgeNodes()
+        df_edges["Nodes"] = [self.doc.queryEdgeNodes(d) for d in range(self.doc.getNumberOfEdges())]
+        df_edges["Elements"] = [self.doc.queryEdgeElements(d) for d in range(self.doc.getNumberOfEdges())]
 
+        # calculate Length
+        vec_l = []
+        for i, (n1, n2) in df_edges.Nodes.iteritems():
+            x1, y1, z1 = self.doc.getX(n1), self.doc.getY(n1), self.doc.getZ(n1)
+            x2, y2, z2 = self.doc.getX(n2), self.doc.getY(n2), self.doc.getZ(n2)
+            length = ((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2) ** 0.5
+            vec_l.append(length)
+        df_edges["length"] = vec_l
+
+        return df_edges
 
     def get_available_items(self, Type=None):
         """
