@@ -10,7 +10,7 @@ class MeshGpd:
         self.doc = doc
 
     def elements(self, par=None, expr=None, distr=None, global_cos=True, layer=None, selection=None, as_2d=False,
-                 content=None):
+                 content=None, polygons_as_2d=False):
         """
         Create a GeoPandas GeoDataframe with information on the model elements.
 
@@ -50,7 +50,11 @@ class MeshGpd:
             y = self.doc.getParamValues(Enum.P_MSH_Y)
 
         # create a GeoDataFrame from the mesh
-        gdf_elements = gpd.GeoDataFrame([Polygon([(x[n], y[n]) for n in element]) for element in imat])
+        if polygons_as_2d:
+            gdf_elements = gpd.GeoDataFrame([Polygon([(x[n], y[n]) for n in element[:len(element)//2]]) for element in imat])
+        else:
+            gdf_elements = gpd.GeoDataFrame([Polygon([(x[n], y[n]) for n in element]) for element in imat])
+
         gdf_elements.columns = ["element_shape"]
         gdf_elements.set_geometry("element_shape", inplace=True)
         gdf_elements.index.name = "ELEMENT"
