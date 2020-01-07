@@ -22,7 +22,7 @@ class HistPd:
         self.doc.c.hist.df.history(hist_type=hist_type, hist_subtype=hist_subtype,
                      force_time_axis=force_time_axis, reference_time=reference_time)
 
-    def history(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None):
+    def history(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None, sync_to_index=None):
         """
         Returns the values of any history charting window as a dataframe. Calling the function without arguments
         returns a dictionary of all available histories
@@ -91,6 +91,19 @@ class HistPd:
                 reference_time = self.doc.getReferenceTime()
             df["Time"] = pd.to_datetime(df.index, unit="D", origin=reference_time)
             df.set_index("Time", inplace=True)
+
+        if sync_to_index is not None:
+            # for convenience, a DataFrame or Series can be provided instead of an index
+            if type(sync_to_index) == pd.DataFrame or type(sync_to_index) == pd.Series:
+                sync_to_index = sync_to_index.index
+
+            # create the index as a union of model time steps and sampling time
+            union_index = sync_to_index.union(df.index)
+
+            # reindex the model data (add obs time steps as nan values)
+            # fill the obs time steps by interpolating the model
+            # then pick only those indices that are in the observation dataframe:
+            df = df.reindex(union_index).interpolate().loc[sync_to_index]
 
         return df
 
