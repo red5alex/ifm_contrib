@@ -94,7 +94,7 @@ class Sel:
                 return seltype
         return Enum.SEL_INVALID
 
-    def create(self, seltype, selname, itemlist=None):
+    def create(self, seltype, selname, itemlist=None, overwrite_existing=False):
         """
         create a new selection of given type and name. Populate the selection if itemlist if provided.
 
@@ -108,10 +108,14 @@ class Sel:
         """
 
         # raise error if selection already exists
-        if not self.doc.findSelection(seltype, selname) == -1:
-            raise ValueError("Selection {} does already exist!".format(selname))
-
-        selid = self.doc.createSelection(seltype, selname)
+        if not self.doc.findSelection(seltype, selname) != -1:
+            selid = self.doc.createSelection(seltype, selname)
+        else:
+            if overwrite_existing:
+                selid = self.doc.findSelection(seltype, selname)
+                self.doc.c.sel.clear(selname)
+            else:
+                raise ValueError("Selection {} does already exist!".format(selname))
 
         # populate if itemlist is provided
         if itemlist is not None:
