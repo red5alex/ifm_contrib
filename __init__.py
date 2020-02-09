@@ -5,8 +5,29 @@
 
 def _():
     import sys, os
-    if 'FEFLOW72_ROOT' in os.environ:
-        feflow_root = os.environ['FEFLOW72_ROOT']
+
+    feflow_root = None
+
+    # check if a FEFLOW Kernel version is specified.
+    if 'FEFLOW_KERNEL_VERSION' in os.environ:
+        kernel_version = os.environ['FEFLOW_KERNEL_VERSION']
+        root_env_variable = 'FEFLOW{}_ROOT'.format(str(kernel_version))
+
+        # set feflow root folder if FEFLOWxx_ROOT exists, otherwise error
+        if root_env_variable in os.environ:
+            feflow_root = os.environ[root_env_variable]
+        else:
+            raise EnvironmentError("Environment variable FEFLOW_KERNEL_VERSION is set to {}, but {} is missing. Is "
+                                   "FEFLOW installed?".format(kernel_version, root_env_variable))
+
+    # use highest available version if not specified
+    else:
+        if 'FEFLOW72_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW72_ROOT']
+        if 'FEFLOW73_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW73_ROOT']
+
+    if feflow_root is not None:
         sys.path.append(feflow_root + 'bin64')
     #       if sys.version_info > (3, 0):
     #           sys.path.append(feflow_root+'python/pyscriptlib37.zip')
@@ -33,7 +54,9 @@ if sys.platform == 'cli':
     def forceLicense(l):
         return PyFeflowKernel.forceLicense(l)
 else:
-    if sys.version_info >= (3, 7) and sys.version_info < (3, 8):
+    if sys.version_info >= (3, 8) and sys.version_info < (3, 9):
+        from ifm38 import *
+    elif sys.version_info >= (3, 7) and sys.version_info < (3, 8):
         from ifm37 import *
         from ifm37 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 6) and sys.version_info < (3, 7):
