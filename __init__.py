@@ -107,8 +107,8 @@ else:
             # load document as standard IFM object
             self.pdoc = _loadDocument(filename)
 
+            # transfer all attributes to contributors IFM object
             if import_ifm_attribs:
-                # transfer all attributes to contributors IFM object
                 for item in dir(self.pdoc):
                     self.__dict__[item] = self.pdoc.__getattribute__(item)
 
@@ -116,6 +116,10 @@ else:
             from . import contrib_lib
             self.c = contrib_lib.IfmContrib(self)
 
+            # add original filename
+            self.c.original_filename = filename
+
+            # add coordinate system
             if crs is not None:
                 self.c.crs = crs
 
