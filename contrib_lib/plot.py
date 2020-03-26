@@ -89,7 +89,7 @@ class Plot:
         elif values is not None:
             values = values  # OK, so this is just to make clear that we are using the values directly!
         else:
-            raise ValueError("either of parameter param, expr or distr must be provided!")
+            raise ValueError("either of parameter par, expr or distr must be provided!")
 
         # set nan values to zero
         values = np.nan_to_num(np.asarray(values))
