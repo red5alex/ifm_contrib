@@ -10,9 +10,9 @@ from .mesh import Mesh
 from .obs import Obs
 from .plot import Plot
 from .sel import Sel
-from .settings import  Settings
+from .settings import Settings
 from .ts import Ts
-#from .simulator import Simulator
+from .simulator import Simulator
 
 class IfmContrib:
     """"
@@ -37,7 +37,7 @@ class IfmContrib:
         self.sel = Sel(doc)
         self.settings = Settings(doc)
         self.ts = Ts(doc)
-        #self.sim = Simulator(doc)
+        self.sim = Simulator(doc)
 
     # set coordinate system to None
     crs=None

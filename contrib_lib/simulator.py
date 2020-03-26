@@ -1,5 +1,7 @@
 from ifm import Enum
 
+from .simulator_pandas import SimPd
+
 import pandas as pd
 from datetime import datetime
 import sys
@@ -13,6 +15,9 @@ class Simulator:
 
     def __init__(self, doc):
         self.doc = doc
+
+        # add custom child-classes here
+        self.df = SimPd(doc)
 
     # add custom methods here
     def start(self, dac=None, save_time_steps=None, skip_time_steps=None, binary=True,
@@ -76,3 +81,14 @@ class Simulator:
             self.doc.stopSimulator()
             sys.stdout.write(", simulator stopped")
         print(".")
+
+    def getAbsoluteSimulationTimeCalendar(self):
+        """
+        Get the current absolute simulation time as a datetime object.
+        Reference time must be set in model.
+        :return: DataFrame
+        """
+        if self.doc.getReferenceTime() is None:
+            raise ValueError("Reference Time not set in FEFLOW model.")
+
+        self.doc.getReferenceTime() + datetime.timedelta(days=self.doc.getAbsoluteSimulationTime())
