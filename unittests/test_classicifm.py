@@ -5,6 +5,9 @@ from ifm import Enum
 
 class TestClassicIfmFunctions(unittest.TestCase):
 
+    def test_kernelVersion(self):
+        print(ifm.getKernelVersion())
+
     def test_createFracElement(self):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
