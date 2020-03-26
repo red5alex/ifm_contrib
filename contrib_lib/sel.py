@@ -37,7 +37,7 @@ class Sel:
                 return self.doc.getSelectionItems(stype, selid)
 
         # if selection is not found
-        return []
+        raise StandardError("Selection {} not found".format(selname))
 
     def set(self, selname, seltype=None):
         """
