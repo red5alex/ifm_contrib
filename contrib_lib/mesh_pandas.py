@@ -71,33 +71,45 @@ class MeshPd:
             if type(expr) == str:
                 expr = [expr]
 
-            for x in expr:
-                if type(x) == str:
-                    exprID = self.doc.getElementalExprDistrIdByName(x)
-                    if exprID == -1:
-                        raise ValueError("expression {} does not exist!".format(str(d)))
-                elif type(x) == int:
-                    exprID = x
-                else:
-                    raise ValueError("expr must be string (for name) or integer (for id)")
-                df_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in
-                                  range(self.doc.getNumberOfElements())]
+            # process items in list
+            if type(expr) == list:
+                for x in expr:
+                    if type(x) == str:
+                        exprID = self.doc.getElementalExprDistrIdByName(x)
+                        if exprID == -1:
+                            raise ValueError("expression {} does not exist!".format(str(d)))
+                    elif type(x) == int:
+                        exprID = x
+                    else:
+                        raise ValueError("expr must be string (for name) or integer (for id)")
+                    df_elements[x] = [self.doc.getElementalExprDistrValue(exprID, n) for n in
+                                      range(self.doc.getNumberOfElements())]
+            elif type(expr)==dict:
+                raise NotImplementedError("dict-type input not implemented for distributions / expressions ")
+            else:
+                raise ValueError("distr / expr argument must be string or list of strings")
 
         if distr is not None:
             # single items become lists
             if type(distr) == str:
                 distr = [distr]
 
-            for d in distr:
-                if type(d) == str:
-                    distrID = self.doc.getElementalRefDistrIdByName(d)
-                    if distrID == -1:
-                        raise ValueError("reference distribution {} does not exist!".format(str(d)))
-                elif type(d) == int:
-                    distrID = d
-                else:
-                    raise ValueError("expr distr be string (for name) or integer (for id)")
-                df_elements[d] = self.doc.getElementalRefDistrValues(distrID)
+            # process items in list
+            if type(distr) ==list:
+                for d in distr:
+                    if type(d) == str:
+                        distrID = self.doc.getElementalRefDistrIdByName(d)
+                        if distrID == -1:
+                            raise ValueError("reference distribution {} does not exist!".format(str(d)))
+                    elif type(d) == int:
+                        distrID = d
+                    else:
+                        raise ValueError("expr distr be string (for name) or integer (for id)")
+                    df_elements[d] = self.doc.getElementalRefDistrValues(distrID)
+            elif type(expr)==dict:
+                raise NotImplementedError("dict-type input not implemented for distributions / expressions ")
+            else:
+                raise ValueError("distr / expr argument must be string or list of strings")
 
         # filter by given selection
         if selection is not None:
