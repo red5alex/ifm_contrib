@@ -1,5 +1,7 @@
 from ifm import Enum
 
+from .sel_pandas import SelPd
+
 
 class Sel:
     """
@@ -8,6 +10,9 @@ class Sel:
 
     def __init__(self, doc):
         self.doc = doc
+
+        # add custom child-classes here
+        self.df = SelPd(doc)
 
     # add custom methods here
 
@@ -104,6 +109,8 @@ class Sel:
         :type selname:   str
         :param itemlist: list of item indices (optional)
         :type itemlist:  [int]
+        :param overwrite_existing: If True, overwrite an existing selection (will raise ValueError otherwise)
+        :type overwrite_existing: bool
         :return:         the id of the selection
         """
 
