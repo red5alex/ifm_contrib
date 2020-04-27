@@ -92,3 +92,27 @@ class Simulator:
             raise ValueError("Reference Time not set in FEFLOW model.")
 
         self.doc.getReferenceTime() + datetime.timedelta(days=self.doc.getAbsoluteSimulationTime())
+
+    def load_first_ts_after(self, time):
+        """
+        Load the first time step after the time step provided by time
+        :param time: Simulation time to load
+        :type time: float
+        :return: Information on time step loaded
+        :rtype: pandas.Series
+        """
+
+        if type(time) == float or int:
+
+            # get time step list
+            df_ts = self.doc.c.sim.df.time_steps()
+            if len(df_ts[df_ts.simulation_time > time]) == 0:
+                raise RuntimeError("{} contains no timestep after {} d".format(self.doc.c.original_filename(),
+                                                                               time))
+            else:
+                ts_no = int(df_ts[df_ts.simulation_time > time].reset_index().iloc[0].file_index)
+        else:
+            raise ValueError("parameter 'time' must be of type float (simulation time in days)  ")
+
+        self.doc.loadTimeStep(ts_no)
+        return df_ts[df_ts.simulation_time > time].reset_index().iloc[0]
