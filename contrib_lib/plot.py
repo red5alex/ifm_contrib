@@ -20,7 +20,7 @@ class Plot:
 
     # add custom methods here
 
-    def _contours(self, par=None, expr=None, distr=None, values=None, slice=1, global_cos=True, species=None,
+    def _contours(self, par=None, expr=None, distr=None, velocity=None, values=None, slice=1, global_cos=True, species=None,
                   style='isolines', ignore_inactive=True, **kwargs):
         """
         Business functions for plotting library.
@@ -86,6 +86,11 @@ class Plot:
             else:
                 raise ValueError("distr must be string (for name) or integer (for id)")
             values = [self.doc.getNodalRefDistrValue(distrID, n) for n in range(self.doc.getNumberOfNodes())]
+        elif velocity is not None:
+            if velocity not in ['v_x', 'v_y', 'v_z','v_norm']:
+                raise ValueError("Allowed options vor parameter 'velocity': 'v_x', 'v_y', 'v_z' or 'v_norm'")
+            values = self.doc.c.mesh.df.nodes(velocity=True)[velocity]
+
         elif values is not None:
             values = values  # OK, so this is just to make clear that we are using the values directly!
         else:
