@@ -149,7 +149,8 @@ class MeshPd:
 
         return df_elements.replace(-99999.0, np.nan)
 
-    def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None, budget=None):
+    def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None, budget=None,
+              velocity=None):
         """
         Create a Pandas Dataframe with information on the model nodes.
 
@@ -243,6 +244,13 @@ class MeshPd:
                 else:
                     raise ValueError("expr distr be string (for name) or integer (for id)")
                 df_nodes[d] = self.doc.getNodalRefDistrValues(distrID)
+
+        if velocity is not None:
+            df_nodes["v_x"] = [self.doc.getResultsXVelocityValue(n) for n in range(self.doc.getNumberOfNodes())]
+            df_nodes["v_y"] = [self.doc.getResultsYVelocityValue(n) for n in range(self.doc.getNumberOfNodes())]
+            if self.doc.pdoc.getNumberOfDimensions() == 3:
+                df_nodes["v_norm"] = [self.doc.getResultsZVelocityValue(n) for n in range(self.doc.getNumberOfNodes())]
+            df_nodes["v_norm"] = [self.doc.getResultsVelocityNormValue(n) for n in range(self.doc.getNumberOfNodes())]
 
         # filter by given selection
         if selection is not None:
