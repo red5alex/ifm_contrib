@@ -58,6 +58,12 @@ class Sel:
 
     def getSelectionNames(self, seltype=None):
         """
+        Legacy, use selections() instead
+        """
+        return self.doc.c.sel.selections(seltype=seltype)
+
+    def selections(self, seltype=None):
+        """
         Return a list of names of selections in the model
 
         :param seltype: Selection type (return all if None).
@@ -94,7 +100,7 @@ class Sel:
                         # Enum.SEL_FACES,  ARE: inactive, probably FEFLOW bug
                         Enum.SEL_FRACS]:
 
-            selections = self.doc.c.sel.getSelectionNames(seltype)
+            selections = self.doc.c.sel.selections(seltype)
             if selection in selections:
                 return seltype
         return Enum.SEL_INVALID
