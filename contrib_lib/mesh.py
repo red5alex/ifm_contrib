@@ -225,13 +225,19 @@ class Mesh:
 
         return x, y, z
 
-    def mlw(self):
+    def mlw(self, global_cos=True):
         """
         Return a dictionary with information on all Multi-Layer wells in the model.
 
         :return: dictionary
         :rtype: dict
         """
+
+        if global_cos:
+            X0, Y0 = self.doc.getOriginX(), self.doc.getOriginY()
+        else:
+            X0, Y0 = 0, 0
+
         l_mlw = range(self.doc.getNumberOfMultiLayerWells())
         data = {
             "name": [self.doc.queryMultiLayerWellInfo(self.doc.getMultiLayerWellBottomNode(mlw)).getName() for mlw in l_mlw],
@@ -245,11 +251,11 @@ class Mesh:
             "bcc_hmax_value": [self.doc.getMultiLayerWellAttrValue(mlw, Enum.MLW_BCC_HMAX) for mlw in l_mlw],
             "bottom_node": [self.doc.getMultiLayerWellBottomNode(mlw) for mlw in l_mlw],
             "top_node": [self.doc.getMultiLayerWellTopNode(mlw) for mlw in l_mlw],
-            "top_x": [self.doc.getX(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
-            "top_y": [self.doc.getY(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
+            "top_x": [self.doc.getX(self.doc.getMultiLayerWellTopNode(mlw)) + X0 for mlw in l_mlw],
+            "top_y": [self.doc.getY(self.doc.getMultiLayerWellTopNode(mlw)) + Y0 for mlw in l_mlw],
             "top_z": [self.doc.getZ(self.doc.getMultiLayerWellTopNode(mlw)) for mlw in l_mlw],
-            "bottom_x": [self.doc.getX(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
-            "bottom_y": [self.doc.getY(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
+            "bottom_x": [self.doc.getX(self.doc.getMultiLayerWellBottomNode(mlw)) + X0 for mlw in l_mlw],
+            "bottom_y": [self.doc.getY(self.doc.getMultiLayerWellBottomNode(mlw)) + Y0 for mlw in l_mlw],
             "bottom_z": [self.doc.getZ(self.doc.getMultiLayerWellBottomNode(mlw)) for mlw in l_mlw],
         }
         return data

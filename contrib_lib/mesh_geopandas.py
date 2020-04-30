@@ -218,14 +218,14 @@ class MeshGpd:
 
         return gdf
 
-    def mlw(self):
+    def mlw(self, global_cos=True):
         """
         Return a geoPandas.GeoDataFrame with information on all Multi-Layer wells in the model.
         :return:
         """
         from shapely.geometry import Point
         import geopandas as gpd
-        gdf = gpd.GeoDataFrame(self.doc.c.mesh.df.mlw())
+        gdf = gpd.GeoDataFrame(self.doc.c.mesh.df.mlw(global_cos=global_cos))
 
         # set a coordinate system if defined for the model
         if self.doc.c.crs is not None:

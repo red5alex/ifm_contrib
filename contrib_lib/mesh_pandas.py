@@ -144,7 +144,7 @@ class MeshPd:
                 name = row["ifm.Enum"]
                 try:
                     df_elements[name] = [self.doc.getElementalContent(i, e) for e in df_elements.index]
-                except StandardError:
+                except RuntimeError:
                     df_elements[name] = np.nan
 
         return df_elements.replace(-99999.0, np.nan)
@@ -400,7 +400,7 @@ class MeshPd:
 
         return df_items
 
-    def mlw(self):
+    def mlw(self, global_cos=True):
         """
         Return a pandas.DataFrame with information on all Multi-Layer wells in the model.
 
@@ -408,7 +408,7 @@ class MeshPd:
         :rtype: pandas.DataFrame
         """
         import pandas as pd
-        data = self.doc.c.mesh.mlw()
+        data = self.doc.c.mesh.mlw(global_cos=global_cos)
         df = pd.DataFrame(data)
         df.set_index("mlw_id", inplace=True)
         return df
