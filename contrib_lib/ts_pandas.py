@@ -38,6 +38,20 @@ class TsPd:
         """
 
         # make sure tsid is a valid number
+
+        if type(tsid) == str:
+            # if the tsid is called by its comment, we first need to check if the comment is a unique identifier
+            # (not guaranteed by FEFLOW)
+            df_info = self.doc.c.ts.df.info()
+            # check if the comment can be found at all
+            if len(df_info[df_info.comment == tsid]) < 1:
+                raise KeyError("no time series with comment {} found!".format(tsid))
+            # check if the choice is unique
+            if len(df_info[df_info.comment == tsid]) > 1:
+                raise RuntimeError("Multiple time series with comment {} found!".format(tsid))
+            # OK!
+            tsid = df_info[df_info.comment == tsid].index[0]
+
         try:
             tsid = int(tsid)
         except ValueError:
