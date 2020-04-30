@@ -19,18 +19,20 @@ For a detailed introduction, see [ifm_contrib: An Introduction](./doc/Notebooks/
 
 ## Highlights
 
-**Visualize FEFLOW Results directly in Jupyter**
+### Visualize FEFLOW Results directly in Jupyter
 
-Create inline plots with the look-and-feel of FEFLOWs directly within Jupyter. The plots can be exported as GeoDataFrames and saved to shape-files easily. *ifm_contrib* adds light support for coordinate systems to FEFLOW.
+Create inline plots with the look-and-feel of FEFLOWs directly within Jupyter. The plots can be exported as GeoDataFrames and saved to shape-files easily. \
+*ifm_contrib* adds light support for coordinate systems to FEFLOW.
 
 <img src="doc/Notebooks/highlights_map.png" align="left"> 
-<br>
-**Process FEFLOWs Time Series with Pandas**
 
-Time Series (aka Power functiosn) and History charts can be easily exported to pandas DataFrames. Automatic conversion to DateTime based on FEFLOWs Reference Time. In-Built Synchronization to observation point reference data.
+### Process FEFLOWs Time Series with Pandas
+
+Time Series (aka Power functiosn) and History charts can be easily exported to pandas DataFrames. 
+Automatic conversion to DateTime based on FEFLOWs Reference Time. In-Built Synchronization to observation point reference data.
 
 <img src="doc/Notebooks/highlights_timeseries.png" align="left">
-<br>
-**Pandas access to Nodal and Elemntal Data, Multi-Layer Wells, and many more**
+
+### Pandas access to Nodal and Elemntal Data, Multi-Layer Wells, and many more**
 
 Read more in [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)
