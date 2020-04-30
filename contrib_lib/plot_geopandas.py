@@ -234,7 +234,7 @@ class PlotGpd:
         values = np.nan_to_num(np.asarray(values))
 
         # generate polygons from matplotlib (suppress output)
-        fig, ax = plt.subplots(1, 1, figsize=(0,0))
+        fig, ax = plt.subplots(1, 1, figsize=(0.1,0.1))
         if levels is None:
             isolines = ax.tricontour(femesh, values,)
         else:
