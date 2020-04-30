@@ -11,8 +11,10 @@ from .obs import Obs
 from .plot import Plot
 from .sel import Sel
 from .settings import Settings
-from .ts import Ts
 from .simulator import Simulator
+from .ts import Ts
+from .user import User
+
 
 class IfmContrib:
     """"
@@ -36,8 +38,9 @@ class IfmContrib:
         self.plot = Plot(doc)
         self.sel = Sel(doc)
         self.settings = Settings(doc)
-        self.ts = Ts(doc)
         self.sim = Simulator(doc)
+        self.ts = Ts(doc)
+        self.user = User(doc)
 
     # set coordinate system to None
     crs=None

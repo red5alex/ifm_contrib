@@ -1,5 +1,5 @@
 # from ifm import Enum
-from .ts_pandas import TsPd
+from .user_pandas import UserPd
 
 class User:
     """
@@ -11,4 +11,4 @@ class User:
         self.doc = doc
 
         # add custom child-classes here
-        self.df = TsPd(doc)
+        self.df = UserPd(doc)
