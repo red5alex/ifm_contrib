@@ -1,9 +1,10 @@
 # ifm_contrib
 
-An Open Source Extension Project for the FEFLOW Programming API.
+**An Open Source Extension Project for the FEFLOW Programming API.**
 
-ifm_ contrib is an Open-Source Extension of the IFM. It is written by FEFLOW users, for FEFLOW users. 
-It builds on top of the Standard FEFLOW IFM API which provides the elementary functions to access the model data. 
+**ifm_contrib** is an Open-Source Extension of the IFM, the Python API of FEFLOW.
+
+It is **written by FEFLOW users, for FEFLOW users**. It builds on top of the Standard FEFLOW IFM API which provides the elementary functions to access the model data. 
 It therefore does not extend the functionality of the IFM in the sense of allowing to do something that was not possible before. 
 It rather allows the use of the current functionality in a more productive and more intuitive way, mainly by making common processes available 
 to the Data Science tools available in the Python Ecosystem, with (Geo)-Pandas being the most important tool.
@@ -15,7 +16,7 @@ Users are however encouraged to contribute their own code back to the main branc
 Note: the library is currently in (mature) BETA-status, thus changes may be made that will not be 
 backwards compatible.
 
-For a detailed introduction, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)
+**For a detailed introduction, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)**
 
 ## Highlights
 
@@ -32,6 +33,6 @@ Time Series (aka Power functiosn) and History charts can be easily exported to p
 
 <img src="doc/Notebooks/highlights_timeseries.png">
 
-### Pandas access to Nodal and Elemntal Data, Multi-Layer Wells, and many more**
+### Pandas-access to Nodal and Elemntal Data, Multi-Layer Wells, and much more..
 
 Read more in [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)
