@@ -42,8 +42,13 @@ class PlotGpd:
     def _tricontourset_to_gdf(self, tricontourset, itemname):
         """
         Create a GeoPandas.GeoDataFrame from a TriContourSet object
+        :param tricontourset: The contourset to convert
+        :type tricontourset: matplotlib.tri.tricontour.TriContourSet
+        :param itemname: attribute name of the column(s) in the GeoDataFrame
+        :type itemname: str
 
         :return: geodataframe
+        :rtype: GeoPandas.GeoDataFrame
         """
 
         import geopandas as gpd
