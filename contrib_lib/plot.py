@@ -111,7 +111,7 @@ class Plot:
                 # problems with quad elements --> need to have values for split elements, was
                 # not a poblem for nodal values...
                 if "Length of color" in str(e):
-                    raise NotImplementedError("does not support quad elements yet")
+                    raise NotImplementedError("This function does not support quad elements yet")
                 else:
                     raise e
 
