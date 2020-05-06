@@ -47,7 +47,7 @@ class MeshPd:
             df_elements["LAYER"] = None
             df_elements["TOP_ELEMENT"] = None
         else:  # assume layered mesh
-            df_elements["LAYER"] = df_elements.index.values / self.doc.getNumberOfElementsPerLayer() + 1
+            df_elements["LAYER"] = df_elements.index.values // self.doc.getNumberOfElementsPerLayer() + 1
             df_elements["TOP_ELEMENT"] = df_elements.index.values % self.doc.getNumberOfElementsPerLayer()
 
         if par is not None:
@@ -112,7 +112,11 @@ class MeshPd:
                 raise ValueError("distr / expr argument must be string or list of strings")
 
         # filter by given selection
+        # check if selection has the right type
         if selection is not None:
+            if self.doc.c.sel.getSelectionType(selection) != Enum.SEL_ELEMENTAL:
+                raise ValueError("Must be an elemental distribution!")
+
             sele = self.doc.c.sel.set(selection)
             sele = sele.intersection(set(df_elements.index))
             df_elements = df_elements.iloc[list(sele)]
@@ -188,7 +192,7 @@ class MeshPd:
             df_nodes["SLICE"] = None
             df_nodes["TOP_NODE"] = None
         else:  # assume layered mesh
-            df_nodes["SLICE"] = df_nodes.index.values / self.doc.getNumberOfNodesPerSlice() + 1
+            df_nodes["SLICE"] = df_nodes.index.values // self.doc.getNumberOfNodesPerSlice() + 1
             df_nodes["TOP_NODE"] = df_nodes.index.values % self.doc.getNumberOfNodesPerSlice()
 
         if global_cos:
@@ -254,6 +258,10 @@ class MeshPd:
 
         # filter by given selection
         if selection is not None:
+            # check if selection has the right type
+            if self.doc.c.sel.getSelectionType(selection) != Enum.SEL_NODAL:
+                raise ValueError("Must be a nodal distribution!")
+
             sele = self.doc.c.sel.set(selection)
             sele = sele.intersection(set(df_nodes.index))
             df_nodes = df_nodes.iloc[list(sele)]
