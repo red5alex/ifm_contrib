@@ -163,11 +163,11 @@ class Sel:
         # elemental to nodal
         if from_type == Enum.SEL_ELEMENTAL and to_type == Enum.SEL_NODAL:
             i_matrix = self.doc.c.mesh.get_imatrix()
-            to_sel = set()
+            to_sel = []
             for e in self.doc.c.sel.list(selection):
-                to_sel = to_sel.union(set(i_matrix[e]))
-
-            return sorted(list(to_sel))
+                for n in i_matrix[e]:
+                    to_sel.append(n)
+            return sorted(set(to_sel))  # only unique values
 
         # nodal to elemental
         if from_type == Enum.SEL_NODAL and to_type == Enum.SEL_ELEMENTAL:
