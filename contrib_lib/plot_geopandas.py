@@ -58,22 +58,23 @@ class PlotGpd:
             #### POLYGON TYPE COLLECTION ####
 
             shapes = []
+
             for polycollection in tricontourset.collections:
+
+                assert len(polycollection.get_paths()) == 1, "More than one path found! More info in sourcecode! "
+                # [red5alex/ARE] this implementation of fringes assumes that there is only one path, not sure if this
+                # is always guaranteed. If the above assertion is triggered, consider reimplementation of the below
+                # loop corresponding to the (better/newer) implementation for the isolines that overcomes this
+                # assumption.
+
                 polygons = []
-                #assert len(collection.get_paths()) == 1, "more than one path found"
                 for path in polycollection.get_paths():
                     for polygon in path.to_polygons():
                         polygons.append(Polygon(polygon))
                 shapes.append(MultiPolygon(polygons))
 
-            # create new dataframe
-            gdf = gpd.GeoDataFrame()
-
-            # use fringes as geometry
-            gdf["geometry"] = shapes
-            gdf.set_geometry("geometry", inplace=True)
-
-            # add limits and layers to gdf
+            # create GeoDataframe
+            gdf = gpd.GeoDataFrame(geometry=shapes)
             gdf["layer"] = tricontourset.layers
             gdf[str(itemname) + "_min"] = tricontourset.levels[:-1]
             gdf[str(itemname) + "_max"] = tricontourset.levels[1:]
@@ -93,8 +94,9 @@ class PlotGpd:
                     levels.append(level)
                     layers.append(layer)
 
+            # create GeoDataframe
             gdf = gpd.GeoDataFrame(geometry=shapes)
-            gdf["itemname"] = levels
+            gdf[itemname] = levels
             gdf["layer"] = layers
 
         # set a coordinate system if defined for the model
