@@ -258,12 +258,16 @@ class MeshPd:
 
         # filter by given selection
         if selection is not None:
-            # check if selection has the right type
-            if self.doc.c.sel.getSelectionType(selection) != Enum.SEL_NODAL:
-                raise ValueError("Must be a nodal distribution!")
-
-            sele = self.doc.c.sel.set(selection)
-            sele = sele.intersection(set(df_nodes.index))
+            if type(selection) == str:
+                # check if selection has the right type
+                if self.doc.c.sel.getSelectionType(selection) != Enum.SEL_NODAL:
+                    raise ValueError("{} not a nodal distribution!".format(selection))
+                sele = self.doc.c.sel.set(selection)
+                sele = sele.intersection(set(df_nodes.index))
+            elif type(selection) == list and any([(type(m)==int) for m in selection]):
+                sele = selection
+            else:
+                raise ValueError("selection must be name of nodal selection (str) or list of node numbers!")
             df_nodes = df_nodes.iloc[list(sele)]
 
         # filter
