@@ -189,6 +189,40 @@ class MeshGpd:
 
         return gdf_nodes
 
+    def model_borders(self):
+        """
+        Return a GeoDataFrame with all model borders.
+
+        :return:
+        :rtype: shapely.geometry.LinearRing
+        """
+        import geopandas as gpd
+        from shapely.geometry import LinearRing
+
+        borders = self.doc.c.mesh.get_borders()
+        shapes = []
+        for border in self.doc.c.mesh.get_borders():
+            gdf_nodes = self.doc.c.mesh.gdf.nodes(selection=borders[border])
+            outline = LinearRing(list(gdf_nodes.element_shape))
+            shapes.append(outline)
+
+        # create GeoDataFrame
+        gdf_borders = gpd.GeoDataFrame(geometry=shapes)
+        gdf_borders.index.name = "BorderIndex"
+
+        # add useful information
+        gdf_borders["is_exterior"] = [self.doc.isExteriorBorder(b) == 1 for b in borders]
+        gdf_borders["is_interior"] = [self.doc.isExteriorBorder(b) == 0 for b in borders]
+        gdf_borders["node_count"] = [len(borders[nn]) for nn in borders]
+        gdf_borders["LENGTH"] = gdf_borders.geometry.length
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            gdf_borders.crs = self.doc.c.crs
+
+        return gdf_borders
+
+
     def model_area(self, selection=None):
         """
         Get the model area as a single 2D polygon.
@@ -198,25 +232,46 @@ class MeshGpd:
 
         :return: geopandas.GeoDataFrame.
         """
+        import geopandas as gpd
+        from shapely.geometry import Polygon
 
-        if selection is not None and self.doc.pdoc.findSelection(Enum.SEL_ELEMENTAL, selection) == -1:
-            raise ValueError("Elemental Selection {} does not exist".format(selection))
+        if selection is None:
+            # Create a GeoDataFrame of Model area based on Border Nodes API.
+            # This is generally fast but does not allow to create the polygons based on selections.
 
-        gdf = self.doc.c.mesh.gdf.elements(layer=1, as_2d=True, selection=selection)
-        gdf["dummy"] = 0
-        gdf = gdf.dissolve(by="dummy")
-        gdf.reset_index(inplace=True)
-        del (gdf["ELEMENT"])
-        del (gdf["LAYER"])
-        del (gdf["TOP_ELEMENT"])
-        del (gdf["dummy"])
-        gdf["AREA"] = gdf.geometry.area
+            # create areas from outer borders:
+            gdf_borders = self.doc.c.mesh.gdf.model_borders()
+            holes = gdf_borders[gdf_borders.is_interior].geometry
+
+            areas = [Polygon(shell=row.geometry, holes=holes) for i, row in
+                     gdf_borders[gdf_borders.is_exterior].iterrows()]
+
+            # create GeoData Frame
+            gdf_areas = gpd.GeoDataFrame(geometry=areas)
+
+            # add useful information
+            gdf_areas["Outer_BorderIndex"] = gdf_borders[gdf_borders.is_exterior].index
+            gdf_areas["AREA"] = gdf_areas.geometry.area
+
+        else:
+            if self.doc.pdoc.findSelection(Enum.SEL_ELEMENTAL, selection) == -1:
+                raise ValueError("Elemental Selection {} does not exist".format(selection))
+
+            gdf_areas = self.doc.c.mesh.gdf.elements(layer=1, as_2d=True, selection=selection)
+            gdf_areas["dummy"] = 0
+            gdf_areas = gdf_areas.dissolve(by="dummy")
+            gdf_areas.reset_index(inplace=True)
+            del (gdf_areas["ELEMENT"])
+            del (gdf_areas["LAYER"])
+            del (gdf_areas["TOP_ELEMENT"])
+            del (gdf_areas["dummy"])
+            gdf_areas["AREA"] = gdf_areas.geometry.area
 
         # set a coordinate system if defined for the model
         if self.doc.c.crs is not None:
-            gdf.crs = self.doc.c.crs
+            gdf_areas.crs = self.doc.c.crs
 
-        return gdf
+        return gdf_areas
 
     def mlw(self, global_cos=True):
         """

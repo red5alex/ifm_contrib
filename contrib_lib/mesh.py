@@ -225,6 +225,18 @@ class Mesh:
 
         return x, y, z
 
+    def get_borders(self):
+        """
+        Return border nodes as a dictionary {key: border number, value: list of node numbers}.
+
+        :return:
+        """
+        borders = {}
+        for border in range(self.doc.getNumberOfBorders()):
+            borders[border] = [self.doc.getBorderNode(border, n) for n in
+                               range(self.doc.getNumberOfBorderNodes(border))]
+        return borders
+
     def mlw(self, global_cos=True):
         """
         Return a dictionary with information on all Multi-Layer wells in the model.
