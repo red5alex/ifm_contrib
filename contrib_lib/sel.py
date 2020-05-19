@@ -239,3 +239,33 @@ class Sel:
 
         # if getting here, selection was not found
         raise StandardError("selection '{}' not found in model".format(selname))
+
+    def get_xybounds(self, selection, global_cos=True, zoom=1.):
+        """
+        Return the bounding box of the given selection as tuple (minx, maxx, miny, maxy).
+        If elemental selection, bounding box is calculated from centroids.
+        :param selection: the name of the selection.
+        :param zoom: zoom factor to be applied.
+        :return:
+        """
+        # get the min, max x/y of the selection
+        if self.doc.c.sel.getSelectionType(selection) == Enum.SEL_NODAL:
+            df = self.doc.c.mesh.df.nodes(selection=selection, global_cos=global_cos)
+        elif self.doc.c.sel.getSelectionType(selection) == Enum.SEL_ELEMENTAL:
+            df = self.doc.c.mesh.df.elements(selection=selection, global_cos=global_cos, centroids=True)
+            df["X"] = df.centroid.apply(lambda x: x[0])
+            df["Y"] = df.centroid.apply(lambda x: x[1])
+        else:
+            raise NotImplementedError("This type of selection is not implemented yet")
+        minx, maxx = df.X.min(), df.X.max()
+        miny, maxy = df.Y.min(), df.Y.max()
+
+        # zoom in or out
+        dx = maxx - minx
+        dy = maxy - miny
+        minx -= dx * (zoom - 1.)
+        maxx += dx * (zoom - 1.)
+        miny -= dy * (zoom - 1.)
+        maxy += dy * (zoom - 1.)
+
+        return minx, maxx, miny, maxy
