@@ -1,4 +1,8 @@
 import ifm
+#from . import enum
+#from . import diff
+from . import obj
+from . import files
 
 def closeAllDocuments():
     """
