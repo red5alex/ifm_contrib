@@ -59,7 +59,7 @@ class MeshGpd:
         gdf_elements.set_geometry("element_shape", inplace=True)
         gdf_elements.index.name = "ELEMENT"
         gdf_elements["ELEMENT"] = gdf_elements.index.values
-        gdf_elements["LAYER"] = gdf_elements.index.values / self.doc.getNumberOfElementsPerLayer() + 1
+        gdf_elements["LAYER"] = gdf_elements.index.values // self.doc.getNumberOfElementsPerLayer() + 1
         gdf_elements["TOP_ELEMENT"] = gdf_elements.index.values % self.doc.getNumberOfElementsPerLayer()
         gdf_elements["AREA"] = gdf_elements.geometry.area
 
