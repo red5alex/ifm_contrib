@@ -16,7 +16,7 @@ Users are however encouraged to contribute their own code back to the main branc
 Note: the library is currently in (mature) BETA-status, thus changes may be made that will not be 
 backwards compatible.
 
-**For a detailed introduction, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)**
+**For a detailed introduction and installation notes, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)**
 
 ## Highlights
 
