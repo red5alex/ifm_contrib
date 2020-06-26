@@ -72,3 +72,14 @@ class Ts:
             return True
         else:
             return False
+
+    def clear(self, tsid):
+        """
+        Clear all data points in time series.
+
+        :param tsid: ID of time series to be cleared
+        :type tsid: int
+        :return:
+        """
+        while self.doc.powerGetNumberOfPoints(tsid) > 0:
+            self.doc.powerDeletePoint(tsid, 0)
