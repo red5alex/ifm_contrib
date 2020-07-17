@@ -238,7 +238,7 @@ class Sel:
                 return True
 
         # if getting here, selection was not found
-        raise StandardError("selection '{}' not found in model".format(selname))
+        raise RuntimeError("selection '{}' not found in model".format(selname))
 
     def get_xybounds(self, selection, global_cos=True, zoom=1.):
         """
