@@ -121,7 +121,7 @@ class Sel:
         """
 
         # raise error if selection already exists
-        if not self.doc.findSelection(seltype, selname) != -1:
+        if self.doc.findSelection(seltype, selname) == -1:
             selid = self.doc.createSelection(seltype, selname)
         else:
             if overwrite_existing:
@@ -207,7 +207,7 @@ class Sel:
                 return True
 
         # if getting here, selection was not found
-        raise StandardError("selection '{}' not found in model".format(selname))
+        raise ValueError("selection '{}' not found in model".format(selname))
 
     def update(self, selname, itemlist, seltype=None):
         """
@@ -269,3 +269,35 @@ class Sel:
         maxy += dy * (zoom - 1.)
 
         return minx, maxx, miny, maxy
+
+    def delete(self, selname, seltype=None, ignore_if_missing=False):
+        """
+        Delete a selection of the given name. Return True if successful.
+        
+        :param selname: name of the selection to be updates
+        :type selname: str
+        :param seltype: list of allowed types of the selections (optional, default None - type will be determined)
+        :type seltype: list
+        :param ignore_if_missing: If False (default), raise ValueError if selection is not found.
+        :type ignore_if_missing: bool 
+        :return: bool
+        """
+        if seltype is None:
+            seltypes = [Enum.SEL_NODES,
+                        Enum.SEL_ELEMS,
+                        Enum.SEL_EDGES,
+                        Enum.SEL_FRACS]
+        else:
+            seltypes = [seltype]
+
+        for stype in seltypes:
+            selid = self.doc.findSelection(stype, selname)
+            if selid != -1:  # if selection is found
+                self.doc.deleteSelection(stype, selid)
+                return True
+
+        if ignore_if_missing:
+            return False
+
+        # if getting here, selection was not found
+        raise ValueError("selection '{}' not found in model".format(selname))
