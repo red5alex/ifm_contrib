@@ -43,7 +43,7 @@ class CTimeSeries:
 
     name = ""
     id = -1
-    DataPoints = [].copy()  # list of (float:time, float:value) tuples or "GAP"
+    DataPoints = []  # list of (float:time, float:value) tuples or "GAP"
     type = "Polylined"  # Polylined, Constant, ..
     option = "linear"
     timeunit = "d"
@@ -53,7 +53,7 @@ class CTimeSeries:
     def __init__(self):
         self.name = ""
         self.id = -1
-        self.DataPoints = [].copy()
+        self.DataPoints = []
 
     def getTimes(self):
         """:returns a list with the time stamps"""

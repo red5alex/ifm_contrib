@@ -14,7 +14,7 @@ from ...obj.TimeSeries import CTimeSeries
 class PowFile:
 
     filename = None
-    timeSeries = [].copy()
+    timeSeries = []
 
     def __init__(self, filename=None):
         self.filename = filename
