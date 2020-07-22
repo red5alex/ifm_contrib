@@ -225,3 +225,12 @@ class Plot:
         """
         return self._contours(*args, style="patches", slice=layer,
                               cmap=cmap, alpha=alpha, **kwargs)
+
+    def _zoom_to(self, selection, ax=None, zoom=1.):
+        minx, maxx, miny, maxy = get_XYbounds(self, selection)
+
+        # get axis and adjust limits
+        if ax is None:
+            ax = plt.gca()
+        ax.set_xlim(minx, maxx)
+        ax.set_ylim(miny, maxy)
