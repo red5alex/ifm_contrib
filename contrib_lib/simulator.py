@@ -107,8 +107,7 @@ class Simulator:
             # get time step list
             df_ts = self.doc.c.sim.df.time_steps()
             if len(df_ts[df_ts.simulation_time > time]) == 0:
-                raise RuntimeError("{} contains no timestep after {} d".format(self.doc.c.original_filename(),
-                                                                               time))
+                raise RuntimeError("{} contains no timestep after {} d".format(self.doc.c.original_filename, time))
             else:
                 ts_no = int(df_ts[df_ts.simulation_time > time].reset_index().iloc[0].file_index)
         else:
