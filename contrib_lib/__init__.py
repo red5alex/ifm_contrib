@@ -2,6 +2,7 @@ import os
 
 from ifm import Enum
 
+from .bdgt import Bdgt
 from .content import Content
 from .dfe import Dfe
 from .diag import Diag
@@ -29,6 +30,7 @@ class IfmContrib:
         # import child-classes
         # If adding additional childs and planning to contribute to the project,
         # please consult the maintainer of the repository about extending name space convention.
+        self.bdgt = Bdgt(doc)
         self.content = Content(doc)
         self.dfe = Dfe(doc)
         self.diag = Diag(doc)
@@ -56,3 +58,6 @@ class IfmContrib:
     def show_readme(self):
         for line in open(os.path.dirname(__file__) + "../../README.MD"):
             print(line.strip())
+
+    def _jedi(self):
+        print("%config Completer.use_jedi = False")
