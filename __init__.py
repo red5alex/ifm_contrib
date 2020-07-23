@@ -75,7 +75,7 @@ else:
 
     from . import c
 
-    def loadDocument(f, import_ifm_attribs=False, ifm_classic=None, crs=None, close_others=False):
+    def loadDocument(f, import_ifm_attribs=True, ifm_classic=None, crs=None, close_others=False):
         """
         This replaces the original ifm.loadDocument function.
         it returns a copy of an IFM Document including the ifm_contrib extension.
@@ -110,6 +110,9 @@ else:
             # transfer all attributes to contributors IFM object
             if import_ifm_attribs:
                 for item in dir(self.pdoc):
+                    if item == "handle":
+                        continue
+
                     self.__dict__[item] = self.pdoc.__getattribute__(item)
 
             # import contributors library
