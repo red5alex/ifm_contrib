@@ -2,6 +2,7 @@ import ifm_contrib as ifm
 from ifm import Enum
 
 from .plot_geopandas import PlotGpd
+from .plot_folium import PlotFolium
 
 
 class Plot:
@@ -17,6 +18,7 @@ class Plot:
 
         # add custom child-classes here
         self.gdf = PlotGpd(doc)
+        self.folium = PlotFolium(doc)
 
     # add custom methods here
 
