@@ -20,14 +20,13 @@ sys.path.append("C:\\Program Files\\DHI\\2019\\FEFLOW 7.2\\python\\ifm_contrib")
 # -- Project information -----------------------------------------------------
 
 project = u'ifm_contrib'
-copyright = u'2018, Alexander Renz'
+copyright = u'2018-2020, Alexander Renz'
 author = u'Alexander Renz'
 
 # The short X.Y version
-version = u'0.2'
+version = u'1.0'
 # The full version, including alpha/beta/rc tags
-release = u'0.2 beta'
-
+release = u'1.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -40,6 +39,7 @@ release = u'0.2 beta'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+	'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
@@ -81,7 +81,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
