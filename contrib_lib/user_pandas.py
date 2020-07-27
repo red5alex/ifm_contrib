@@ -1,3 +1,4 @@
+from warnings import warn
 # from ifm import Enum
 import pandas as pd
 
@@ -8,6 +9,10 @@ class UserPd:
         self.doc = doc
 
     def info(self):
+        warn("doc.c.user.df.info() is depreciated. Use doc.c.user.df.selections()", FutureWarning)
+        return self.distributions()
+
+    def distributions(self):
         """
         Returns a pandas.DataFrame with information on existing user distributions.
         """
