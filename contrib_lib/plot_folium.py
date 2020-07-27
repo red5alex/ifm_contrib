@@ -9,4 +9,3 @@ class PlotFolium:
 
     def __init__(self, doc):
         self.doc = doc
-        raise NotImplementedError("contact ARE")
