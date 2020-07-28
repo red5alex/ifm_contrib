@@ -9,7 +9,7 @@ FEFLOW ifm_contrib
 An Open-Source Extension to FEFLOW's Python programming API.
 
 Code-Compatibility with Classic IFM
-#######################################
+-----------------------------------
 
 ifm_contrib inherits all commands of the classic IFM API, thus that it is code-compatible with 
 code written for the classic IFM:
@@ -21,7 +21,7 @@ code written for the classic IFM:
   ``doc.getNumberOfElements()``
   
 Additional Features
-#######################################
+-------------------
 
 It adds however additional API features, such as creating plots similar to those of the FEFLOW Slice View using matplotlib, or exporting model data to Pandas (Geo-)DataFrames.
 
@@ -54,6 +54,9 @@ For detailed information, see :ref:`modindex`.
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   api
+   tutorials
    
 
 Indices and tables
