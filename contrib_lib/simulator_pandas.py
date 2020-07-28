@@ -5,7 +5,7 @@ from datetime import timedelta
 
 class SimPd:
     """
-    Functions for getting information on simulation propoerties as dataframes
+    Functions regarding the simulator and data specific to results files, using Pandas
     """
 
     def __init__(self, doc):

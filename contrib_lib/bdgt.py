@@ -6,9 +6,7 @@ from .bdgt_pandas import BdgtPd
 
 class SubDomainBudgetTransferContrib:
     """
-    SubDomainTransfer Class
-
-    Extension Class for working with SubDomain budgets
+    Functions regarding information of the Budget Panels.
     """
 
     def __init__(self, doc, domain, masking_domain, budget_type=Enum.PCLS_FLOW):

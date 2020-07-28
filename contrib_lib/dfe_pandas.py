@@ -3,7 +3,7 @@ from ifm import Enum
 
 class DfePd:
     """
-    Functions for exporting dfe properties to DataFrames.
+    Functions regarding Discrete Feature Elements using Pandas.
     """
 
     def __init__(self, doc):

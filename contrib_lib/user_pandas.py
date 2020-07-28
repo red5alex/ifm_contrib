@@ -4,6 +4,9 @@ import pandas as pd
 
 
 class UserPd:
+    """
+    Functions regarding User Data (Distributions and Expressions)
+    """
 
     def __init__(self, doc):
         self.doc = doc

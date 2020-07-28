@@ -4,7 +4,7 @@ import numpy as np
 
 class MeshPd:
     """
-    Functions for exporting nodal and elemental properties to DataFrames.
+    Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames
     """
 
     def __init__(self, doc):

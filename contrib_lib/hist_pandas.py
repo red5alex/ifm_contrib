@@ -2,6 +2,8 @@ from ifm import Enum
 
 
 class HistPd:
+    """Functions to obtain data of FEFLOWs chart panels as pandas.DataFrames
+    """
 
     def __init__(self, doc):
         self.doc = doc

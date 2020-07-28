@@ -2,7 +2,7 @@ from ifm import Enum
 
 class ContentPd:
     """
-    Functions for exporting nodal and elemental properties to GeoDataFrames.
+    Functions regarding accessing information from the Content Panel as pandas.DataFrames.
     """
 
     def __init__(self, doc):

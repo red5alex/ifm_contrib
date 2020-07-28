@@ -4,8 +4,7 @@ from .hist_pandas import HistPd
 
 class Hist:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to OBSERVATION HISTORIES.
+    Functions to obtain data of FEFLOWs chart panels
     """
 
     def __init__(self, doc):

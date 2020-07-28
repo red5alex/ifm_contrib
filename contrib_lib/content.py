@@ -4,8 +4,7 @@ from .content_pandas import ContentPd
 
 class Content:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to CONTENT.
+    Functions regarding accessing information from the Content Panel
     """
 
     def __init__(self, doc):

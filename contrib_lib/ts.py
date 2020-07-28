@@ -4,9 +4,7 @@ from .ts_pandas import TsPd
 
 class Ts:
     """
-    Extension sub-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to MODEL TIME SERIES (formerly Power Functions).
-    (Note: methods relating to Output Time Series - Histories - should be added to the .hist class)
+    Functions regarding time series (aka power functions)
     """
 
     def __init__(self, doc):

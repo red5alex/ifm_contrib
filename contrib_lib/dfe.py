@@ -4,8 +4,7 @@ from .dfe_pandas import DfePd
 
 class Dfe:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to MESH (Nodes, Elements).
+    Functions regarding Discrete Feature Elements.
     """
 
     def __init__(self, doc):

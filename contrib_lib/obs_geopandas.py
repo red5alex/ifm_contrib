@@ -3,7 +3,7 @@ from ifm import Enum
 
 class ObsGpd:
     """
-    Functions for exporting observation point properties to GeoDataFrames.
+    Functions to obtain data of Observation Points as geoPandas.GeoDataFrames.
     """
 
     def __init__(self, doc):

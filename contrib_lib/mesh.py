@@ -6,7 +6,7 @@ from .mesh_pandas import MeshPd
 
 class Mesh:
     """
-    Provides functions for working with mesh properties.
+    Functions to obtain data of FEFLOWs Data Panel.
     """
 
     def __init__(self, doc):

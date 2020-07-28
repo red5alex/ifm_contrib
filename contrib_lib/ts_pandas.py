@@ -3,6 +3,9 @@ import pandas as pd
 
 
 class TsPd:
+    """
+    Functions regarding time series (aka power functions)
+    """
 
     def __init__(self, doc):
         self.doc = doc

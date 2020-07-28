@@ -3,7 +3,7 @@ from ifm import Enum
 
 class MeshGpd:
     """
-    Functions for exporting nodal and elemental properties to GeoDataFrames.
+    Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames.
     """
 
     def __init__(self, doc):

@@ -9,8 +9,7 @@ import sys
 
 class Simulator:
     """
-    Extension child-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to MESH (Nodes, Elements).
+    Functions regarding the simulator and data specific to results files
     """
 
     def __init__(self, doc):

@@ -3,7 +3,7 @@ import pandas as pd
 
 class SettingsPd:
     """
-    Functions for exporting dfe properties to DataFrames.
+    Functions for reading and writing global settings as pandas.DataFrames
     """
 
     def __init__(self, doc):

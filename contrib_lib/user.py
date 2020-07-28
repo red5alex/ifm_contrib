@@ -3,8 +3,7 @@ from .user_pandas import UserPd
 
 class User:
     """
-    Extension sub-class for IFM contributor's Extensions.
-    Use this class to add functionality relating to user distributions and expressions
+    Functions regarding User Data (Distributions and Expressions)
     """
 
     def __init__(self, doc):
