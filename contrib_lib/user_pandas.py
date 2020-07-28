@@ -65,4 +65,9 @@ class UserPd:
         else:
             df_expr_n = pd.DataFrame(columns=["Name", "user_type", "item_type"])
 
-        return pd.concat([df_dist_e, df_dist_n, df_expr_e, df_expr_n])
+        # concatenate all lists 
+        df = pd.concat([df_dist_e, df_dist_n, df_expr_e, df_expr_n])
+        
+        # concatenation may cause a cast to float - repair before return
+        df["ID"] = df["ID"].astype(int)
+        return df
