@@ -82,34 +82,12 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Content</a></li>
-<li><a class="reference internal" href="#accessing-nodal-and-elemental-model-data">Accessing Nodal and Elemental Model Data</a><ul>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.mesh">doc.c.mesh - Model Properties</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.mesh_pandas">doc.c.mesh.df - Model Properties (Pandas)</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.mesh_geopandas">doc.c.mesh.gdf - Model Properties (Geopandas)</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.sel">doc.c.sel - Selections</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.content_pandas">doc.c.content.df - Content (Pandas)</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">ifm_contrib API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#plotting-and-visualization">Plotting and Visualization</a><ul>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.plot">doc.c.plot - Matplotlib</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.plot_geopandas">doc.c.plot.gdf - Plot Output</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#history-charts-and-time-series">History Charts and Time Series</a><ul>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.hist_pandas">doc.c.hist.df - History Charts</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.ts">doc.c.ts - Time Series</a></li>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.ts_pandas">doc.c.ts - Time Series (Pandas)</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#observation-points">Observation Points</a><ul>
-<li><a class="reference internal" href="#module-ifm_contrib.contrib_lib.obs_geopandas">doc.c.obs.gdf - Observations (Geopandas)</a></li>
-</ul>
-</li>
-</ul>
-</div>
+
             
           
         </div>
@@ -202,7 +180,7 @@
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.mesh.Mesh">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.mesh.</code><code class="sig-name descname">Mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh.Mesh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides functions for working with mesh properties.</p>
+<dd><p>Functions to obtain data of FEFLOWs Data Panel.</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.mesh.Mesh.getCentroid">
 <code class="sig-name descname">getCentroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item</span></em>, <em class="sig-param"><span class="n">localcos</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">itemtype</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh.Mesh.getCentroid" title="Permalink to this definition">¶</a></dt>
@@ -306,7 +284,7 @@
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.mesh_pandas.MeshPd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.mesh_pandas.</code><code class="sig-name descname">MeshPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh_pandas.MeshPd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functions for exporting nodal and elemental properties to DataFrames.</p>
+<dd><p>Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.mesh_pandas.MeshPd.dfe">
 <code class="sig-name descname">dfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh_pandas.MeshPd.dfe" title="Permalink to this definition">¶</a></dt>
@@ -414,15 +392,17 @@ with distribution values will be added to the DataFrame.</p></li>
 <li><p><strong>global_cos</strong> (<em>bool</em>) – if True (default), use global instead of local coordinate system</p></li>
 <li><p><strong>slice</strong> (<em>int</em>) – if provided in a 3D model, return only nodes of this slice</p></li>
 <li><p><strong>selection</strong> (<em>str</em>) – if provided, return only nodes of this selection</p></li>
-<li><p><strong>budget</strong> – add nodal budget values to dataframe. Can be “flow”, “mass”, “heat”, or a list
-like [“flow”, “mass]. If True, all available budgets will be created. If None, no budget is
-calculated (default).</p></li>
+<li><p><strong>budget</strong> (<em>bool</em><em>, </em><em>str</em><em> or </em><em>[</em><em>str</em><em>]</em><em>, </em><em>None.</em>) – add nodal budget values to dataframe. Can be “flow”, “mass”, “heat”, or a list like [“flow”, “mass].
+If True, all available budgets will be created. If None, no budget is calculated (default).</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame, index of element nodes, all requested information as columns.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
 </dl>
-<p>:type budget       bool, str or [str], None.
-:return:           DataFrame, index of element nodes, all requested information as columns.
-:rtype:            pandas.DataFrame</p>
 </dd></dl>
 
 </dd></dl>
@@ -433,7 +413,7 @@ calculated (default).</p></li>
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.mesh_geopandas.MeshGpd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.mesh_geopandas.</code><code class="sig-name descname">MeshGpd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh_geopandas.MeshGpd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functions for exporting nodal and elemental properties to GeoDataFrames.</p>
+<dd><p>Functions to obtain data of FEFLOWs Data Panel as geopandas.GeoDataFrames.</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.mesh_geopandas.MeshGpd.dfe">
 <code class="sig-name descname">dfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.mesh_geopandas.MeshGpd.dfe" title="Permalink to this definition">¶</a></dt>
@@ -708,7 +688,7 @@ If elemental selection, bounding box is calculated from centroids.
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.content_pandas.ContentPd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.content_pandas.</code><code class="sig-name descname">ContentPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.content_pandas.ContentPd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functions for exporting nodal and elemental properties to GeoDataFrames.</p>
+<dd><p>Functions regarding accessing information from the Content Panel as pandas.DataFrames.</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.content_pandas.ContentPd.content">
 <code class="sig-name descname">content</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_domain</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">content_types</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.content_pandas.ContentPd.content" title="Permalink to this definition">¶</a></dt>
@@ -923,7 +903,8 @@ GeoDataFrame.</p>
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.hist_pandas.HistPd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.hist_pandas.</code><code class="sig-name descname">HistPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.hist_pandas.HistPd" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Functions to obtain data of FEFLOWs chart panels as pandas.DataFrames</p>
+<dl class="py method">
 <dt id="ifm_contrib.contrib_lib.hist_pandas.HistPd.all_hist_items">
 <code class="sig-name descname">all_hist_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.hist_pandas.HistPd.all_hist_items" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -931,9 +912,7 @@ GeoDataFrame.</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.hist_pandas.HistPd.getDataframe">
 <code class="sig-name descname">getDataframe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hist_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hist_subtype</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">force_time_axis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reference_time</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.hist_pandas.HistPd.getDataframe" title="Permalink to this definition">¶</a></dt>
-<dd><p>”
-Depreciated: use doc.c.hist.history()</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.hist_pandas.HistPd.history">
@@ -963,9 +942,7 @@ is not a permanent change of the model settings.</p></li>
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.ts.Ts">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.ts.</code><code class="sig-name descname">Ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.ts.Ts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extension sub-class for IFM contributor’s Extensions.
-Use this class to add functionality relating to MODEL TIME SERIES (formerly Power Functions).
-(Note: methods relating to Output Time Series - Histories - should be added to the .hist class)</p>
+<dd><p>Functions regarding time series (aka power functions)</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.ts.Ts.clear">
 <code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsid</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.ts.Ts.clear" title="Permalink to this definition">¶</a></dt>
@@ -1023,7 +1000,8 @@ Use this class to add functionality relating to MODEL TIME SERIES (formerly Powe
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.ts_pandas.TsPd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.ts_pandas.</code><code class="sig-name descname">TsPd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.ts_pandas.TsPd" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Functions regarding time series (aka power functions)</p>
+<dl class="py method">
 <dt id="ifm_contrib.contrib_lib.ts_pandas.TsPd.create_from_series">
 <code class="sig-name descname">create_from_series</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tsid</span></em>, <em class="sig-param"><span class="n">series</span></em>, <em class="sig-param"><span class="n">comment</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cyclic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">interpolation</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">warn_on_overwrite</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">error_on_overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.ts_pandas.TsPd.create_from_series" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a FEFLOW time series from a pandas.Series.</p>
@@ -1088,7 +1066,7 @@ and is not a permanent change of the model settings.</p></li>
 <dl class="py class">
 <dt id="ifm_contrib.contrib_lib.obs_geopandas.ObsGpd">
 <em class="property">class </em><code class="sig-prename descclassname">ifm_contrib.contrib_lib.obs_geopandas.</code><code class="sig-name descname">ObsGpd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">doc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.obs_geopandas.ObsGpd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Functions for exporting observation point properties to GeoDataFrames.</p>
+<dd><p>Functions to obtain data of Observation Points as geoPandas.GeoDataFrames.</p>
 <dl class="py method">
 <dt id="ifm_contrib.contrib_lib.obs_geopandas.ObsGpd.obspoints">
 <code class="sig-name descname">obspoints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">global_cos</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">filter_by</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ifm_contrib.contrib_lib.obs_geopandas.ObsGpd.obspoints" title="Permalink to this definition">¶</a></dt>
@@ -1096,15 +1074,18 @@ and is not a permanent change of the model settings.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>global_cos</strong> – If True, use global coordinate system (default)</p></li>
-<li><p><strong>filter_by</strong> – dictionary {str : list} defining a filter. Return only observation points whose attributes</p></li>
+<li><p><strong>global_cos</strong> (<em>Bool</em>) – If True, use global coordinate system (default)</p></li>
+<li><p><strong>filter_by</strong> (<em>dict {str : list}</em>) – dictionary {str : list} defining a filter. Return only observation points whose attributes
+defined by the key of the dictionary is member of a list provided as the value.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>GeoDataFrame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>geopandas.GeoDataFrame</p>
+</dd>
 </dl>
-<p>defined by the key of the dictionary is member of a list provided as the value.
-:type global_cos: Bool
-:type filter_by: dict {str : list}
-:return: GeoDataFrame</p>
 </dd></dl>
 
 </dd></dl>

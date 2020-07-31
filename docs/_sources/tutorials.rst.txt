@@ -3,15 +3,9 @@
 Tutorials
 =================
 
-Programming in IFM
+Gettings Started
 ----------------------
 .. toctree::
 
    https://github.com/DHI/ifm_contrib/blob/master/doc/Notebooks/getting_started.ipynb
 
-Working with FEFLOW
-----------------------------
-.. toctree::
-
-   https://github.com/DHI/ifm_contrib/blob/master/doc/Notebooks/getting_started.ipynb
-	
