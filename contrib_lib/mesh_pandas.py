@@ -77,7 +77,7 @@ class MeshPd:
                     if type(x) == str:
                         exprID = self.doc.getElementalExprDistrIdByName(x)
                         if exprID == -1:
-                            raise ValueError("expression {} does not exist!".format(str(d)))
+                            raise ValueError("expression {} does not exist!".format(str(x)))
                     elif type(x) == int:
                         exprID = x
                     else:
