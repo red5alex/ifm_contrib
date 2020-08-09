@@ -23,8 +23,8 @@ class UserPd:
         # elemental Distribution
         if self.doc.pdoc.getNumberOfElementalRefDistr() > 0:
             df_dist_e = pd.DataFrame(
-                [self.doc.getElementalRefDistrName(i) for i in range(self.doc.pdoc.getNumberOfElementalRefDistr())])
-            df_dist_e.columns = ["Name"]
+                [self.doc.getElementalRefDistrName(i) for i in range(self.doc.pdoc.getNumberOfElementalRefDistr())], 
+                columns=["Name"])
             df_dist_e["user_type"] = "DISTRIBUTION"
             df_dist_e["item_type"] = "ELEMENTAL"
             df_dist_e.index.name = "ID"
@@ -35,7 +35,8 @@ class UserPd:
         # nodal Distribution
         if self.doc.pdoc.getNumberOfNodalRefDistr() > 0:
             df_dist_n = pd.DataFrame(
-            [self.doc.getNodalRefDistrName(i) for i in range(self.doc.pdoc.getNumberOfNodalRefDistr())])
+                [self.doc.getNodalRefDistrName(i) for i in range(self.doc.pdoc.getNumberOfNodalRefDistr())], 
+                columns=["Name"]) 
             df_dist_n.columns = ["Name"]
             df_dist_n["user_type"] = "DISTRIBUTION"
             df_dist_n["item_type"] = "NODAL"
@@ -47,8 +48,8 @@ class UserPd:
         # elemental Expression
         if self.doc.pdoc.getNumberOfElementalExprDistr() > 0:
             df_expr_e = pd.DataFrame(
-                [self.doc.getElementalExprDistrName(i) for i in range(self.doc.pdoc.getNumberOfElementalExprDistr())])
-            df_expr_e.columns = ["Name"]
+                [self.doc.getElementalExprDistrName(i) for i in range(self.doc.pdoc.getNumberOfElementalExprDistr())],
+                columns = ["Name"])
             df_expr_e["user_type"] = "EXPRESSION"
             df_expr_e["item_type"] = "ELEMENTAL"
             df_expr_e.index.name = "ID"
@@ -59,8 +60,8 @@ class UserPd:
         # nodal Expression
         if self.doc.pdoc.getNumberOfNodalExprDistr() > 0:
             df_expr_n = pd.DataFrame(
-            [self.doc.getNodalExprDistrName(i) for i in range(self.doc.pdoc.getNumberOfNodalExprDistr())])
-            df_expr_n.columns = ["Name"]
+                [self.doc.getNodalExprDistrName(i) for i in range(self.doc.pdoc.getNumberOfNodalExprDistr())],
+                columns = ["Name"])
             df_expr_n["user_type"] = "EXPRESSION"
             df_expr_n["item_type"] = "NODAL"
             df_expr_n.index.name = "ID"
