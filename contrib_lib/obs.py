@@ -24,13 +24,7 @@ class Obs:
     # add custom methods here
 
     def add_reference_values(self, refvalues, par=Enum.P_HEAD):
-        """
-        Adds reference values for the observation points
-        :param refvalues: dictionary {label : value} with observed values
-        :type refvalues: dict
-        :param par: parameter to be set. (only Enum.P_HEAD implemented at the moment)
-        :return: None
-        """
+        # untested - add reference values to model for metrics and scatter plit
 
         if type(refvalues) != dict:
             raise TypeError("refvalues must be of type dict")
@@ -38,15 +32,7 @@ class Obs:
         self.reference_values[par] = refvalues
 
     def plot_scatter(self, par=Enum.P_HEAD, labels=True, reference_line=True, format_plot=True,  *args, **kwargs):
-        """
-        Create a scatter plot
-        :param par:
-        :param add_labels:
-        :param args:
-        :param kwargs:
-        :return: None
-        """
-
+        # untested - create a matplolib scatter plot
         import matplotlib.pyplot as plt
 
         # abort if reference values do not exist
@@ -80,11 +66,7 @@ class Obs:
             plt.ylim(hmin, hmax)
 
     def metrics(self):
-        """
-        Returns some common metrics of the calibration.
-        :return: dictionary with metrics
-        :rtype: dict
-        """
+        # untested
         # get obspoints
         gdf_obs = self.doc.c.obs.gdf.obspoints()
         n = gdf_obs.h_res.count()

@@ -2,7 +2,8 @@ from ifm import Enum
 
 
 class HistPd:
-    """Functions to obtain data of FEFLOWs chart panels as pandas.DataFrames
+    """
+    Functions to obtain data of FEFLOWs chart panels as pandas.DataFrames
     """
 
     def __init__(self, doc):
@@ -16,11 +17,9 @@ class HistPd:
             raise AttributeError()
 
     def getDataframe(self, hist_type=None, hist_subtype=0, force_time_axis=False, reference_time=None):
-        """"
-        Depreciated: use doc.c.hist.history()
-        """
+        #  is depreciated > use doc.c.hist.history()
         import warnings
-        warnings.warn("This function is depreciated. Use doc.c.hist.df.history()", DeprecationWarning)
+        warnings.warn("This function is depreciated. Use doc.c.hist.df.history()", FutureWarning)
         self.doc.c.hist.df.history(hist_type=hist_type, hist_subtype=hist_subtype,
                      force_time_axis=force_time_axis, reference_time=reference_time)
 

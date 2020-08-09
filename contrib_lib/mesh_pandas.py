@@ -174,12 +174,12 @@ class MeshPd:
         :type slice:       int
         :param selection:  if provided, return only nodes of this selection
         :type selection:   str
-        :param budget:     add nodal budget values to dataframe. Can be "flow", "mass", "heat", or a list
-                           like ["flow", "mass]. If True, all available budgets will be created. If None, no budget is
-                           calculated (default).
-        :type budget       bool, str or [str], None.
+        :param budget:     add nodal budget values to dataframe. Can be "flow", "mass", "heat", or a list like ["flow", "mass].
+                           If True, all available budgets will be created. If None, no budget is calculated (default).
+        :type budget:       bool, str or [str], None.
         :return:           DataFrame, index of element nodes, all requested information as columns.
         :rtype:            pandas.DataFrame
+
         """
 
         import pandas as pd

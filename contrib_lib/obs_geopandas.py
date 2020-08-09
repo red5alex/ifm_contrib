@@ -14,11 +14,13 @@ class ObsGpd:
         Get the observation points as a GeoPandas GeoDataFrame.
 
         :param global_cos: If True, use global coordinate system (default)
-        :param filter_by: dictionary {str : list} defining a filter. Return only observation points whose attributes
-        defined by the key of the dictionary is member of a list provided as the value.
         :type global_cos: Bool
+        :param filter_by: dictionary {str : list} defining a filter. Return only observation points whose attributes
+                          defined by the key of the dictionary is member of a list provided as the value.
+                          
         :type filter_by: dict {str : list}
         :return: GeoDataFrame
+        :rtype: geopandas.GeoDataFrame
         """
 
         import pandas as pd
