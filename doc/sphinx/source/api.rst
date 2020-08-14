@@ -6,7 +6,7 @@ ifm_contrib API Documentation
 ifm.c.content 
 -----------------
 
-.. automodule:: contrib_lib.content
+.. autoclass:: contrib_lib.content
 	:members:
 	
 .. autoclass:: contrib_lib.content.ContentPd
@@ -14,22 +14,22 @@ ifm.c.content
 
 ifm.c.dfe 
 -----------------
-.. automodule:: contrib_lib.dfe
+.. autoclass:: contrib_lib.dfe
 	:members:
 
-.. automodule:: contrib_lib.dfe.DfePd
+.. autoclass:: contrib_lib.dfe.DfePd
 	:members:
 
 
 ifm.c.diag 
 -----------------
-.. automodule:: contrib_lib.diag
+.. autoclass:: contrib_lib.diag
 	:members:
 
 ifm.c.hist
 --------------
 
-.. automodule:: contrib_lib.hist
+.. autoclass:: contrib_lib.hist
 	:members:
 	
 .. autoclass:: contrib_lib.hist.HistPd
@@ -39,7 +39,7 @@ ifm.c.hist
 ifm.c.mesh
 -------------------
 
-.. automodule:: contrib_lib.mesh
+.. autoclass:: contrib_lib.mesh
 	:members:
 	
 .. autoclass:: contrib_lib.mesh.MeshPd
@@ -51,62 +51,62 @@ ifm.c.mesh
 ifm.c.obs
 -----------------
 
-.. automodule:: contrib_lib.obs
+.. autoclass:: contrib_lib.obs
 	:members:
 	
-.. automodule:: contrib_lib.obs.ObsGpd
+.. autoclass:: contrib_lib.obs.ObsGpd
 	:members:
 
 	
 ifm.c.plot 
 -----------------
 
-.. automodule:: contrib_lib.plot
+.. autoclass:: contrib_lib.plot
 	:members:
 	
-.. automodule:: contrib_lib.plot.PlotGpd
+.. autoclass:: contrib_lib.plot.PlotGpd
 	:members:
 
 ifm.c.sel
 -----------------
 
-.. automodule:: contrib_lib.sel
+.. autoclass:: contrib_lib.sel
 	:members:
 	
-.. automodule:: contrib_lib.sel.SelPd
+.. autoclass:: contrib_lib.sel.SelPd
 	:members:
 	
 
 ifm.c.settings 
 -----------------
 
-.. automodule:: contrib_lib.settings
+.. autoclass:: contrib_lib.settings
 	:members:
 	
-.. automodule:: contrib_lib.settings.SettingsPd
+.. autoclass:: contrib_lib.settings.SettingsPd
 	:members:
 
 ifm.c.sim 
 -----------------
 
-.. automodule:: contrib_lib.simulator
+.. autoclass:: contrib_lib.simulator
 	:members:
 	
-.. automodule:: contrib_lib.simulator.SimPd
+.. autoclass:: contrib_lib.simulator.SimPd
 	:members:
 
 ifm.c.ts 
 -----------------
-.. automodule:: contrib_lib.ts
+.. autoclass:: contrib_lib.ts
 	:members:
 	
-.. automodule:: contrib_lib.ts.TsPd
+.. autoclass:: contrib_lib.ts.TsPd
 	:members:
 	
 ifm.c.user 
 -----------------
-.. automodule:: contrib_lib.user
+.. autoclass:: contrib_lib.user
 	:members:
 
-.. automodule:: contrib_lib.user.UserPd
+.. autoclass:: contrib_lib.user.UserPd
 	:members:
