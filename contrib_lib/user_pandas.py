@@ -12,7 +12,7 @@ class UserPd:
         self.doc = doc
 
     def info(self):
-        warn("doc.c.user.df.info() is depreciated. Use doc.c.user.df.selections()", FutureWarning)
+        warn("doc.c.user.df.info() is depreciated. Use doc.c.user.df.distributions()", FutureWarning)
         return self.distributions()
 
     def distributions(self):
