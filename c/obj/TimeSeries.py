@@ -1,4 +1,5 @@
 __author__ = 'are'
+from datetime import datetime
 
 class CTimeSeries:
     """
@@ -184,6 +185,37 @@ class CTimeSeries:
                     if dp[i-1][1] == dp[i][1] == dp[i+1][1]:
                         del dp[i]
             pass
+
+
+    def resample(self, rule, origin=datetime(1899,12,30)):
+            """
+            resample the data points.
+
+            Parameters
+            ----------
+
+            rule : str
+                    The resampling rule, e.g. "D" (daily), "W" (weekly), "6M" (every six month), "A" (annual.).
+                    See https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases for a full list.
+
+            """
+            import pandas as pd
+
+            # convert data points to df
+            times = list(map(float, self.getTimes()))
+            values = list(map(float, self.getDataValues()))
+            df = pd.DataFrame(times, columns=["times"])
+            df["value"] = values
+            df["datetime"] = pd.to_datetime(df.times, unit="D", origin=origin)
+            df.set_index("datetime", inplace=True)
+
+            # resample
+            df_resampled = df.resample(resample_rule).mean().dropna()
+            df_resampled.reset_index(inplace=True)
+            df_resampled["times_reverse"] =  (df_resampled.datetime - origin).dt.days
+
+            # write back to data points
+            self.DataPoints = [(t, v) for t,v in df_resampled[['times_reverse', 'value']].values]
 
     def __eq__(self, other):
         if self.DataPoints == other.DataPoints:
