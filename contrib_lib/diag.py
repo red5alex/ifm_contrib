@@ -34,6 +34,13 @@ class Diag:
         else:
             return False, info # passed
 
+"""
+Tests to implement:
+- check for non-zero Y-Offset in 2D vertical model
+
+
+"""
+
 
 
 
