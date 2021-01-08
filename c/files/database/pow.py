@@ -117,7 +117,7 @@ class PowFile:
 
     def getTsById(self, id):
         #returns the first time series with the name given by <name>. Returns None if not found.
-        for ts in self.id:
+        for ts in self.timeSeries:
             if ts.id == id:
                 return ts
         return None
