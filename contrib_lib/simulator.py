@@ -19,8 +19,7 @@ class Simulator:
 
         # add custom child-classes here
         self.df = SimPd(doc)
-        
-    # add custom methods here
+
     def suggest_dac_filename(self, relative=False):
         """
         Suggest a default file name for a results (dac) file.
@@ -29,7 +28,6 @@ class Simulator:
 
         Parameters:
         -----------
-
             relative : Bool, optional
                 Will return absolute path if `False` (default), and relative path if `True`
         
@@ -41,7 +39,7 @@ class Simulator:
             folder = os.path.sep.join(folders)
             dacpath = folder + os.path.sep + os.path.basename(fempath).replace(".fem", ".dac")
         else:
-            dacpath = fempath
+            dacpath = fempath.replace(".fem", ".dac")
             
         if relative:
             return os.path.relpath(dacpath)
@@ -49,8 +47,9 @@ class Simulator:
             return os.path.abspath(dacpath)
 
 
-    def start(self, dac=None, ui="widget", 
-                compact_output=False, auto_start=True, auto_stop=True):
+    def start(self, dac=None, ui="widget",
+              compact_output=False, auto_start=True, auto_stop=True,
+              dashboard_callback=None, custom_termination_criterion=None):
         """
         Runs the model. Similar to doc.startSimulator but adds some features.
 
@@ -65,7 +64,13 @@ class Simulator:
                 If `True` (default), will stop the simulator when finished.
             auto_stop : Bool
                 If `True` (default), will stop the simulator when finished.
-
+            dashboard_callback : BoundFunction on None
+                Must be provided as a bound function with one positional parameter, which is a valid FEFLOWDocument.
+                If provided, the output of this function will be displayed in the Dashboard tab of the widget.
+            auto_stop: BoundFunction or None
+                Must be provided as a bound function with one positional parameter, which is a valid FEFLOWDocument.
+                If the return value is True, the simulation is aborted. Useful e.g. to stop a simulation when reaching
+                quasi steady-state.
         """
 
         #TODO
@@ -81,7 +86,9 @@ class Simulator:
             from ifm_contrib.c.simulator.Simulator import SimWidget
 
             if compact_output is False:
-                simwidget = SimWidget(self.doc)
+                simwidget = SimWidget(self.doc,
+                                      dashboard_callback=dashboard_callback,
+                                      custom_termination_criterion=custom_termination_criterion)
                 simwidget.display()
                 if auto_start:
                     simwidget.start()
@@ -113,16 +120,22 @@ class Simulator:
         :rtype: pandas.Series
         """
 
-        if type(time) == float or int:
-
-            # get time step list
-            df_ts = self.doc.c.sim.df.time_steps()
+        # get time step list
+        df_ts = self.doc.c.sim.df.time_steps()
+            
+        if type(time) in [float, int]:
             if len(df_ts[df_ts.simulation_time > time]) == 0:
                 raise RuntimeError("{} contains no timestep after {} d".format(self.doc.c.original_filename, time))
             else:
                 ts_no = int(df_ts[df_ts.simulation_time > time].reset_index().iloc[0].file_index)
+                self.doc.loadTimeStep(ts_no)
+                return df_ts[df_ts.simulation_time > time].reset_index().iloc[0]
+        elif type(time) == datetime:
+            if len(df_ts[df_ts.simulation_date>time])==0:
+                raise RuntimeError("{} contains no timestep after {}".format(self.doc.c.original_filename, time))
+            else:
+                ts_no = int(df_ts[df_ts.simulation_date > time].reset_index().iloc[0].file_index)
+                self.doc.loadTimeStep(ts_no)
+                return df_ts[df_ts.simulation_date > time].reset_index().iloc[0]
         else:
             raise ValueError("parameter 'time' must be of type float (simulation time in days)  ")
-
-        self.doc.loadTimeStep(ts_no)
-        return df_ts[df_ts.simulation_time > time].reset_index().iloc[0]
