@@ -177,7 +177,7 @@ class CTimeSeries:
         pattern:
          "equalMidPoints" removes all points i where f(i-1) = f(i) = f(i+1)
         """
-        if pattern is "equalMidPoints":
+        if pattern == "equalMidPoints":
             dp = self.DataPoints
             pass
             for i in range(len(dp)-2, 1, -1):  # step backwards as elements become deleted
