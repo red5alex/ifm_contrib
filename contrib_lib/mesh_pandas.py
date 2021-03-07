@@ -10,7 +10,8 @@ class MeshPd:
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False, content=None):
+    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False, global_cos=True,
+                 content=None, ):
         """
         Create a Pandas Dataframe with information on the model elements.
 
@@ -131,7 +132,7 @@ class MeshPd:
 
         # add centroid values
         if centroids is True:
-            df_elements["centroid"] = [self.doc.c.mesh.getCentroid(e) for e in df_elements.index]
+            df_elements["centroid"] = [self.doc.c.mesh.getCentroid(e, localcos=(not global_cos)) for e in df_elements.index]
 
         # add elemental content
         if content is not None and content is not False:
@@ -327,6 +328,49 @@ class MeshPd:
                 self.doc.pdoc.budgetClose(bdgt)
 
         return df_nodes.replace(-99999.0, np.nan)
+
+    def border_nodes(self, border_number=0, *args , **kwargs):
+        """
+        Return a DataFrame with all nodes of the specified border.
+
+        :param border_number: the ordinal number of the border. Default 0.
+        :type border_number: int
+        :param \*args: additional arguments passed, see `nodes()`
+        :param \**kwargs: additional keyword arguments see `nodes()`
+        :return: A DataFrame with the node information
+        :rtype: pandas.DataFrame
+        """
+        import pandas as pd
+        bnodes = [self.doc.getBorderNode(border_number, N) for N in range(self.doc.getNumberOfBorderNodes(border_number))]
+        df_bordernodes = pd.DataFrame(bnodes, columns=["NODE"]).join(self.doc.c.mesh.df.nodes(*args , **kwargs), on="NODE")
+        return df_bordernodes
+
+    def borders(self):
+        """
+        Return a DataFrame with all model borders.
+
+        :return:
+        :rtype: shapely.geometry.LinearRing
+        """
+        import pandas as pd
+
+        borders = self.doc.c.mesh.get_borders()
+
+        # create GeoDataFrame
+        df_borders = pd.DataFrame(borders)
+        df_borders.index.name = "BorderIndex"
+
+        # add useful information
+        df_borders["is_exterior"] = [self.doc.isExteriorBorder(b) == 1 for b in borders]
+        df_borders["is_interior"] = [self.doc.isExteriorBorder(b) == 0 for b in borders]
+        df_borders["node_count"] = [len(borders[nn]) for nn in borders]
+
+        # set a coordinate system if defined for the model
+        if self.doc.c.crs is not None:
+            df_borders.crs = self.doc.c.crs
+
+        return df_borders
+
 
     def faces(self):
         """

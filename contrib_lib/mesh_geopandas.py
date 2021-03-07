@@ -145,8 +145,8 @@ class MeshGpd:
             for i, row in self.doc.c.content.df.info().loc[items].iterrows():
                 name = row["ifm.Enum"]
                 try:
-                    gdf_elements[name] = [self.doc.getElementalContent(i, e) for e in df_elements.index]
-                except StandardError:
+                    gdf_elements[name] = [self.doc.getElementalContent(i, e) for e in gdf_elements.index]
+                except RuntimeError:
                     gdf_elements[name] = np.nan
 
 
@@ -176,7 +176,6 @@ class MeshGpd:
         """
 
         from shapely.geometry import Point
-        import geopandas
 
         df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
@@ -189,7 +188,14 @@ class MeshGpd:
 
         return gdf_nodes
 
-    def model_borders(self):
+    def border_nodes(self, border_number=0, *args, **kwargs):
+        from shapely.geometry import Point
+        import geopandas as gpd
+        gdf_border = gpd.GeoDataFrame(self.doc.c.mesh.df.border_nodes(border_number, *args, **kwargs))
+        gdf_border["geometry"] = gdf_border.apply(lambda x: Point(x.X, x.Y), axis=1)
+        return gdf_border
+
+    def borders(self):
         """
         Return a GeoDataFrame with all model borders.
 
