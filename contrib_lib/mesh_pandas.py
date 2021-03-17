@@ -308,22 +308,22 @@ class MeshPd:
             # compute nodal values for the mass budget
             if "mass" in budget:
                 bdgt = self.doc.budgetMassCreate()
-                df_nodes["budget_mass_bc"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[1] for n in
+                df_nodes["budget_mass_bc"] = [self.doc.budgetComponentsQueryMassAtNode2(bdgt, n)[1] for n in
                                               map(int, df_nodes.index)]
-                df_nodes["budget_mass_area"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[2] for n in
+                df_nodes["budget_mass_area"] = [self.doc.budgetComponentsQueryMassAtNode2(bdgt, n)[2] for n in
                                                 map(int, df_nodes.index)]
-                df_nodes["budget_mass_storage"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[3] for n in
+                df_nodes["budget_mass_storage"] = [self.doc.budgetComponentsQueryMassAtNode2(bdgt, n)[3] for n in
                                                    map(int, df_nodes.index)]
                 self.doc.pdoc.budgetClose(bdgt)
 
             # compute nodal values for the heat heat budget
             if "heat" in budget:
                 bdgt = self.doc.budgetHeatCreate()
-                df_nodes["budget_heat_bc"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[1] for n in
+                df_nodes["budget_heat_bc"] = [self.doc.budgetComponentsQueryHeatAtNode2(bdgt, n)[1] for n in
                                               map(int, df_nodes.index)]
-                df_nodes["budget_heat_area"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[2] for n in
+                df_nodes["budget_heat_area"] = [self.doc.budgetComponentsQueryHeatAtNode2(bdgt, n)[2] for n in
                                                 map(int, df_nodes.index)]
-                df_nodes["budget_heat_storage"] = [self.doc.budgetComponentsQueryFlowAtNode2(bdgt, n)[3] for n in
+                df_nodes["budget_heat_storage"] = [self.doc.budgetComponentsQueryHeatAtNode2(bdgt, n)[3] for n in
                                                    map(int, df_nodes.index)]
                 self.doc.pdoc.budgetClose(bdgt)
 
