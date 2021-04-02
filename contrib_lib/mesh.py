@@ -18,6 +18,78 @@ class Mesh:
 
     # add custom methods here
 
+    def available_aux(self, silent=True, show_unavailable=False):
+        """
+        returns a dictionary with available auxiliary data items (separate for nodal and elemental items).
+        :param silent: do not print to screen
+        :param show_unavailable: also show unavailable items
+        :return:
+        """
+
+        # define lists of all known aux items
+        aux_E_strings = ['auxAquiferThickness',
+                         'auxAspectRatio',
+                         'auxAspectRatioBeta',
+                         'auxAspectRatioGamma',
+                         'auxCFLCondition',
+                         'auxConditionNumber',
+                         'auxCourantNumber',
+                         'auxDelaunayViolatingTriangles',
+                         'auxElementalVolumes',
+                         'auxElementDiameter',
+                         'auxLayerThickness',
+                         'auxMaxDihedralAngles',
+                         'auxMinDihedralAngles',
+                         'auxPecletNumber',
+                         'auxPseudoSat',
+                         'auxQuadrangleMaxAngles',
+                         'auxRelPerm',
+                         'auxSquishIndex',
+                         'auxTriangleMaxAngles']
+
+        aux_N_strings = ['auxSliceDistance',
+                         'auxNodalDepth']
+
+        # check for existence - elemental
+        elemental_avail = []
+        elemental_unavail = []
+        for auxid in aux_E_strings:
+            param = self.doc.getParameter(Enum.P_AUXDIST_E, auxid)
+            if param != None:
+                elemental_avail.append(auxid)
+            else:
+                elemental_unavail.append(auxid)
+
+        # check for existence - elemental
+        nodal_avail = []
+        nodal_unavail = []
+        for auxid in aux_N_strings:
+            param = self.doc.getParameter(Enum.P_AUXDIST_N, auxid)
+            if param != None:
+                nodal_avail.append(auxid)
+            else:
+                nodal_unavail.append(auxid)
+
+        # print to screen
+        if not silent:
+            print("available elemental:\n\t", end="")
+            print(",\n\t".join(elemental_avail))
+            print()
+            if show_unavailable:
+                print("unavailable elemental:\n\t", end="")
+                print(",\n\t".join(elemental_unavail))
+                print()
+
+            print("available nodal:\n\t", end="")
+            print(",\n\t".join(nodal_avail))
+            if show_unavailable:
+                print("unavailable nodal:\n\t", end="")
+                print(",\n\t".join(nodal_unavail))
+                print()
+
+        return {"nodal" : nodal_avail,
+                "elemental" : elemental_avail}
+
     def get_imatrix(self, layer=None, split_quads_to_triangles=False, ignore_inactive=False, return_elements=False):
         """
         return the incidence matrix as [[int]].
