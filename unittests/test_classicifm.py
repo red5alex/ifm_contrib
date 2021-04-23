@@ -12,7 +12,7 @@ class TestClassicIfmFunctions(unittest.TestCase):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         # doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
-        doc.pdoc.createFracElement(0, 1, Enum.FRAC_1D, Enum.FRAC_A, Enum.MANNING_LAW)
+        doc.createFracElement(0, 1, Enum.FRAC_1D, Enum.FRAC_A, Enum.MANNING_LAW)
 
     def test_setFracFlowConductivity(self):
         ifm.forceLicense("Viewer")
