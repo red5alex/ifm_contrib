@@ -9,7 +9,7 @@ class TestPlot(unittest.TestCase):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument(r".\models\example_2D.dac")
         doc.loadTimeStep(doc.getNumberOfTimeSteps() - 1)
-        gdf = doc.c.plot.gdf.fringes(Enum.P_HEAD, levels=range(11))
+        gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD, levels=range(11))
 
         # check if levels are correct:
         np.testing.assert_almost_equal(gdf.layer.values, [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5],
@@ -27,16 +27,16 @@ class TestPlot(unittest.TestCase):
         doc.closeDocument()
 
         doc = ifm.loadDocument(r".\models\example_3D_mspecies.fem")
-        gdf = doc.c.plot.gdf.fringes(Enum.P_HEAD)
-        gdf = doc.c.plot.gdf.fringes(Enum.P_HEAD, levels=range(11))
+        gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD)
+        gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD, levels=range(11))
         doc.closeDocument()
 
     def test_isolines(self):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument(r".\models\example_2D.dac")
         doc.loadTimeStep(doc.getNumberOfTimeSteps() - 1)
-        gdf = doc.c.plot.gdf.isolines(Enum.P_HEAD)
-        gdf = doc.c.plot.gdf.isolines(Enum.P_HEAD, levels=range(11))
+        gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD)
+        gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD, levels=range(11))
         #TODO: add tests for distributions and expressions
         doc.closeDocument()
 

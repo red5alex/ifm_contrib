@@ -22,6 +22,7 @@ class TestPlot(unittest.TestCase):
         self.doc = ifm.loadDocument(r".\models\example_2D.dac")
         self.doc.c.plot.continuous(par=Enum.P_HEAD)
 
+
     def test_patches(self):
         ifm.forceLicense("Viewer")
         self.doc = ifm.loadDocument(r".\models\example_2D_unconf.fem")  # pure triangle mesh

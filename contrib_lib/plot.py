@@ -22,8 +22,8 @@ class Plot:
 
     # add custom methods here
 
-    def _contours(self, par=None, expr=None, distr=None, velocity=None, values=None, slice=1, global_cos=True, species=None,
-                  style='isolines', ignore_inactive=True, **kwargs):
+    def _contours(self, par=None, expr=None, distr=None, velocity=None, values=None, slice=1, global_cos=True,
+                  species=None, style='isolines', ignore_inactive=True, **kwargs):
         """
         Business functions for plotting library.
 
@@ -34,6 +34,10 @@ class Plot:
         import numpy as np
         import matplotlib.pyplot as plt
         import matplotlib.tri as tri
+
+        # check if keywords arguments are corrent - dirty fix, this required reimplementation.
+        if slice > self.doc.getNumberOfSlices():
+            raise ValueError("no entitiy provided (either of par, distr or expr parameter must be called) or slice number out of range.")
 
         # set current species
         if species is not None:
@@ -225,8 +229,22 @@ class Plot:
         :param args: see matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         :param kwargs: matplotlib.org/api/_as_gen/matplotlib.axes.Axes.tripcolor.html
         """
+
+        # TODO:
+        #
+        # gdf_zones = doc.c.plot.gdf.patches().dissolve(PROPERTY)
+        # gdf_zones["repr_point"] = gdf_zones.geometry.apply(lambda x: x.representative_point().coords[:])
+        # gdf_zones['repr_point'] = [coords[0] for coords in gdf_zones['repr_point']]
+        # for idx, row in gdf_zones.iterrows():
+        #     plt.annotate(s=PROPERTY, xy=row['repr_point'],
+        #                  horizontalalignment='center')
+
         return self._contours(*args, style="patches", slice=layer,
                               cmap=cmap, alpha=alpha, **kwargs)
+
+    def borders(self, ax=None, *args, **kwargs):
+        self.doc.c.mesh.gdf.borders().plot(ax=ax, *args, **kwargs)
+
 
     def _zoom_to(self, selection, ax=None, zoom=1.):
         minx, maxx, miny, maxy = get_XYbounds(self, selection)
