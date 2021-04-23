@@ -1,6 +1,6 @@
 import ifm
 import pandas as pd
-
+from warnings import warn
 
 class TsPd:
     """
@@ -125,7 +125,7 @@ class TsPd:
             if error_on_overwrite:
                 raise RuntimeError("time series {} does already exist!".format(tsid))
             if warn_on_overwrite:
-                raise RuntimeWarning("time series {} does already exist!".format(tsid))
+                warn(RuntimeWarning("time series {} does already exist!".format(tsid)))
             self.doc.c.ts.clear(tsid)
         else:
             self.doc.pdoc.powerCreateCurve(tsid)
