@@ -31,6 +31,12 @@ class TestMeshPd(unittest.TestCase):
         doc = ifm.loadDocument("./models/example_fully_unstruct.fem")
         df = doc.c.mesh.df.elements()
 
+        doc = ifm.loadDocument("./models/example_3D.fem")
+        doc.c.mesh.df.elements(aux="auxLayerThickness")
+        doc.c.mesh.df.elements(aux=["auxLayerThickness"])
+        doc.c.mesh.df.elements(aux={"layer_thickness": "auxLayerThickness"})
+
+
 
     def test_nodes(self):
         ifm.forceLicense("Viewer")
@@ -62,6 +68,10 @@ class TestMeshPd(unittest.TestCase):
         self.assertAlmostEqual(df.budget_flow_area.sum(), 23.580393938311079)
         self.assertAlmostEqual(df.budget_flow_storage.sum(), -18.378763638890959)
 
+        doc = ifm.loadDocument("./models/example_3D.fem")
+        doc.c.mesh.df.nodes(aux="auxSliceDistance")
+        doc.c.mesh.df.nodes(aux=["auxSliceDistance"])
+        doc.c.mesh.df.nodes(aux={"slice_distance": "auxSliceDistance"})
 
     def test_availableitems(self):
         ifm.forceLicense("Viewer")

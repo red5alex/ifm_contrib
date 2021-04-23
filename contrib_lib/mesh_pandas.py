@@ -1,3 +1,4 @@
+import ifm
 from ifm import Enum
 import numpy as np
 
@@ -10,7 +11,7 @@ class MeshPd:
     def __init__(self, doc):
         self.doc = doc
 
-    def elements(self, par=None, expr=None, distr=None, layer=None, selection=None, centroids=False, global_cos=True,
+    def elements(self, par=None, expr=None, distr=None, aux=None, layer=None, selection=None, centroids=False, global_cos=True,
                  content=None, ):
         """
         Create a Pandas Dataframe with information on the model elements.
@@ -25,6 +26,9 @@ class MeshPd:
         :param expr:       Name or list of names of user expressions. For each uer expression provided, a column with
                            with distribution values will be added to the DataFrame.
         :type expr:        str or list
+        :param aux:        Name or list of names of auxilliary parameters. For each uer expression provided, a column with
+                           with distribution values will be added to the DataFrame.
+        :type aux:         str, list or dict.
         :param layer:      if provided in a 3D model, return only elements of this layer
         :type layer:       int
         :param selection:  if provided in a 3D model, return only elements of this selection
@@ -112,6 +116,33 @@ class MeshPd:
             else:
                 raise ValueError("distr / expr argument must be string or list of strings")
 
+        if aux is not None:
+            # version check
+            if int(ifm.getKernelVersion()) < 7400:
+                raise RuntimeError("aux option requires FEFLOW 7.4 or higher.")
+
+            # single items become lists
+            if type(aux) == str:
+                aux = [aux]
+
+            # export parameters if provided
+            if type(aux) == list:
+                for key in aux:
+                    p = self.doc.getParameter(ifm.Enum.P_AUXDIST_E, str(key))
+                    if p is None:
+
+                        raise RuntimeError(str(key)+" is not an available elemental aux parameter.")
+                    df_elements[key] = self.doc.getParamValues(p)
+
+            if type(aux) == dict:
+                for key in aux:
+                    p = self.doc.getParameter(ifm.Enum.P_AUXDIST_E, str(aux[key]))
+                    if p is None:
+                        raise RuntimeError(str(aux[key]) + " is not an available elemental aux parameter.\n" +\
+                                           "Available items: "+", ".join(self.doc.c.mesh.available_aux()["elemental"]))
+                    df_elements[key] = self.doc.getParamValues(p)
+
+
         # filter by given selection
         # check if selection has the right type
         if selection is not None:
@@ -154,7 +185,7 @@ class MeshPd:
 
         return df_elements.replace(-99999.0, np.nan)
 
-    def nodes(self, par=None, expr=None, distr=None, global_cos=True, slice=None, selection=None, budget=None,
+    def nodes(self, par=None, expr=None, distr=None, aux=None, global_cos=True, slice=None, selection=None, budget=None,
               velocity=None):
         """
         Create a Pandas Dataframe with information on the model nodes.
@@ -249,6 +280,32 @@ class MeshPd:
                 else:
                     raise ValueError("expr distr be string (for name) or integer (for id)")
                 df_nodes[d] = self.doc.getNodalRefDistrValues(distrID)
+
+        if aux is not None:
+            # version check
+            if int(ifm.getKernelVersion()) < 7400:
+                raise RuntimeError("aux option requires FEFLOW 7.4 or higher.")
+
+            # single items become lists
+            if type(aux) == str:
+                aux = [aux]
+
+            # export parameters if provided
+            if type(aux) == list:
+                for key in aux:
+                    p = self.doc.getParameter(ifm.Enum.P_AUXDIST_N, str(key))
+                    if p is None:
+                        raise RuntimeError(str(key) + " is not an available nodal aux parameter.\n" +\
+                                        "Available items: "+", ".join(self.doc.c.mesh.available_aux()["nodal"]))
+                    df_nodes[key] = self.doc.getParamValues(p)
+
+            if type(aux) == dict:
+                for key in aux:
+                    p = self.doc.getParameter(ifm.Enum.P_AUXDIST_N, str(aux[key]))
+                    if p is None:
+                        raise RuntimeError(str(key) + " is not an available nodal aux parameter.\n" + \
+                                           "Available items: " + ", ".join(self.doc.c.mesh.available_aux()["nodal"]))
+                    df_nodes[key] = self.doc.getParamValues(p)
 
         if velocity is not None:
             df_nodes["v_x"] = [self.doc.getResultsXVelocityValue(n) for n in range(self.doc.getNumberOfNodes())]
