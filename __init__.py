@@ -56,6 +56,7 @@ if sys.platform == 'cli':
 else:
     if sys.version_info >= (3, 8) and sys.version_info < (3, 9):
         from ifm38 import *
+        from ifm38 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 7) and sys.version_info < (3, 8):
         from ifm37 import *
         from ifm37 import loadDocument as _loadDocument
