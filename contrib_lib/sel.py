@@ -107,27 +107,35 @@ class Sel:
 
     def create(self, seltype, selname, itemlist=None, overwrite_existing=False):
         """
-        create a new selection of given type and name. Populate the selection if itemlist if provided.
+        Create a new selection of given type and name. Populate the selection if itemlist if provided.
 
         :param seltype:  Type of selection type
         :type seltype:   ifm.Enum
         :param selname:  Name of selection
         :type selname:   str
         :param itemlist: list of item indices (optional)
-        :type itemlist:  [int]
-        :param overwrite_existing: If True, overwrite an existing selection (will raise ValueError otherwise)
+        :type itemlist:  [int] or int
+        :param overwrite_existing: If True, overwrite an existing selection. Raises ValueError if False (default).
         :type overwrite_existing: bool
         :return:         the id of the selection
         """
 
-        # raise error if selection already exists
+        # parameter handling
+        if type(itemlist) not in [list, int]:
+            raise ValueError("itemlist must be of type [int] or int")
+        if type(itemlist)==int:
+            itemlist = [itemlist]
+        
+        # create selection if it does not exist
         if self.doc.findSelection(seltype, selname) == -1:
             selid = self.doc.createSelection(seltype, selname)
         else:
+            # clear existing selection if allowed
             if overwrite_existing:
                 selid = self.doc.findSelection(seltype, selname)
                 self.doc.c.sel.clear(selname)
             else:
+                # raise Error otherwise
                 raise ValueError("Selection {} does already exist!".format(selname))
 
         # populate if itemlist is provided
