@@ -33,6 +33,9 @@ class SimWidget:
         Simulation is aborted if the function returns True. 
         """
 
+        if ifm.getKernelVersion () < 7400:
+            raise RuntimeError("This function requires FEFLOW Version 7.400 or higher!")
+
         self.doc = doc
 
         self.dashboard_callback = dashboard_callback
@@ -42,6 +45,8 @@ class SimWidget:
             self.filepath_dac = doc.c.sim.suggest_dac_filename()
         else:
             self.filepath_dac = filepath_dac
+
+        self.doc.setOutput(self.filepath_dac)
 
         # setup time logging
         self.df_log = pd.DataFrame()
