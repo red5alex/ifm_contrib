@@ -87,6 +87,7 @@ class Simulator:
 
             if compact_output is False:
                 simwidget = SimWidget(self.doc,
+                                      filepath_dac=dac,
                                       dashboard_callback=dashboard_callback,
                                       custom_termination_criterion=custom_termination_criterion)
                 simwidget.display()
