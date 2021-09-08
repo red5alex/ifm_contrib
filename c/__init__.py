@@ -3,6 +3,7 @@ import ifm
 #from . import diff
 from . import obj
 from . import files
+from . import tools
 
 def closeAllDocuments():
     """
