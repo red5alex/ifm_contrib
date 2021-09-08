@@ -26,6 +26,10 @@ def _():
             feflow_root = os.environ['FEFLOW72_ROOT']
         if 'FEFLOW73_ROOT' in os.environ:
             feflow_root = os.environ['FEFLOW73_ROOT']
+        if 'FEFLOW74_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW74_ROOT']
+        if 'FEFLOW75_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW75_ROOT']
 
     if feflow_root is not None:
         sys.path.append(feflow_root + 'bin64')
