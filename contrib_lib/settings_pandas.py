@@ -27,3 +27,35 @@ class SettingsPd:
         # doc.getSpeciesKineticsArrhenius(0)
         # doc.getSpeciesKineticsMonod(0)
         # doc.getSpeciesKineticsUserDefined(0)
+
+    def lookup_table(self, names_as_index=True):
+        """
+        Return the models parameter lookup table as a DataFrame
+
+        :param names_as_index: Use material names as index (default), otherwise use material ID.
+        :return: Parameter Lookup Table
+        :rtype: pandas.DataFrame
+        """
+
+        # Version check
+        import ifm
+        if ifm.getKernelVersion() < 7458:
+            raise RuntimeError("This function requires FEFLOW Version 7.5 or higher")
+
+        # get lookup table
+        lookuptable = self.doc.getLookupTable()
+
+        # get materials
+        df_lookuptable = pd.DataFrame(index=lookuptable.getMaterials().values())
+        df_lookuptable.index.name = "material_id"
+        df_lookuptable["material_name"] = [i for i in lookuptable.getMaterials()]
+
+        # get properties
+        df_properties = pd.DataFrame([lookuptable.getProperties(m) for m in lookuptable.getMaterials().values()])
+        df_properties.index = lookuptable.getMaterials().values()
+
+        # combine and format
+        df_lookuptable = df_lookuptable.join(df_properties)
+        if names_as_index is True:
+            df_lookuptable = df_lookuptable.reset_index().set_index("material_name")
+        return df_lookuptable
