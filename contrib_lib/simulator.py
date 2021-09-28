@@ -4,7 +4,7 @@ from .simulator_pandas import SimPd
 import sys
 import os
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from glob import glob
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -140,3 +140,37 @@ class Simulator:
                 return df_ts[df_ts.simulation_date > time].reset_index().iloc[0]
         else:
             raise ValueError("parameter 'time' must be of type float (simulation time in days)  ")
+
+    def calendar_to_simtime(self, calendar_time):
+        """
+        Converts a calendar time (datetime) to simulation time (in hours).
+        Requires that the Reference Time is set in the model.
+
+        :param calendar_time: The simulation time as a calendar datetime.
+        :type calendar_time:  datetime.datetime
+        :return:              The time in simulation time, unit: days.
+        :rtype:               float
+        """
+        time_ref = self.doc.getReferenceTime()
+
+        if time_ref is None:
+            raise (RuntimeError("Reference time not set in model"))
+
+        return (calendar_time - time_ref).total_seconds() / (24 * 60 * 60)
+
+    def simtime_to_calendar(self, sim_time):
+        """
+        Converts a simulation time (in unit days since reference time) into a calendar date (datetime.datetime).
+        Requires that the Reference Time is set in the model.
+
+        :param sim_time:   The time in simulation time, unit: days.
+        :type sim_time:    float
+        :return:           The simulation time as a calendar datetime.
+        :rtype:            datetime.datetime
+        """
+        time_ref = self.doc.getReferenceTime()
+        if time_ref is None:
+            raise (RuntimeError("Reference time not set in model"))
+
+        return time_ref + timedelta(sim_time)
+
