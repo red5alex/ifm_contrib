@@ -106,6 +106,11 @@ class HistPd:
             # then pick only those indices that are in the observation dataframe:
             df = df.reindex(union_index).interpolate().loc[sync_to_index]
 
+            #TODO: the interpolate method requires the method="time" or method="index" parameter to work correctly
+            #https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.interpolate.html for more info
+
+
+
         return df
 
     def all_hist_items(self):
