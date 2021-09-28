@@ -9,6 +9,7 @@ from .diag import Diag
 from .hist import Hist
 from .mesh import Mesh
 from .obs import Obs
+from .particles import ParticleTracer
 from .plot import Plot
 from .sel import Sel
 from .settings import Settings
@@ -37,6 +38,7 @@ class IfmContrib:
         self.hist = Hist(doc)
         self.mesh = Mesh(doc)
         self.obs = Obs(doc)
+        self.particles = ParticleTracer(doc)
         self.plot = Plot(doc)
         self.sel = Sel(doc)
         self.settings = Settings(doc)
