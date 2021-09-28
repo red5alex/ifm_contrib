@@ -39,7 +39,10 @@ class ObsGpd:
                 x += X0
                 y += Y0
 
-            shape = Point(x, y)  # create a geometry object
+            if self.doc.getNumberOfDimensions() == 2:
+                shape = Point(x, y)  # create a 2D geometry object
+            elif self.doc.getNumberOfDimensions() == 3:
+                shape = Point(x, y, z)  # create a 3D geometry object
 
             # get label and append to list
             label = str(self.doc.getObsLabel(obsid))
