@@ -176,6 +176,7 @@ class MeshGpd:
         """
 
         from shapely.geometry import Point
+        import geopandas as gpd  # required, this integrates the df.set_geometry function in pandas.DataFrame
 
         df_nodes = self.doc.c.mesh.df.nodes(*args, **kwargs)
         df_nodes["element_shape"] = [Point(row.X, row.Y) for (i, row) in df_nodes.iterrows()]
