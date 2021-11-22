@@ -48,7 +48,7 @@ class MeshPd:
         df_elements = pd.DataFrame(index=range(self.doc.getNumberOfElements()))
         df_elements.index.name = "ELEMENT"
 
-        if self.doc.getNumberOfNodesPerElement() == 0:  # unstructured mesh
+        if self.doc.getNumberOfLayers() == -1:  # unstructured mesh
             df_elements["LAYER"] = None
             df_elements["TOP_ELEMENT"] = None
         else:  # assume layered mesh
