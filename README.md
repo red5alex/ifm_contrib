@@ -1,5 +1,8 @@
 # ifm_contrib
 
+**Note that ifm_contrib is at the moment OUT OF MAINTENANCE. DHI does not guarantee its correct functioning or compatibility with FEFLOW Versions >= 8.0. 
+DHI might investigate in the future the possibility of finding an alternative solution for such library.**
+
 **An Open Source Extension Project for the FEFLOW Programming API.**
 
 **ifm_contrib** is an Open-Source Extension of the IFM, the Python API of FEFLOW.
