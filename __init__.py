@@ -3,9 +3,12 @@
 
 # ONLY EDIT THIS FILE IF YOU KNOW WHAT YOU DO!
 
-def _():
-    import sys, os
+import sys
+import os
 
+
+def _():
+    global feflow_root
     feflow_root = None
 
     # check if a FEFLOW Kernel version is specified.
@@ -58,7 +61,14 @@ if sys.platform == 'cli':
     def forceLicense(l):
         return PyFeflowKernel.forceLicense(l)
 else:
-    if sys.version_info >= (3, 8) and sys.version_info < (3, 9):
+    if sys.version_info >= (3, 9) and sys.version_info < (3, 10):
+        if len(feflow_root) > 0:
+            os.add_dll_directory(feflow_root+'bin64')
+        from ifm39 import *
+        from ifm39 import loadDocument as _loadDocument
+    elif sys.version_info >= (3, 8) and sys.version_info < (3, 9):
+        if len(feflow_root) > 0:
+            os.add_dll_directory(feflow_root+'bin64')
         from ifm38 import *
         from ifm38 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 7) and sys.version_info < (3, 8):
@@ -74,7 +84,7 @@ else:
         from ifm27 import *
         from ifm27 import loadDocument as _loadDocument
     else:
-        raise ImportError('This python version is not supported by FEFLOW!')
+        raise ImportError(f'This python version is not supported by FEFLOW!\n{sys.version_info}')
 
     from . import colormaps
 
@@ -97,7 +107,7 @@ else:
         if ifm_classic is not None:
             import warnings
             warnings.warn(DeprecationWarning("ifm_classic is depreciated, use import_ifm_attribs!"))
-            import_ifm_attribs=ifm_classic
+            import_ifm_attribs = ifm_classic
 
         return doc_contrib(f, import_ifm_attribs=import_ifm_attribs, crs=crs)
 
