@@ -28,12 +28,11 @@ An installation of FEFLOW (version 7.2 or higher) is required.
 
 **For a detailed introduction and installation notes, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)**
 
-Its not a pretty one, but you can find an (unregularly updated) help system including API reference [here](https://red5alex.github.io/ifm_contrib/ifm_contrib.contrib_lib.html).
+Its not a pretty one, but you can find an (unregularly updated) help system including API reference here](https://red5alex.github.io/ifm_contrib/ifm_contrib.contrib_lib.html).
 
 ## Troubleshooting and Contribution
 
-If you run into issues please open an (issue)[https://github.com/red5alex/ifm_contrib/issues].
-(Unfortunately the maintainer can currently not dedicate significant time to the project but will try its best).
+If you run into issues please open an [issue](https://github.com/red5alex/ifm_contrib/issues). Please note that the maintainer may not dedicate significant time to the project at this time but will try its best to respond.
 
 ## Gallery
 
