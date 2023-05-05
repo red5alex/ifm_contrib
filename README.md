@@ -16,6 +16,19 @@ The library has been developed since 2019, and reached maturity around 2021 with
 
 Please note that the maintainer of this project is not associated with DHI.
 
+## Development setup
+
+- Clone this repo
+- Inside the repo:
+
+  ```bash
+  python -m venv .venv
+  source .venv/bin/activate
+  pip install ".[test]"
+  ```
+
+- Run unit test with `pytest`
+
 ## Installation
 
 The recommended way of installing `ifm_contrib` is by copying or cloning the repository directly into the FEFLOW program director next to the classic IFM.
@@ -41,7 +54,7 @@ If you run into issues please open an [issue](https://github.com/red5alex/ifm_co
 Create inline plots with the look-and-feel of FEFLOWs directly within Jupyter. The plots can be exported as GeoDataFrames and saved to shape-files easily. \
 *ifm_contrib* adds light support for coordinate systems to FEFLOW.
 
-<img src="doc/Notebooks/highlights_map.png"> 
+<img src="doc/Notebooks/highlights_map.png">
 
 ### Process FEFLOWs Time Series with Pandas
 
@@ -49,6 +62,6 @@ Time Series (aka Power functions) and History charts can be easily exported to p
 
 <img src="doc/Notebooks/highlights_timeseries.png">
 
-### Pandas-access to Nodal and Elemntal Data, Multi-Layer Wells, and much more..
+### Pandas-access to Nodal and Elemntal Data, Multi-Layer Wells, and much more
 
 Read more in [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)
