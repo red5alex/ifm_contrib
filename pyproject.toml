@@ -6,7 +6,7 @@ build-backend = 'setuptools.build_meta'
 name = "ifm_contrib"
 dynamic = ["version"]
 description = "*ifm_contrib* is an Open-Source Extension of the IFM, the Python API of the groundwater modellierung software [FEFLOW](https://en.wikipedia.org/wiki/FEFLOW) by [DHI](https://www.dhigroup.com)."
-authors = [{ name = 'Alexander Renz', email = 'are@dhigroup.com' }]
+authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = '<3.10'
