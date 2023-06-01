@@ -9,7 +9,7 @@ description = "*ifm_contrib* is an Open-Source Extension of the IFM, the Python 
 authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
 license = { text = "MIT" }
 readme = "README.md"
-requires-python = '<3.10'
+requires-python = '<3.12'
 
 [project.urls]
 # "Documentation" = 'TODO'
