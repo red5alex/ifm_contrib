@@ -5,7 +5,7 @@
 
 import sys
 import os
-
+import platform
 
 def _():
     global feflow_root
@@ -33,17 +33,20 @@ def _():
             feflow_root = os.environ['FEFLOW74_ROOT']
         if 'FEFLOW75_ROOT' in os.environ:
             feflow_root = os.environ['FEFLOW75_ROOT']
+        if 'FEFLOW80_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW80_ROOT']
 
     if feflow_root is not None:
-        sys.path.append(feflow_root + 'bin64')
-    #       if sys.version_info > (3, 0):
-    #           sys.path.append(feflow_root+'python/pyscriptlib37.zip')
-    #       else:
-    #           sys.path.append(feflow_root+'python/pyscriptlib27.zip')
+        if platform.system() == 'Windows':
+            sys.path.append(feflow_root + 'bin64')
+        else:
+            sys.path.append(feflow_root + '/lib64')
+    else:
+        print('The FEFLOW installation could not be found')
+        
     if sys.platform == 'cli':
         import clr
         clr.AddReference('IronPython.Feflow72')
-
 
 _()
 del _
@@ -61,14 +64,16 @@ if sys.platform == 'cli':
     def forceLicense(l):
         return PyFeflowKernel.forceLicense(l)
 else:
-    if sys.version_info >= (3, 9) and sys.version_info < (3, 10):
-        if len(feflow_root) > 0:
-            os.add_dll_directory(feflow_root+'bin64')
+    if sys.version_info >= (3, 11) and sys.version_info < (3, 12):
+        from ifm311 import *
+        from ifm311 import loadDocument as _loadDocument
+    elif sys.version_info >= (3, 10) and sys.version_info < (3, 11):
+        from ifm310 import *
+        from ifm310 import loadDocument as _loadDocument
+    elif sys.version_info >= (3, 9) and sys.version_info < (3, 10):
         from ifm39 import *
         from ifm39 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 8) and sys.version_info < (3, 9):
-        if len(feflow_root) > 0:
-            os.add_dll_directory(feflow_root+'bin64')
         from ifm38 import *
         from ifm38 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 7) and sys.version_info < (3, 8):

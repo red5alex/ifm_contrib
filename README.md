@@ -33,7 +33,10 @@ Please note that the maintainer of this project is not associated with DHI.
 
 The recommended way of installing `ifm_contrib` is by copying or cloning the repository directly into the FEFLOW program director next to the classic IFM.
 
-Installation via `pip` is currently **not** recommended, as the associated Pypi package is currently not under maintanence. This might change in the future.
+Installation via `pip` should be done by:
+```bash
+pip install pip install https://github.com/red5alex/ifm_contrib/archive/refs/heads/master.zip
+```
 
 An installation of FEFLOW (version 7.2 or higher) is required.
 
