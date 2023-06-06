@@ -35,7 +35,7 @@ The recommended way of installing `ifm_contrib` is by copying or cloning the rep
 
 Installation via `pip` should be done by:
 ```bash
-pip install pip install https://github.com/red5alex/ifm_contrib/archive/refs/heads/master.zip
+pip install https://github.com/red5alex/ifm_contrib/archive/refs/heads/master.zip
 ```
 
 An installation of FEFLOW (version 7.2 or higher) is required.
