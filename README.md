@@ -24,10 +24,20 @@ Please note that the maintainer of this project is not associated with DHI.
   ```bash
   python -m venv .venv
   source .venv/bin/activate
-  pip install ".[test]"
+  pip install -e ".[test]"
   ```
 
 - Run unit test with `pytest`
+
+If you want to create the documentation:
+
+```bash
+source .venv/bin/activate
+pip install -e ".[test,doc]"
+cd doc/sphinx
+make html
+# Open doc/sphinx/build/html/index.html in a browser
+```
 
 ## Installation
 
