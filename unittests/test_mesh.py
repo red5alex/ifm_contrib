@@ -4,12 +4,10 @@ import ifm_contrib as ifm
 class TestMesh(unittest.TestCase):
 
     def test_show_available_aux(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.mesh.available_aux()
 
     def test_get_imatrix(self):
-        ifm.forceLicense("Viewer")
         doc =  ifm.loadDocument("./models/example_2D.fem")
         self.assertEqual(len(doc.c.mesh.get_imatrix()), 959)
         self.assertEqual(len(doc.c.mesh.get_imatrix(ignore_inactive=True)), 904)
@@ -47,7 +45,6 @@ class TestMesh(unittest.TestCase):
 
 
     def test_get_imatrix2d(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         self.assertEqual(len(doc.c.mesh.get_imatrix2d()), 959)
         self.assertEqual(len(doc.c.mesh.get_imatrix2d(ignore_inactive=True)), 904)
@@ -75,12 +72,10 @@ class TestMesh(unittest.TestCase):
             doc.c.mesh.get_imatrix2d(slice=4)
 
     def test_getCentroid(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.mesh.getCentroid(0)
 
     def test_mlw(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
         doc.c.mesh.mlw()
 

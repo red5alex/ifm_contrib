@@ -5,7 +5,6 @@ from ifm import Enum
 class TestMeshGpd(unittest.TestCase):
 
     def test_elements(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         gdf = doc.c.mesh.gdf.elements([Enum.P_TRANS])
         self.assertAlmostEqual(gdf[Enum.P_TRANS].sum(), 741.2000004276633)
@@ -25,7 +24,6 @@ class TestMeshGpd(unittest.TestCase):
         doc.c.mesh.gdf.elements(content=[Enum.TOTAL_VOLUME, Enum.VOID_VOLUME])
 
     def test_nodes(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
         doc.c.mesh.gdf.nodes(par=Enum.P_HEAD)   # 0
         doc.c.mesh.gdf.nodes(par=[Enum.P_HEAD])  # 0
@@ -48,7 +46,6 @@ class TestMeshGpd(unittest.TestCase):
         self.assertAlmostEqual(df.budget_flow_storage.sum(), -18.378763638890959)
 
     def test_mlw(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
         doc.c.mesh.gdf.mlw()
 

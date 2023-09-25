@@ -6,7 +6,6 @@ import ifm_contrib as ifm
 class TestObsGpd(unittest.TestCase):
 
     def test_history(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.dac")
 
         # check if all_hist_itemsworks

@@ -6,7 +6,6 @@ from ifm import Enum
 class TestSel(unittest.TestCase):
 
     def test_sel_convert_2D(self):
-        ifm.forceLicense("Viewer")
         self.doc = ifm.loadDocument("./models/example_2D.fem")
 
         self.assertEqual(self.doc.c.sel.getSelectionType("conversiontest_el"), 1)
@@ -38,7 +37,6 @@ class TestSel(unittest.TestCase):
         self.doc.closeDocument()
 
     def test_sel_convert_3D(self):
-        ifm.forceLicense("Viewer")
         self.doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
 
         self.assertEqual(self.doc.c.sel.getSelectionType("conversiontest_el"), 1)
