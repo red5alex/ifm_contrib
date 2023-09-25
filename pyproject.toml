@@ -24,3 +24,17 @@ doc = ["sphinx", "sphinx_rtd_theme", "sphinxcontrib-apidoc", "ipython", "ipywidg
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["ifm_contrib*"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+  "-ra",
+  "--showlocals",
+  "--strict-markers",
+  "--strict-config",
+  "--import-mode=importlib",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+testpaths = ["unittests"]
