@@ -392,8 +392,8 @@ class MeshPd:
 
         :param border_number: the ordinal number of the border. Default 0.
         :type border_number: int
-        :param \*args: additional arguments passed, see `nodes()`
-        :param \**kwargs: additional keyword arguments see `nodes()`
+        :param *args: additional arguments passed, see `nodes()`
+        :param **kwargs: additional keyword arguments see `nodes()`
         :return: A DataFrame with the node information
         :rtype: pandas.DataFrame
         """
