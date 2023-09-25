@@ -47,8 +47,8 @@ def create_colormap_from_xml(name, xmlfile, register_cmap=True):
     cmap = LinearSegmentedColormap.from_list(name, colors)
 
     if register_cmap:
-        from matplotlib import cm
-        cm.register_cmap(name, cmap)
+        import matplotlib
+        matplotlib.colormaps.register(cmap, name=name)
 
     return cmap
 
