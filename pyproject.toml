@@ -12,6 +12,9 @@ readme = "README.md"
 requires-python = '<3.12'
 dependencies = ["geopandas", "matplotlib<3.8", "numpy", "pandas", "shapely"]
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [project.urls]
 # "Documentation" = 'TODO'
 "Bug Tracker" = 'https://github.com/red5alex/ifm_contrib/issues'
