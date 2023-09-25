@@ -213,7 +213,7 @@ class Plot:
         import matplotlib.pyplot as plt
 
         for i, row in self.doc.c.obs.gdf.obspoints(filter_by=filter_by).iterrows():
-            plt.annotate(*args, s=row[attribute],
+            plt.annotate(*args, row[attribute],
                          xy=(row.x, row.y),
                          horizontalalignment=horizontalalignment,
                          **kwargs)
