@@ -7,7 +7,7 @@ class TestPlot(unittest.TestCase):
 
     def test_fringes(self):
         ifm.forceLicense("Viewer")
-        doc = ifm.loadDocument(r".\models\example_2D.dac")
+        doc = ifm.loadDocument("./models/example_2D.dac")
         doc.loadTimeStep(doc.getNumberOfTimeSteps() - 1)
         gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD, levels=range(11))
 
@@ -26,14 +26,14 @@ class TestPlot(unittest.TestCase):
                                        err_msg="areas of polygon differs")
         doc.closeDocument()
 
-        doc = ifm.loadDocument(r".\models\example_3D_mspecies.fem")
+        doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
         gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD)
         gdf = doc.c.plot.gdf.fringes(par=Enum.P_HEAD, levels=range(11))
         doc.closeDocument()
 
     def test_isolines(self):
         ifm.forceLicense("Viewer")
-        doc = ifm.loadDocument(r".\models\example_2D.dac")
+        doc = ifm.loadDocument("./models/example_2D.dac")
         doc.loadTimeStep(doc.getNumberOfTimeSteps() - 1)
         gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD)
         gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD, levels=range(11))
@@ -41,7 +41,7 @@ class TestPlot(unittest.TestCase):
         doc.closeDocument()
 
         ifm.forceLicense("Viewer")
-        doc = ifm.loadDocument(r".\models\example_3D_mspecies.fem")
+        doc = ifm.loadDocument("./models/example_3D_mspecies.fem")
         doc.loadTimeStep(doc.getNumberOfTimeSteps() - 1)
         gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD, slice=1)
         gdf = doc.c.plot.gdf.isolines(par=Enum.P_HEAD, levels=range(11))
