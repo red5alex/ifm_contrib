@@ -10,7 +10,7 @@ authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = '<3.12'
-dependencies = ["geopandas","matplotlib","numpy","pandas","shapely"]
+dependencies = ["geopandas", "matplotlib<3.8", "numpy", "pandas", "shapely"]
 
 [project.urls]
 # "Documentation" = 'TODO'
