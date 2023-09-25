@@ -6,7 +6,7 @@ class TestMesh(unittest.TestCase):
     def test_show_available_aux(self):
         ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
-        doc.c.mesh.show_available_aux()
+        doc.c.mesh.available_aux()
 
     def test_get_imatrix(self):
         ifm.forceLicense("Viewer")
