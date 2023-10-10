@@ -1,0 +1,26 @@
+name: Python application
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: registry.opengeosys.org/ogs/tools/ogstools/devcontainer-3.9
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        . .venv/bin/activate
+        pip install -e .[test]
+    - name: Test with pytest
+      run: |
+        . .venv/bin/activate
+        pytest

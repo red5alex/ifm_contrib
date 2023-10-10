@@ -6,7 +6,6 @@ import ifm_contrib as ifm
 class TestObsGpd(unittest.TestCase):
 
     def test_obspoints(self):
-        ifm.forceLicense("Viewer")
         doc = ifm.loadDocument("./models/example_2D.fem")
 
         # should return three observation points

@@ -10,7 +10,11 @@ authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = '<3.12'
-dependencies = ["geopandas","matplotlib","numpy","pandas","shapely"]
+dependencies = ["geopandas", "matplotlib<3.8", "numpy", "pandas", "shapely"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+doc = ["sphinx", "sphinx_rtd_theme", "sphinxcontrib-apidoc", "ipython", "ipywidgets"]
 
 [project.urls]
 # "Documentation" = 'TODO'
@@ -20,3 +24,17 @@ dependencies = ["geopandas","matplotlib","numpy","pandas","shapely"]
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["ifm_contrib*"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+  "-ra",
+  "--showlocals",
+  "--strict-markers",
+  "--strict-config",
+  "--import-mode=importlib",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+log_cli_level = "info"
+testpaths = ["unittests"]

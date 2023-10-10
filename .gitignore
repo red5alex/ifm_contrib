@@ -75,9 +75,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
-docs/reference/*
-!docs/reference/index.md
+doc/sphinx/build/
+doc/sphinx/source/reference
 
 # PyBuilder
 .pybuilder/

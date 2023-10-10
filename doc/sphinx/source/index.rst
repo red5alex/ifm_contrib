@@ -55,8 +55,9 @@ For detailed information, see :ref:`modindex`.
    :maxdepth: 2
    :caption: Contents:
    
-   api
+   reference/modules
    tutorials
+   ifm_contrib.contrib_lib
    
 
 Indices and tables
@@ -65,5 +66,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-[sphinx:index.rst]
