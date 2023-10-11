@@ -1,5 +1,7 @@
 [build-system]
-requires = ['setuptools', 'setuptools_scm[toml]']
+requires = [
+    "setuptools>=60",
+    "setuptools-scm>=8.0"]
 build-backend = 'setuptools.build_meta'
 
 [project]
@@ -38,3 +40,6 @@ xfail_strict = true
 filterwarnings = ["error"]
 log_cli_level = "info"
 testpaths = ["unittests"]
+
+[tool.setuptools_scm]
+version_file = "ifm_contrib/_version.py"
