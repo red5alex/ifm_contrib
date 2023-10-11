@@ -79,7 +79,8 @@ class ObsGpd:
                 if key not in gdf_obs.columns:
                     raise ValueError("unknown attribute {}".format(key))
                 if type(filter_by[key]) == list:
-                    gdf_obs = gdf_obs.loc[gdf_obs[key].isin(filter_by[key])]
+                    selected_rows = gdf_obs.loc[gdf_obs[key].isin(filter_by[key])]
+                    gdf_obs = gpd.GeoDataFrame(selected_rows)
                 else:
                     raise ValueError("type {} not supported as dict value! (provide a list)".format(type(filter_by[key])))
 
