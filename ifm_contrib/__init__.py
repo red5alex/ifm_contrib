@@ -35,6 +35,8 @@ def _():
             feflow_root = os.environ['FEFLOW75_ROOT']
         if 'FEFLOW80_ROOT' in os.environ:
             feflow_root = os.environ['FEFLOW80_ROOT']
+        if 'FEFLOW81_ROOT' in os.environ:
+            feflow_root = os.environ['FEFLOW81_ROOT']
 
     if feflow_root is not None:
         if platform.system() == 'Windows':
