@@ -487,22 +487,22 @@ class MeshPd:
         import pandas as pd
 
         available_items = []
-        for e in [e for e in dir(Enum) if "P_" in e]:
-            e_num = eval("Enum." + e)
+        for enum_item in [item for item in dir(Enum) if "P_" in item]:
             try:
-                ii = self.doc.getParamSize(e_num)
-                if ii == self.doc.getNumberOfNodes() and ii == self.doc.getNumberOfElements():
-                    itemtype = 'ambiguous'  # n_nodes = n_elements, can't determine type
-                elif ii == self.doc.getNumberOfNodes():
-                    itemtype = 'nodal'
-                elif ii == self.doc.getNumberOfElements():
-                    itemtype = 'elemental'
-                else:
-                    itemtype = 'unknowm'
-                available_items.append((e, e_num, itemtype))
+                enum_value = getattr(Enum, enum_item)
+                if isinstance(enum_value, int) and enum_value > 0:
+                    param_size = self.doc.getParamSize(enum_value)
+                    if param_size == self.doc.getNumberOfNodes() == self.doc.getNumberOfElements():
+                        item_type = 'ambiguous'  # n_nodes = n_elements, can't determine type
+                    elif param_size == self.doc.getNumberOfNodes():
+                        item_type = 'nodal'
+                    elif param_size == self.doc.getNumberOfElements():
+                        item_type = 'elemental'
+                    else:
+                        item_type = 'unknown'
+                    available_items.append((enum_item, enum_value, item_type))
             except Exception:
                 pass
-
         df_items = pd.DataFrame(available_items, columns=["Name", "Enum_Constant", "Type"])
 
         # filter by type
