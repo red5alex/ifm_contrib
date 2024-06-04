@@ -487,7 +487,7 @@ class MeshPd:
         import pandas as pd
 
         available_items = []
-        for e in [e for e in dir(Enum) if "P_" in e]:
+        for e in [e for e in dir(Enum) if e.startswith("P_") and e != "P_INVALID"]:
             e_num = eval("Enum." + e)
             try:
                 ii = self.doc.getParamSize(e_num)
