@@ -12,7 +12,7 @@ authors = [{ name = 'Alexander Renz', email = 'alex.renz@gmx.net' }]
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = '<3.12'
-dependencies = ["geopandas", "matplotlib<3.8", "numpy", "pandas<2.2", "shapely"]
+dependencies = ["geopandas", "matplotlib", "numpy", "pandas<2.2", "shapely"]
 
 [project.optional-dependencies]
 test = ["pytest"]
