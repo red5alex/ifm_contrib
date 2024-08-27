@@ -66,7 +66,10 @@ if sys.platform == 'cli':
     def forceLicense(l):
         return PyFeflowKernel.forceLicense(l)
 else:
-    if sys.version_info >= (3, 11) and sys.version_info < (3, 12):
+    if sys.version_info >= (3, 12) and sys.version_info < (3, 13):
+        from ifm312 import *
+        from ifm312 import loadDocument as _loadDocument
+    elif sys.version_info >= (3, 11) and sys.version_info < (3, 12):
         from ifm311 import *
         from ifm311 import loadDocument as _loadDocument
     elif sys.version_info >= (3, 10) and sys.version_info < (3, 11):
