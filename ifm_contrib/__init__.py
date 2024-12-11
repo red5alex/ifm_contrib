@@ -6,6 +6,8 @@
 import sys
 import os
 import platform
+import warnings
+import re
 
 def _():
     global feflow_root
@@ -25,18 +27,28 @@ def _():
 
     # use highest available version if not specified
     else:
-        if 'FEFLOW72_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW72_ROOT']
-        if 'FEFLOW73_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW73_ROOT']
-        if 'FEFLOW74_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW74_ROOT']
-        if 'FEFLOW75_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW75_ROOT']
-        if 'FEFLOW80_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW80_ROOT']
-        if 'FEFLOW81_ROOT' in os.environ:
-            feflow_root = os.environ['FEFLOW81_ROOT']
+        feflow_roots = [env_var for env_var in os.environ if "FEFLOW" in env_var and "ROOT" in env_var]
+        if len(feflow_roots) == 0:
+            raise ImportError("The environmental variable for the FEFLOW installation could not be found. Either it needs to be set manually or FEFLOW is not installed.")
+        elif "FEFLOW_ACTIVE_ROOT" in os.environ:
+            warnings.warn("If you choose 'FEFLOW_ACTIVE_ROOT', the 'LD_LIBRARY_PATH' must be assigned to the correct FEFLOW version.")
+            feflow_root = os.environ["FEFLOW_ACTIVE_ROOT"]
+        elif len(feflow_roots) >= 1:
+            if len(feflow_roots) > 1:
+                warn_message = """
+                               There is more than 1 FEFLOW installation. 
+                               The latest one was chosen for the API. If another one is to be configured, 
+                               the environmental variable 'FEFLOW_ACTIVE_ROOT' needs to be set to the corresponding path, 
+                               as well as the corresponding 'LD_LIBRARY_PATH'. 
+                               In Linux: 'export FEFLOW_ACTIVE_ROOT=/opt/feflow/X, with X the version.
+                               """
+                warnings.warn(warn_message)
+            digits = []
+            for root in feflow_roots:
+                m = re.search(r"FEFLOW(\d{2,3})_ROOT",root)
+                digits.append(int(m.group(1)))
+            digits.sort()
+            feflow_root = os.environ[f"FEFLOW{digits[-1]}_ROOT"]
 
     if feflow_root is not None:
         if platform.system() == 'Windows':
@@ -115,7 +127,6 @@ else:
             c.closeAllDocuments()
 
         if ifm_classic is not None:
-            import warnings
             warnings.warn(DeprecationWarning("ifm_classic is depreciated, use import_ifm_attribs!"))
             import_ifm_attribs = ifm_classic
 
