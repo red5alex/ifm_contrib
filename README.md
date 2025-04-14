@@ -52,9 +52,9 @@ An installation of FEFLOW (version 7.2 or higher) is required.
 
 ## Getting started
 
-**For a detailed introduction and installation notes, see [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)**
+**For a detailed introduction and installation notes, see [ifm_contrib: An Introduction](https://github.com/red5alex/ifm_contrib/blob/master/doc/Notebooks/getting_started.ipynb)**
 
-Its not a pretty one, but you can find an (unregularly updated) help system including API reference here](https://red5alex.github.io/ifm_contrib/ifm_contrib.contrib_lib.html).
+Its not a pretty one, but you can find an (unregularly updated) help system including API reference [here](https://red5alex.github.io/ifm_contrib/ifm_contrib.contrib_lib.html).
 
 ## Troubleshooting and Contribution
 
@@ -77,4 +77,4 @@ Time Series (aka Power functions) and History charts can be easily exported to p
 
 ### Pandas-access to Nodal and Elemntal Data, Multi-Layer Wells, and much more
 
-Read more in [ifm_contrib: An Introduction](./doc/Notebooks/getting_started.ipynb)
+Read more in [ifm_contrib: An Introduction](https://github.com/red5alex/ifm_contrib/blob/master/doc/Notebooks/getting_started.ipynb)
